@@ -1,27 +1,25 @@
 const {Model, DataTypes, Sequelize} = require('sequelize')
 
-const CAMA_TABLE = 'camas';
+const HUESPED_TABLE = 'huesped';
 
-const CamaSchema = {
+const HuespedSchema = {
   id:{
     type:DataTypes.UUID,
     defaultValue: Sequelize.UUIDV4,
     allowNull: false,
     primaryKey: true,
   },
-  precio: {
+  nombre: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  apellido:{
     type: DataTypes.INTEGER,
     allowNull: false,
-    defaultValue: 0
-  },
-  estado:{
-    type: DataTypes.ENUM('reservada', 'ocupada', 'libre', 'mantenimiento'),
-    allowNull: false,
-    defaultValue: 'libre',
   }
 }
 
-class Cama extends Model {
+class Huesped extends Model {
   static associate() {
     // asociaciones
   }
@@ -29,12 +27,12 @@ class Cama extends Model {
   static config(sequelize) {
     return {
       sequelize,
-      tableName: CAMA_TABLE,
-      modelName: 'Cama',
+      tableName: HUESPED_TABLE,
+      modelName: 'Huesped',
       timestamps: false
     }
   }
 }
 
 
-module.exports = { CAMA_TABLE, CamaSchema, Cama }
+module.exports = { HUESPED_TABLE, HuespedSchema, Huesped }
