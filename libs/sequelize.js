@@ -3,7 +3,7 @@ const { config } = require('../config/config');
 const setupModels = require('../db/models/index')
 const USER = encodeURIComponent(config.dbUser);
 const PASSWORD = encodeURIComponent(config.dbPassword);
-const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`
+const URI = `postgres://${USER}:${PASSWORD}@localhost:5432/hostel`
 
 const sequelize = new Sequelize(URI, {
   dialect: 'postgres',
@@ -32,8 +32,8 @@ Reserva.belongsTo(Usuario);
 //una cama es ocupada por un usuario
 //un usuario puede ocupar una cama
 
-Cama.hasOne(Usuario)
-Usuario.belongsTo(Cama)
+/* Cama.hasOne(Usuario)
+Usuario.belongsTo(Cama) */
 
 // relacion Huesped reserva  
 // una reserva tiene un Huesped

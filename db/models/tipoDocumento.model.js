@@ -23,7 +23,7 @@ class TipoDocumento extends Model {
   static config(sequelize) {
     return {
       sequelize,
-      tableName: TIPO_DOCUMENTO,
+      tableName: TIPO_DOCUMENTO_TABLE,
       modelName: 'TipoDocumento',
       timestamps: false
     }
