@@ -1,0 +1,20 @@
+version: '3.3'
+
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=hostel
+      - POSTGRES_USER=rodrigo
+      - POSTGRES_PASSWORD=hostel123
+    ports:
+      - 5435:5435
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=rodrigo.m.quintero@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=SuperSecret
+    ports:
+      - 5050:80
