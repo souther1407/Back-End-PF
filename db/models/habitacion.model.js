@@ -20,13 +20,15 @@ const HabitacionSchema = {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  tipoHabitacion:{
-    type: DataTypes.ENUM('compartida', 'privada'),
+  privada:{
+    type: DataTypes.BOOLEAN,
     allowNull: false,
-    field: ' tipo_habitacion',
+    defaultValue: false
   },
-  precio: {
-    type: DataTypes.INTEGER
+  bañoPrivado:{
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
   },
   createdAt: {
     allowNull: false,
