@@ -42,11 +42,11 @@ const UsuarioSchema = {
   password: {
     type: DataTypes.STRING,
   },
-  tipoUsuario: {
-    type: DataTypes.ENUM('admin', 'usuario', 'huesped', 'empleado'),
-    allowNull: false,
-    field: 'tipo_usuario',
-  },
+  // tipoUsuario: {
+  //   type: DataTypes.ENUM('admin', 'usuario', 'huesped', 'empleado'),
+  //   allowNull: false,
+  //   field: 'tipo_usuario',
+  // },
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE,

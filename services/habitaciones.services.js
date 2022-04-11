@@ -6,6 +6,7 @@ const { Habitacion } = require('../db/models/habitacion.model');
 class habitacionesService {
 
   async crear(data) {
+    console.log('Creando Habitacion');
 
     const habitacion = await Habitacion.create({
       nombre: data.nombre,
