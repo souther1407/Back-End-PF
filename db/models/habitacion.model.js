@@ -4,14 +4,15 @@ const HABITACION_TABLE = 'habitaciones';
 
 const HabitacionSchema = {
   id:{
-    type:DataTypes.UUID,
-    defaultValue: Sequelize.UUIDV4,
+    type:DataTypes.INTEGER,
+    autoIncrement: true,
     allowNull: false,
     primaryKey: true,
   },
   nombre: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: true,
   },
   comodidades:{
     type: DataTypes.STRING,

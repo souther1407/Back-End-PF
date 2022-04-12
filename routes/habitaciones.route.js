@@ -29,8 +29,9 @@ validatorHandler(getHabitacionSchema, 'params'),
 });
 
 router.post('/',
-// validatorHandler(crearHabitacionSchema, 'body'), //validation
+ validatorHandler(crearHabitacionSchema, 'body'), // validation
   async (req, res)=>{
+    console.log(req.body)
     try {
       const body = req.body
       const nuevaHabitacion = await services.crear(body)
