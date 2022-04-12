@@ -4,8 +4,8 @@
 ---
 
 ## GET:  / habitaciones
-- ##### Entrega un array con ojetos cuya extructura varia segun el tipo de habirtacion.
-- ##### Si es una habitacion individual el objeto tendra la forma:
+- ### Entrega un array con ojetos cuya extructura varia segun el tipo de habirtacion.
+- ### Si es una habitacion individual el objeto tendra la forma:
 ```javascript
     {
 		"id": 1, 
@@ -49,7 +49,7 @@
 ```
 ---
 ## GET:  / habitaciones /:idHabitacion
-- ### Entrega un ojeto con los datos de la habitacion.
+- ### Entrega un objeto con los datos de la habitacion.
 ```javascript
 {
 	"id": 2,
@@ -80,4 +80,18 @@
 }
 ```
 - ### En caso de una Habitacion privada omite la pripiedad camas.
+---
+## POST:  / habitaciones /
+- ### Recibe por body todos los datos necesrios para crear una habitacion.
+```javascript
+{
+	"nombre": "Lunar",
+  "comodidades": "Aire acondicionado, smart Tv, Frigobar",
+  "cantCamas": 5,
+  "privada": false,
+  "bañoPrivado": false,
+  "preciosCamas": [1500, 1500, 1500, 1200, 1000]
+}
+```
+- ### Devuelve la Habitación creada.
 ---
