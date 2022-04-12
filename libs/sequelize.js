@@ -43,22 +43,8 @@ Reserva.belongsTo(Usuario);
 //una cama es ocupada por un huesped
 //un huesped puede ocupar una cama
 
-<<<<<<< HEAD
-/* Cama.hasOne(Usuario)
-Usuario.belongsTo(Cama) */
-
-// relacion Huesped reserva  
-// una reserva tiene un Huesped
-// un Huesped puede tener muchas reservas
-
-// Huesped.hasMany(Reserva, {
-//   foreignKey: 'dni'
-// });
-// Reserva.belongsTo(Huesped);
-=======
 Huesped.hasOne(Cama)
 Cama.belongsTo(Huesped)
->>>>>>> 3a247f5df847d84290979aa662cf6f1bb885410d
 
 // relacion cama reserva  
 // una cama puede tener varias reservas
