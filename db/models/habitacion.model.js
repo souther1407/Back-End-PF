@@ -12,6 +12,7 @@ const HabitacionSchema = {
   nombre: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: true,
   },
   comodidades:{
     type: DataTypes.STRING,
@@ -23,7 +24,7 @@ const HabitacionSchema = {
   privada:{
     type: DataTypes.BOOLEAN,
     allowNull: false,
-    defaultValue: false
+     defaultValue: false
   },
   bañoPrivado:{
     type: DataTypes.BOOLEAN,

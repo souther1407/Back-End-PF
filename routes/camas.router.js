@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) =>{
   try {
     const {id} = req.params
-    const camas = await services.mostrarByHabitacion(id);
+    const camas = await services.traeruna(id);
     res.status(200).json(camas)
   } catch (error) {
     res.status(error)

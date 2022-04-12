@@ -20,6 +20,11 @@ class camasServices {
         return camas
     }
 
+    async traeruna(id){
+        const camas = await Cama.findByPk(id)
+        return camas
+    }
+
     async actualizar(id, cambios){
         const { precio, estado } = cambios
         const camaUpdate = Cama.update({
