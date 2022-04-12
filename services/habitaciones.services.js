@@ -48,15 +48,19 @@ class habitacionesService {
       return habitacion
   }
 
+  // eslint-disable-next-line class-methods-use-this
   async buscar() {
     const habitacion = await Habitacion.findAll();
     return habitacion;
   }
+
+  // eslint-disable-next-line class-methods-use-this
   async mostrarByHabitacion(id){
     const camas = await Cama.findAll({where: { HabitacionId : id}})
-    return camas
+    return camas;
 }
 
+  // eslint-disable-next-line class-methods-use-this
   async buscaruno(id) {
     let habitacion = Habitacion.findByPk(id);
     if(!habitacion.privada){
@@ -68,14 +72,16 @@ class habitacionesService {
     return habitacion;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   async actualizar(id, cambios) {
     const {nombre, cantCamas, comodidades, tipoHabitacion} = cambios;
+
     const habitacionUpdate = await Habitacion.update({ 
       nombre: nombre,
       cantCamas: cantCamas,
       comodidades: comodidades,
       tipoHabitacion: tipoHabitacion
-     }, 
+    }, 
       { where : { id : id }} 
     )
 

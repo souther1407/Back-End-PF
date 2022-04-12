@@ -4,8 +4,8 @@ const HABITACION_TABLE = 'habitaciones';
 
 const HabitacionSchema = {
   id:{
-    type:DataTypes.UUID,
-    defaultValue: Sequelize.UUIDV4,
+    type:DataTypes.INTEGER,
+    autoIncrement: true,
     allowNull: false,
     primaryKey: true,
   },
@@ -24,7 +24,7 @@ const HabitacionSchema = {
   privada:{
     type: DataTypes.BOOLEAN,
     allowNull: false,
-     defaultValue: false
+    defaultValue: false
   },
   bañoPrivado:{
     type: DataTypes.BOOLEAN,

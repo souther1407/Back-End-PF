@@ -25,6 +25,26 @@ class camasServices {
         return camas
     }
 
+    async crear(data){
+    const {HabitacionId} = data
+          
+        //  const habitacion = Habitacion.findByPk(parseInt(HabitacionId))
+        
+            try {
+            const cama = await Cama.create({
+                precio: data.precio,
+                HabitacionId: data.HabitacionId,
+                })
+                // Habitacion.addCamas(HabitacionId)
+            let cantCam = await Cama.count({where: {HabitacionId}})
+            await Habitacion.update({cantCamas:cantCam})
+            return cama
+            } catch(error) {
+        console.log(error)
+        }
+}
+
+
     async actualizar(id, cambios){
         const { precio, estado } = cambios
         const camaUpdate = Cama.update({
