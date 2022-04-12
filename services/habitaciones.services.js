@@ -6,9 +6,7 @@ const { Habitacion } = require('../db/models/habitacion.model');
 class habitacionesService {
 
   async crear(data) {
-    console.log('Creando Habitacion');
-
-    if(data.privada === true){
+    if(data.privada){
       try {
         const habitacion = await Habitacion.create({
           nombre: data.nombre,
@@ -44,20 +42,23 @@ class habitacionesService {
         console.error(error)
       }
     }
-
-
-      return habitacion
   }
 
   // eslint-disable-next-line class-methods-use-this
   async buscar() {
     const habitacion = await Habitacion.findAll();
+    for (let i = 0; i < habitacion.length; i++) {
+      if(!habitacion[i].privada){
+        habitacion[i] = await Habitacion.findByPk(habitacion[i].id, {include: [Cama]})
+      }
+    }
     return habitacion;
   }
 
   // eslint-disable-next-line class-methods-use-this
   async mostrarByHabitacion(id){
     const camas = await Cama.findAll({where: { HabitacionId : id}})
+
     return camas;
 }
 
@@ -79,7 +80,7 @@ class habitacionesService {
 
     const habitacionUpdate = await Habitacion.update({ 
       nombre: nombre,
-      cantCamas: cantCamas,
+      // cantCamas: cantCamas,
       comodidades: comodidades,
       tipoHabitacion: tipoHabitacion
     }, 
