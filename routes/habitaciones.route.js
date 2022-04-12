@@ -48,9 +48,11 @@ validatorHandler(actualizarHabitacionSchema, 'body'),
     try {
       const { id } = req.params
       const body = req.body
+
       const habitacion = await services.actualizar(id, body)
       res.json(habitacion)
     } catch(error) {
+      console.log(error)
       res.status(404).json({
         message: error
       })

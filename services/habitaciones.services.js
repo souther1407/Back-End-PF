@@ -55,14 +55,12 @@ class habitacionesService {
     return habitacion;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  async mostrarByHabitacion(id){
-    const camas = await Cama.findAll({where: { HabitacionId : id}})
+// CUMPLE LA MISMA FUNCION QUE BUASCAR UNO
+// async mostrarByHabitacion(id){
+//  const camas = await Cama.findAll({where: { HabitacionId : id}})
+//  return camas;
+// }
 
-    return camas;
-}
-
-  // eslint-disable-next-line class-methods-use-this
   async buscaruno(id) {
     let habitacion = await Habitacion.findByPk(id);
     if(!habitacion.privada){
@@ -74,18 +72,19 @@ class habitacionesService {
     return habitacion;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async actualizar(id, cambios) {
-    const {nombre, cantCamas, comodidades, tipoHabitacion} = cambios;
+    const {nombre, comodidades, privada, precioHabitacion, bañoPrivado} = cambios;
 
     const habitacionUpdate = await Habitacion.update({ 
-      nombre: nombre,
-      // cantCamas: cantCamas,
-      comodidades: comodidades,
-      tipoHabitacion: tipoHabitacion
+      nombre,
+      comodidades,
+      privada,
+      precioHabitacion,
+      bañoPrivado
     }, 
-      { where : { id : id }} 
+      { where : { id }} 
     )
+    console.log(habitacionUpdate)
 
     if(!habitacionUpdate) {
       throw boom.notFound('habitacion no encontrada');
