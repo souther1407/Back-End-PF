@@ -102,6 +102,16 @@ class habitacionesService {
     return `Habitacion con id: ${id} fue borrada con exito`;
   }
 
+  async FilterByTypeRoom(privada) {
+    let Rooms;
+    Rooms = await Habitacion.findAll({where: {privada: privada}})
+    return Rooms;
+  }
+  async FilterWithBathroom() {
+    let Rooms;
+    Rooms = await Habitacion.findAll({where: {bañoPrivado: true}})
+    return Rooms;
+  }
 }
 
 module.exports = habitacionesService
