@@ -44,7 +44,7 @@ class habitacionesService {
       cantCamas: cantCamas,
       comodidades: comodidades,
       tipoHabitacion: tipoHabitacion
-     }, 
+    }, 
       { where : { id : id }} 
     )
 

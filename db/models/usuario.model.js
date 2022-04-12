@@ -37,14 +37,6 @@ const UsuarioSchema = {
   password: {
     type: DataTypes.STRING,
   },
-<<<<<<< HEAD
-  // tipoUsuario: {
-  //   type: DataTypes.ENUM('admin', 'usuario', 'huesped', 'empleado'),
-  //   allowNull: false,
-  //   field: 'tipo_usuario',
-  // },
-=======
->>>>>>> 3a247f5df847d84290979aa662cf6f1bb885410d
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE,
