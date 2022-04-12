@@ -1,7 +1,7 @@
 # Back-End PF - Peticiones y Rutas de la API
 
 ## GET:  / habitaciones
-- ### Entrega un array con ojetos cuya extructura varia segun el tipo de habirtacion.
+- ### Entrega un array con ojetos cuya extructura varia segun el tipo de habitacion.
 - ### Sí es una habitacion individual el objeto tendra la forma:
 ```javascript
     {
