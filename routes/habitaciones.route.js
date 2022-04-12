@@ -29,7 +29,7 @@ validatorHandler(getHabitacionSchema, 'params'),
 });
 
 router.post('/',
-// validatorHandler(crearHabitacionSchema, 'body'), //validation
+ validatorHandler(crearHabitacionSchema, 'body'), // validation
   async (req, res)=>{
     try {
       const body = req.body

@@ -8,37 +8,75 @@ class habitacionesService {
   async crear(data) {
     console.log('Creando Habitacion');
 
-    const habitacion = await Habitacion.create({
-      nombre: data.nombre,
-      comodidades: data.comodidades,
-      tipoHabitacion: data.tipoHabitacion,
-      cantCamas: data.cantCamas,
-      precio: data.precio
-    })
-      for (let i = 0; i < data.cantCamas; i++) {
-        Cama.create()
-        .then((cama)=>{
-          habitacion.setCamas(cama)
+    if(data.privada === true){
+      try {
+        const habitacion = await Habitacion.create({
+          nombre: data.nombre,
+          comodidades: data.comodidades,
+          cantCamas: data.cantCamas,
+          privada: data.privada,
+          bañoPrivado: data.bañoPrivado,
+          precio: data.precioHabitacion
         })
+        return habitacion
+      } catch(error) {
+        console.log(error)
       }
+    }else{
+      try {
+        const habitacion = await Habitacion.create({
+          nombre: data.nombre,
+          comodidades: data.comodidades,
+          cantCamas: data.cantCamas,
+          privada: data.privada,
+          bañoPrivado: data.bañoPrivado,
+        })
+        for (let i = 0; i < data.cantCamas; i++) {
+          Cama.create({
+            precio: data.preciosCamas[i]
+          })
+          .then((cama)=>{
+            habitacion.setCamas(cama)
+          })
+        }
+        return habitacion
+      } catch(error) {
+        console.error(error)
+      }
+    }
+
+
       return habitacion
   }
 
+  // eslint-disable-next-line class-methods-use-this
   async buscar() {
     const habitacion = await Habitacion.findAll();
     return habitacion;
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  async mostrarByHabitacion(id){
+    const camas = await Cama.findAll({where: { HabitacionId : id}})
+    return camas;
+}
+
+  // eslint-disable-next-line class-methods-use-this
   async buscaruno(id) {
-    const habitacion = Habitacion.findByPk(id);
+    let habitacion = Habitacion.findByPk(id);
+    if(!habitacion.privada){
+      habitacion = Habitacion.findByPk(id, {include: [Cama]})
+    }
     if (!habitacion) {
       throw boom.notFound('no se encontro la habitacion')
     }
     return habitacion;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   async actualizar(id, cambios) {
     const {nombre, cantCamas, comodidades, tipoHabitacion} = cambios;
+
     const habitacionUpdate = await Habitacion.update({ 
       nombre: nombre,
       cantCamas: cantCamas,
