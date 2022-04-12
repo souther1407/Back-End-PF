@@ -8,7 +8,14 @@ const CamaSchema = {
     defaultValue: Sequelize.UUIDV4,
     allowNull: false,
     primaryKey: true,
+    
   },
+  /* id:{
+    type:DataTypes.INTEGER,
+    allowNull:false,
+    primaryKey:true,
+    autoIncrement:true,
+  }, */
   precio: {
     type: DataTypes.INTEGER,
     allowNull: false,
