@@ -17,6 +17,9 @@ const HabitacionSchema = {
   comodidades:{
     type: DataTypes.STRING,
   },
+  descripcion:{
+    type: DataTypes.STRING
+  },
   cantCamas: {
     type: DataTypes.INTEGER,
     allowNull: false
