@@ -53,13 +53,8 @@ class habitacionTipoService {
 
   async mostrarByhabBan(tipo, bano) {
     const habitaciones =await this.mostrarBytipo(tipo)
-     let booleano = ''
-     bano === 'privado' ? booleano = true : booleano = false; 
-    // if(tipo === 'privada'){
-    //   habitaciones = await Habitacion.findAll({where:{privada: true}})
-    // } else if(tipo === 'compartida'){
-    //   habitaciones = await Habitacion.findAll({where:{privada:false}})
-    // };
+    let booleano = ''
+    bano === 'privado' ? booleano = true : booleano = false; 
     const habitacionesBano = await habitaciones.filter(habitacion => habitacion.banoPrivado === booleano);
     return habitacionesBano;
   }

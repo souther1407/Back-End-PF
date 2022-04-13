@@ -37,7 +37,7 @@ class camasServices {
                 })
                 // Habitacion.addCamas(HabitacionId)
             let cantCam = await Cama.count({where: {HabitacionId}})
-            await Habitacion.update({cantCama:cantCam})
+            await Habitacion.update({cantCamas: cantCam}, {where: {id: cama.HabitacionId}})
             return cama
             } catch(error) {
         console.log(error)

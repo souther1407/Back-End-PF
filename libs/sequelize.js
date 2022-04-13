@@ -4,8 +4,8 @@ const setupModels = require('../db/models/index')
 const {Model, DataTypes} = require('sequelize')
 const USER = encodeURIComponent(config.dbUser);
 const PASSWORD = encodeURIComponent(config.dbPassword);
-const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`
-
+// const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`
+const URI = 'postgres://ebzvjeht:2vQxks0hV0POuEpWoQKyyFo-_Uoi66QW@heffalump.db.elephantsql.com/ebzvjeht'
 const sequelize = new Sequelize(URI, {
   dialect: 'postgres',
   logging: false,
@@ -86,12 +86,8 @@ Huesped.belongsTo(TipoDocumento)
 Huesped.belongsToMany( Cama,{through: Historial})
 Cama.belongsToMany( Huesped,{through: Historial})
 
-<<<<<<< HEAD
 sequelize.sync({ force: false })
 
-=======
-sequelize.sync({ force: true })
->>>>>>> 016df52e8a97e42acac173d9a9d669db0fe6ed5f
   .then(() => {
     console.log(`base de datos creada/actualizada`);
   })
