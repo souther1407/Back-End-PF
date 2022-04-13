@@ -7,11 +7,13 @@ const { Op } = require('sequelize')
 class ReservaService {
 
     async mostrarReservas(fecha){
+        
         const reservas = await ReservaCama.findAll({
             where: {
                 fecha_ingreso:{
-                    [Op.like]: fecha ? `%${fecha}` : "%%"
-                } 
+                    [Op.gte]: fecha ? new Date(fecha) : new Date("1/1/1900")
+                }
+                   
             },
             include: Cama
         })

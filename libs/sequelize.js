@@ -130,19 +130,19 @@ sequelize.sync({ force: true })
 
     //TEST: Reservas de prueba, borrar luego
     const res1 = await Reserva.create({
-      fecha_ingreso:new Date().toUTCString(),
-      fecha_egreso:new Date(2025,5,1).toUTCString(),
+      fecha_ingreso:new Date(),
+      fecha_egreso:new Date("1/5/2025"),
       saldo:300
     })
     const res2 = await Reserva.create({
-      fecha_ingreso:new Date(2022,11,3).toUTCString(),
-      fecha_egreso:new Date(2029,1,9).toUTCString(),
+      fecha_ingreso:new Date("3/1/2025"),
+      fecha_egreso:new Date("9/1/2029"),
       saldo:12409124809
     })
 
     const res3 = await Reserva.create({
-      fecha_ingreso:new Date().toUTCString(),
-      fecha_egreso:new Date(2023,1,11).toUTCString(),
+      fecha_ingreso:new Date(),
+      fecha_egreso:new Date("1/1/2023"),
       saldo:3234
     })
     res1.setUsuario(user1);

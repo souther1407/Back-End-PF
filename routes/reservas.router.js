@@ -5,10 +5,9 @@ const router = express.Router()
 const services = new ReservaService
 
 router.get('/', async (req, res)=>{
-    const {fecha} = req.query
+    const {fecha_ingreso} = req.query
     try {
-        const reservas = await services.mostrarReservas(fecha)
-
+        const reservas = await services.mostrarReservas(fecha_ingreso)
         res.status(200).json(reservas)
     } catch (error) {
         res.status(error)
