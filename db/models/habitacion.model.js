@@ -29,7 +29,7 @@ const HabitacionSchema = {
     allowNull: false,
     defaultValue: false
   },
-  bañoPrivado:{
+  banoPrivado:{
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: false

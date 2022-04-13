@@ -37,7 +37,7 @@ class camasServices {
                 })
                 // Habitacion.addCamas(HabitacionId)
             let cantCam = await Cama.count({where: {HabitacionId}})
-            await Habitacion.update({cantCamas:cantCam})
+            await Habitacion.update({cantCamas: cantCam}, {where: {id: cama.HabitacionId}})
             return cama
             } catch(error) {
         console.log(error)
@@ -45,11 +45,12 @@ class camasServices {
 }
 
 
+    // eslint-disable-next-line class-methods-use-this
     async actualizar(id, cambios){
         const { precio, estado } = cambios
         const camaUpdate = Cama.update({
-            precio: precio,
-            estado: estado
+            precio,
+            estado
         },
             { where: {id : id}}
         )
