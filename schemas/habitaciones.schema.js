@@ -29,7 +29,10 @@ const actualizarHabitacionSchema = joi.object({
   nombre,
   cantCamas,
   comodidades,
+  privada,
+  banoPrivado,
   tipo,
+  precioHabitacion,
 });
 
 const getHabitacionSchema = joi.object({
