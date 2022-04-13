@@ -104,3 +104,35 @@
 - ### Recibe por params el id de la habitación a modificar.
 - ### Recibe por body los datos de la habitación a modificar con sus detalles. Valores modificables: nombre, comodidades, cantCamas, privada, bañoPrivado, preciosCamas
 - ### Si la cama se modifico retonar un array con el valor 1, en caso de que no se haya modificado retorna un array con el valor 0 indicando que no se modifico nada.
+
+## GET:  / reservas?fecha_ingreso=2020-05-1
+ devuelve las reservas hechas al hostel
+ ### queries(todas opcionales): fecha_ingreso, debe ser YYYY-MM-DD, devuelve solo las que tengan fecha de ingreso lo enviado
+ 
+ ### ejemplo
+ ```json
+ [
+  {
+    "id": "72466aed-6e54-48b2-8f6c-c72f0bff36fc",
+    "fecha_ingreso": "2025-03-01",
+    "fecha_egreso": "2029-09-01",
+    "saldo": 12409124809,
+    "UsuarioId": "7a4d894a-3897-4424-b152-a51beb0dc7e4",
+    "Camas": [
+        {
+          "id": "79634438-ecd9-476d-b441-04ffa7e7a44c",
+          "precio": 300,
+          "estado": "libre",
+          "HabitacionId": 1,
+          "HuespedId": null,
+          "Reserva_Cama": {
+              "createdAt": "2022-04-13T15:31:30.793Z",
+              "updatedAt": "2022-04-13T15:31:30.793Z",
+              "ReservaId": "72466aed-6e54-48b2-8f6c-c72f0bff36fc",
+              "CamaId": "79634438-ecd9-476d-b441-04ffa7e7a44c"
+            }
+        }
+     ]
+  }
+]
+ ```
