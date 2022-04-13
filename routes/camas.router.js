@@ -1,10 +1,10 @@
 const express = require('express');
-
 const router = express.Router();
+
 const camasServices = require('../services/camas.services');
 const validatorHandler = require('../middleware/validator.handler');
 const {crearCamaSchema, actualizarCamaSchema, getCamaSchema} = require('../schemas/camas.schema');
-const { not } = require('joi');
+
 
 
 // eslint-disable-next-line new-cap

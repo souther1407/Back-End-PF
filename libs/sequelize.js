@@ -50,8 +50,8 @@ Cama.belongsTo(Huesped)
 // una cama puede tener varias reservas
 // una reserva puede tener varias camas 
 
-Reserva.hasMany(Cama);
-Cama.belongsTo(Reserva);
+Reserva.belongsToMany(Cama, { through: 'Reserva-Cama' });
+Cama.belongsToMany(Reserva, { through: 'Reserva-Cama' });
 
 //relacion user nacionalidad
 //un usuario tiene una nacionalidad
@@ -87,6 +87,7 @@ Huesped.belongsToMany( Cama,{through: Historial})
 Cama.belongsToMany( Huesped,{through: Historial})
 
 sequelize.sync({ force: false })
+
   .then(() => {
     console.log(`base de datos creada/actualizada`);
   })

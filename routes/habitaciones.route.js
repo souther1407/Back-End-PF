@@ -14,6 +14,20 @@ router.get('/', async (req, res)=>{
 //   res.json('soy el filtro')
 // });
 
+
+
+router.post('/',
+ validatorHandler(crearHabitacionSchema, 'body'), // validation
+  async (req, res)=>{
+    try {
+      const body = req.body
+      const nuevaHabitacion = await services.crear(body)
+      res.status(201).json(nuevaHabitacion)
+    } catch(error) {
+      res.status(error)
+    }
+});
+
 router.get('/:id',
 validatorHandler(getHabitacionSchema, 'params'),
   async (req, res)=>{
@@ -25,18 +39,6 @@ validatorHandler(getHabitacionSchema, 'params'),
       res.status(404).json({
         message: error
       })
-    }
-});
-
-router.post('/',
- validatorHandler(crearHabitacionSchema, 'body'), // validation
-  async (req, res)=>{
-    try {
-      const body = req.body
-      const nuevaHabitacion = await services.crear(body)
-      res.status(201).json(nuevaHabitacion)
-    } catch(error) {
-      res.status(error)
     }
 });
 

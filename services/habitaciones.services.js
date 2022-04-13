@@ -14,7 +14,7 @@ class habitacionesService {
           comodidades: data.comodidades,
           cantCamas: data.cantCamas,
           privada: data.privada,
-          bañoPrivado: data.bañoPrivado,
+          banoPrivado: data.banoPrivado,
           precio: data.precioHabitacion
         })
         return habitacion
@@ -28,11 +28,11 @@ class habitacionesService {
           comodidades: data.comodidades,
           cantCamas: data.cantCamas,
           privada: data.privada,
-          bañoPrivado: data.bañoPrivado,
+          banoPrivado: data.banoPrivado,
         })
         for (let i = 0; i < data.cantCamas; i++) {
           Cama.create({
-            precio: data.preciosCamas[i]
+            precio: data.preciosCamas
           })
           .then((cama)=>{
             habitacion.setCamas(cama)
