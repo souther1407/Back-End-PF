@@ -5,13 +5,16 @@ const router = express.Router()
 const services = new ReservaService
 
 router.get('/', async (req, res)=>{
+    const {fecha_ingreso} = req.query
     try {
-        const reservas = await services.mostrarReservas()
+        const reservas = await services.mostrarReservas(fecha_ingreso)
         res.status(200).json(reservas)
     } catch (error) {
         res.status(error)
     }
 });
+
+
 
 router.patch('/:id',
     async (req, res) => {

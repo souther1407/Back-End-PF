@@ -10,11 +10,11 @@ const ReservaCamaSchema = {
     primaryKey: true,
   },
   fecha_ingreso:{
-    type: DataTypes.DATE,
+    type: DataTypes.DATEONLY,
     allowNull: false,
   },
   fecha_egreso:{
-    type: DataTypes.DATE,
+    type: DataTypes.DATEONLY,
     allowNull: false,
   },
   saldo: {
