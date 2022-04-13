@@ -14,30 +14,20 @@ router.get('/', async (req, res)=>{
 //   res.json('soy el filtro')
 // });
 
-// Filtra por tipo de habitacion 
-router.get('/filter',
-  async (req, res)=>{
-    const { privada } = req.query
-    try {
-      const Rooms = await services.FilterByTypeRoom(privada);
-      res.json(Rooms)
-    } catch(error) {
-      res.status(404).json({
-        message: error
-      })
-    }
-});
-router.get('/filter/withBathroom',
+
+
+router.post('/',
+ validatorHandler(crearHabitacionSchema, 'body'), // validation
   async (req, res)=>{
     try {
-      const Rooms = await services.FilterWithBathroom();
-      res.json(Rooms)
+      const body = req.body
+      const nuevaHabitacion = await services.crear(body)
+      res.status(201).json(nuevaHabitacion)
     } catch(error) {
-      res.status(404).json({
-        message: error
-      })
+      res.status(error)
     }
 });
+
 router.get('/:id',
 validatorHandler(getHabitacionSchema, 'params'),
   async (req, res)=>{

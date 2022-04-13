@@ -3,12 +3,13 @@ const joi = require('joi')
 const id = joi.string();
 const nombre = joi.string().min(3).max(15);
 const cantCamas = joi.number().integer().min(1);
-const tipoHabitacion = joi.string().valid('privada', 'compartida');
+const tipo = joi.string().valid('privada', 'compartida');
 const comodidades = joi.string();
 const precioHabitacion = joi.number().integer();
 const preciosCamas = joi.array();
-const bañoPrivado = joi.boolean();
+const banoPrivado = joi.boolean();
 const privada = joi.bool();
+const bano = joi.string().valid('privado', 'compartido');
 
 
 const crearHabitacionSchema = joi.object({
@@ -16,9 +17,10 @@ const crearHabitacionSchema = joi.object({
   comodidades: comodidades.required(),
   cantCamas: cantCamas.required(),
   privada: privada.required(),
-  bañoPrivado: bañoPrivado.required(),
+  banoPrivado: banoPrivado.required(),
   precioHabitacion,
   preciosCamas,
+  
 
 });
 
@@ -27,18 +29,24 @@ const actualizarHabitacionSchema = joi.object({
   nombre,
   cantCamas,
   comodidades,
-  tipoHabitacion,
   privada,
-  bañoPrivado,
-  precioHabitacion
+  banoPrivado,
+  tipo,
+  precioHabitacion,
 });
 
 const getHabitacionSchema = joi.object({
   id: id.required(),
 });
 
+const getHabitacionTipoSchema = joi.object({
+tipo,
+bano
+})
+
 module.exports = {
   crearHabitacionSchema,
   actualizarHabitacionSchema,
-  getHabitacionSchema
+  getHabitacionSchema,
+  getHabitacionTipoSchema
 }
