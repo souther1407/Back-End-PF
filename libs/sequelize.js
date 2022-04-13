@@ -50,8 +50,8 @@ Cama.belongsTo(Huesped)
 // una cama puede tener varias reservas
 // una reserva puede tener varias camas 
 
-Reserva.hasMany(Cama);
-Cama.belongsTo(Reserva);
+Reserva.belongsToMany(Cama,{through:"Reserva_Cama"});
+Cama.belongsToMany(Reserva,{through:"Reserva_Cama"});
 
 //relacion user nacionalidad
 //un usuario tiene una nacionalidad
@@ -87,8 +87,71 @@ Huesped.belongsToMany( Cama,{through: Historial})
 Cama.belongsToMany( Huesped,{through: Historial})
 
 sequelize.sync({ force: true })
-  .then(() => {
+  .then(async() => {
     console.log(`base de datos creada/actualizada`);
+
+    //TEST: Nacionalidad de prueba, borrar luego
+    const argentino = await Nacionalidades.create({nombre:"Argentina"})
+
+    //TEST: tipo de documento de prueba, borrar luego
+    const dni = await TipoDocumento.create({nombre:"DNI"})
+
+    //TEST: Usuario de prueba, borrar luego
+    const user1 = await Usuario.create({
+      nombre:"Ignacio",
+      apellido:"Lestrada",
+      telefono:1234,
+      direccion:"asdasf",
+      nombreUser:"igna1407",
+      email:"adasd@asd.com",
+      password:"12345",
+    })
+    
+    user1.setNacionalidade(argentino) //D: Nacionalidade
+    user1.setTipoDocumento(dni)
+
+
+    //TEST: habitaciones con camas de prueba, borrar luego
+    const habitacion1 = await Habitacion.create({
+      nombre:"La casona de Marcela",
+      comodidades:"TV, internet",
+      cantCamas:1,
+      privada:true,
+      bañoPrivado:true,
+    })
+
+    //TEST: cama de prueba, borrar luego
+    const cama1 = await Cama.create({
+      precio:300,
+      estado:"libre",
+    })
+
+    habitacion1.addCama(cama1)
+
+    //TEST: Reservas de prueba, borrar luego
+    const res1 = await Reserva.create({
+      fecha_ingreso:new Date().toUTCString(),
+      fecha_egreso:new Date(2025,5,1).toUTCString(),
+      saldo:300
+    })
+    const res2 = await Reserva.create({
+      fecha_ingreso:new Date(2022,11,3).toUTCString(),
+      fecha_egreso:new Date(2029,1,9).toUTCString(),
+      saldo:12409124809
+    })
+
+    const res3 = await Reserva.create({
+      fecha_ingreso:new Date().toUTCString(),
+      fecha_egreso:new Date(2023,1,11).toUTCString(),
+      saldo:3234
+    })
+    res1.setUsuario(user1);
+    res2.setUsuario(user1);
+    res3.setUsuario(user1);
+    res1.addCama(cama1);
+    res2.addCama(cama1);
+    res3.addCama(cama1);
+    
   })
   .catch(err => console.log(err));
 

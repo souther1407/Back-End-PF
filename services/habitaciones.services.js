@@ -6,7 +6,7 @@ const { Habitacion } = require('../db/models/habitacion.model');
 class habitacionesService {
 
   async crear(data) {
-    if(data.privada){
+    
       try {
         const habitacion = await Habitacion.create({
           nombre: data.nombre,
@@ -16,32 +16,22 @@ class habitacionesService {
           bañoPrivado: data.bañoPrivado,
           precio: data.precioHabitacion
         })
-        return habitacion
-      } catch(error) {
-        console.log(error)
-      }
-    }else{
-      try {
-        const habitacion = await Habitacion.create({
-          nombre: data.nombre,
-          comodidades: data.comodidades,
-          cantCamas: data.cantCamas,
-          privada: data.privada,
-          bañoPrivado: data.bañoPrivado,
-        })
-        for (let i = 0; i < data.cantCamas; i++) {
+        /* for (let i = 0; i < data.cantCamas; i++) {
           Cama.create({
             precio: data.preciosCamas[i]
           })
           .then((cama)=>{
             habitacion.setCamas(cama)
           })
-        }
+        } */
+        const camas=await Promise.all(data.preciosCamas.map(pc => Cama.create({precio: pc})))
+        habitacion.setCamas(camas)
         return habitacion
+
       } catch(error) {
-        console.error(error)
+        console.log(error)
       }
-    }
+      
   }
 
   // eslint-disable-next-line class-methods-use-this

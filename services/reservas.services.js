@@ -2,11 +2,17 @@ const { sequelize } = require('../libs/sequelize')
 const { ReservaCama } = require('../db/models/reservaCama.model')
 const { Usuario } = require('../db/models/usuario.model')
 const { Cama } = require('../db/models/cama.model')
+const { Op } = require('sequelize')
 
 class ReservaService {
 
-    async mostrarReservas(){
+    async mostrarReservas(fecha){
         const reservas = await ReservaCama.findAll({
+            where: {
+                fecha_ingreso:{
+                    [Op.like]: fecha ? `%${fecha}` : "%%"
+                } 
+            },
             include: Cama
         })
         return reservas;
@@ -15,6 +21,8 @@ class ReservaService {
     async mostrarReservaById(){
 
     }
+
+    
 
     async crearReserva(idUser, data){
         const newReserva = await ReservaCama.create({
