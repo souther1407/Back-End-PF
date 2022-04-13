@@ -107,8 +107,7 @@
 
 ## GET:  / reservas?fecha_ingreso=2020-05-1
  devuelve las reservas hechas al hostel
- ### queries(todas opcionales): fecha_ingreso, debe ser YYYY-MM-DD, devuelve solo las que tengan fecha de ingreso lo enviado
- 
+ ### queries(todas opcionales): fecha_ingreso, debe ser YYYY-MM-DD, devuelve solo las que tengan como fecha de ingreso lo enviado por query
  ### ejemplo
  ```json
  [
