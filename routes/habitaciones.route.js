@@ -14,6 +14,7 @@ router.get('/', async (req, res)=>{
 //   res.json('soy el filtro')
 // });
 
+<<<<<<< HEAD
 
 
 router.post('/',
@@ -28,6 +29,32 @@ router.post('/',
     }
 });
 
+=======
+// Filtra por tipo de habitacion 
+router.get('/filter',
+  async (req, res)=>{
+    const { privada } = req.query
+    try {
+      const Rooms = await services.FilterByTypeRoom(privada);
+      res.json(Rooms)
+    } catch(error) {
+      res.status(404).json({
+        message: error
+      })
+    }
+});
+router.get('/filter/withBathroom',
+  async (req, res)=>{
+    try {
+      const Rooms = await services.FilterWithBathroom();
+      res.json(Rooms)
+    } catch(error) {
+      res.status(404).json({
+        message: error
+      })
+    }
+});
+>>>>>>> 016df52e8a97e42acac173d9a9d669db0fe6ed5f
 router.get('/:id',
 validatorHandler(getHabitacionSchema, 'params'),
   async (req, res)=>{
@@ -42,6 +69,22 @@ validatorHandler(getHabitacionSchema, 'params'),
     }
 });
 
+<<<<<<< HEAD
+=======
+router.post('/',
+ validatorHandler(crearHabitacionSchema, 'body'), // validation
+  async (req, res)=>{
+    console.log(req.body)
+    try {
+      const body = req.body
+      const nuevaHabitacion = await services.crear(body)
+      res.status(201).json(nuevaHabitacion)
+    } catch(error) {
+      res.status(error)
+    }
+});
+
+>>>>>>> 016df52e8a97e42acac173d9a9d669db0fe6ed5f
 router.patch('/:id',
 validatorHandler(getHabitacionSchema, 'params'),
 validatorHandler(actualizarHabitacionSchema, 'body'),
@@ -49,9 +92,11 @@ validatorHandler(actualizarHabitacionSchema, 'body'),
     try {
       const { id } = req.params
       const body = req.body
+
       const habitacion = await services.actualizar(id, body)
       res.json(habitacion)
     } catch(error) {
+      console.log(error)
       res.status(404).json({
         message: error
       })

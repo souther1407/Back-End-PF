@@ -6,8 +6,7 @@ const { Habitacion } = require('../db/models/habitacion.model');
 class habitacionesService {
 
   async crear(data) {
-
-    if(data.privada === true){
+    if(data.privada){
       try {
         const habitacion = await Habitacion.create({
           nombre: data.nombre,
@@ -43,26 +42,27 @@ class habitacionesService {
         console.error(error)
       }
     }
-
-
-      return habitacion
   }
 
   // eslint-disable-next-line class-methods-use-this
   async buscar() {
     const habitacion = await Habitacion.findAll();
+    for (let i = 0; i < habitacion.length; i++) {
+      if(!habitacion[i].privada){
+        habitacion[i] = await Habitacion.findByPk(habitacion[i].id, {include: [Cama]})
+      }
+    }
     return habitacion;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  async mostrarByHabitacion(id){
-    const camas = await Cama.findAll({where: { HabitacionId : id}})
-    return camas;
-}
+// CUMPLE LA MISMA FUNCION QUE BUASCAR UNO
+// async mostrarByHabitacion(id){
+//  const camas = await Cama.findAll({where: { HabitacionId : id}})
+//  return camas;
+// }
 
-  // eslint-disable-next-line class-methods-use-this
   async buscaruno(id) {
-    let habitacion = Habitacion.findByPk(id);
+    let habitacion = await Habitacion.findByPk(id);
     if(!habitacion.privada){
       habitacion = Habitacion.findByPk(id, {include: [Cama]})
     }
@@ -72,18 +72,19 @@ class habitacionesService {
     return habitacion;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async actualizar(id, cambios) {
-    const {nombre, cantCamas, comodidades, tipoHabitacion} = cambios;
+    const {nombre, comodidades, privada, precioHabitacion, bañoPrivado} = cambios;
 
     const habitacionUpdate = await Habitacion.update({ 
-      nombre: nombre,
-      cantCamas: cantCamas,
-      comodidades: comodidades,
-      tipoHabitacion: tipoHabitacion
+      nombre,
+      comodidades,
+      privada,
+      precioHabitacion,
+      bañoPrivado
     }, 
-      { where : { id : id }} 
+      { where : { id }} 
     )
+    console.log(habitacionUpdate)
 
     if(!habitacionUpdate) {
       throw boom.notFound('habitacion no encontrada');
@@ -101,6 +102,16 @@ class habitacionesService {
     return `Habitacion con id: ${id} fue borrada con exito`;
   }
 
+  async FilterByTypeRoom(privada) {
+    let Rooms;
+    Rooms = await Habitacion.findAll({where: {privada: privada}})
+    return Rooms;
+  }
+  async FilterWithBathroom() {
+    let Rooms;
+    Rooms = await Habitacion.findAll({where: {bañoPrivado: true}})
+    return Rooms;
+  }
 }
 
 module.exports = habitacionesService
