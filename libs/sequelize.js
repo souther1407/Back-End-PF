@@ -4,8 +4,13 @@ const setupModels = require('../db/models/index')
 const {Model, DataTypes} = require('sequelize')
 const USER = encodeURIComponent(config.dbUser);
 const PASSWORD = encodeURIComponent(config.dbPassword);
+<<<<<<< HEAD
 // const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`
 const URI = 'postgres://ebzvjeht:2vQxks0hV0POuEpWoQKyyFo-_Uoi66QW@heffalump.db.elephantsql.com/ebzvjeht'
+=======
+const URI = `postgres://${USER}:${PASSWORD}@localhost:5432/hostel`
+
+>>>>>>> e57fee3ab6f53ad65eb85489d5ca9bd1c7b4087c
 const sequelize = new Sequelize(URI, {
   dialect: 'postgres',
   logging: false,
@@ -50,8 +55,13 @@ Cama.belongsTo(Huesped)
 // una cama puede tener varias reservas
 // una reserva puede tener varias camas 
 
+<<<<<<< HEAD
 Reserva.belongsToMany(Cama, { through: 'Reserva-Cama' });
 Cama.belongsToMany(Reserva, { through: 'Reserva-Cama' });
+=======
+Reserva.belongsToMany(Cama,{through:"Reserva_Cama"});
+Cama.belongsToMany(Reserva,{through:"Reserva_Cama"});
+>>>>>>> e57fee3ab6f53ad65eb85489d5ca9bd1c7b4087c
 
 //relacion user nacionalidad
 //un usuario tiene una nacionalidad
@@ -86,10 +96,78 @@ Huesped.belongsTo(TipoDocumento)
 Huesped.belongsToMany( Cama,{through: Historial})
 Cama.belongsToMany( Huesped,{through: Historial})
 
+<<<<<<< HEAD
 sequelize.sync({ force: false })
 
   .then(() => {
+=======
+sequelize.sync({ force: true })
+  .then(async() => {
+>>>>>>> e57fee3ab6f53ad65eb85489d5ca9bd1c7b4087c
     console.log(`base de datos creada/actualizada`);
+
+    //TEST: Nacionalidad de prueba, borrar luego
+    const argentino = await Nacionalidades.create({nombre:"Argentina"})
+
+    //TEST: tipo de documento de prueba, borrar luego
+    const dni = await TipoDocumento.create({nombre:"DNI"})
+
+    //TEST: Usuario de prueba, borrar luego
+    const user1 = await Usuario.create({
+      nombre:"Ignacio",
+      apellido:"Lestrada",
+      telefono:1234,
+      direccion:"asdasf",
+      nombreUser:"igna1407",
+      email:"adasd@asd.com",
+      password:"12345",
+    })
+    
+    user1.setNacionalidade(argentino) //D: Nacionalidade
+    user1.setTipoDocumento(dni)
+
+
+    //TEST: habitaciones con camas de prueba, borrar luego
+    const habitacion1 = await Habitacion.create({
+      nombre:"La casona de Marcela",
+      comodidades:"TV, internet",
+      cantCamas:1,
+      privada:true,
+      bañoPrivado:true,
+    })
+
+    //TEST: cama de prueba, borrar luego
+    const cama1 = await Cama.create({
+      precio:300,
+      estado:"libre",
+    })
+
+    habitacion1.addCama(cama1)
+
+    //TEST: Reservas de prueba, borrar luego
+    const res1 = await Reserva.create({
+      fecha_ingreso:new Date(),
+      fecha_egreso:new Date("1/5/2025"),
+      saldo:300
+    })
+    const res2 = await Reserva.create({
+      fecha_ingreso:new Date("3/1/2025"),
+      fecha_egreso:new Date("9/1/2029"),
+      saldo:12409124809
+    })
+
+    const res3 = await Reserva.create({
+      fecha_ingreso:new Date(),
+      fecha_egreso:new Date("1/1/2023"),
+      saldo:3234
+    })
+    res1.setUsuario(user1);
+    res2.setUsuario(user1);
+    res3.setUsuario(user1);
+    res1.addCama(cama1);
+    res2.addCama(cama1);
+    res3.addCama(cama1);
+    
   })
   .catch(err => console.log(err));
 
