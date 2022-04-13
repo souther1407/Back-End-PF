@@ -8,15 +8,18 @@ class ReservaService {
 
     async mostrarReservas(fecha){
         
+        
         const reservas = await ReservaCama.findAll({
             where: {
                 fecha_ingreso:{
-                    [Op.gte]: fecha ? new Date(fecha) : new Date("1/1/1900")
+                    [Op.and]: fecha ? {[Op.eq]:fecha} : {[Op.gt]:new Date("1/1/1")}
                 }
                    
             },
             include: Cama
         })
+        
+        
         return reservas;
     }
 
