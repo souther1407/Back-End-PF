@@ -6,7 +6,8 @@ const { Habitacion } = require('../db/models/habitacion.model');
 class habitacionesService {
 
   async crear(data) {
-    
+
+    if(data.privada === true){
       try {
         const habitacion = await Habitacion.create({
           nombre: data.nombre,
@@ -16,7 +17,6 @@ class habitacionesService {
           banoPrivado: data.banoPrivado,
           precio: data.precioHabitacion
         })
-<<<<<<< HEAD
         return habitacion
       } catch(error) {
         console.log(error)
@@ -31,45 +31,38 @@ class habitacionesService {
           banoPrivado: data.banoPrivado,
         })
         for (let i = 0; i < data.cantCamas; i++) {
-=======
-        /* for (let i = 0; i < data.cantCamas; i++) {
->>>>>>> e57fee3ab6f53ad65eb85489d5ca9bd1c7b4087c
           Cama.create({
-            precio: data.preciosCamas
+            precio: data.preciosCamas[0]
           })
           .then((cama)=>{
             habitacion.setCamas(cama)
           })
-        } */
-        const camas=await Promise.all(data.preciosCamas.map(pc => Cama.create({precio: pc})))
-        habitacion.setCamas(camas)
+        }
         return habitacion
-
       } catch(error) {
-        console.log(error)
+        console.error(error)
       }
-      
+    }
+
+
+      return habitacion
   }
 
   // eslint-disable-next-line class-methods-use-this
   async buscar() {
     const habitacion = await Habitacion.findAll();
-    for (let i = 0; i < habitacion.length; i++) {
-      if(!habitacion[i].privada){
-        habitacion[i] = await Habitacion.findByPk(habitacion[i].id, {include: [Cama]})
-      }
-    }
     return habitacion;
   }
 
-// CUMPLE LA MISMA FUNCION QUE BUASCAR UNO
-// async mostrarByHabitacion(id){
-//  const camas = await Cama.findAll({where: { HabitacionId : id}})
-//  return camas;
-// }
+  // eslint-disable-next-line class-methods-use-this
+  async mostrarByHabitacion(id){
+    const camas = await Cama.findAll({where: { HabitacionId : id}})
+    return camas;
+}
 
+  // eslint-disable-next-line class-methods-use-this
   async buscaruno(id) {
-    let habitacion = await Habitacion.findByPk(id);
+    let habitacion = Habitacion.findByPk(id);
     if(!habitacion.privada){
       habitacion = Habitacion.findByPk(id, {include: [Cama]})
     }
@@ -79,19 +72,18 @@ class habitacionesService {
     return habitacion;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   async actualizar(id, cambios) {
-    const {nombre, comodidades, privada, precioHabitacion, bañoPrivado} = cambios;
+    const {nombre, cantCamas, comodidades, tipoHabitacion} = cambios;
 
     const habitacionUpdate = await Habitacion.update({ 
-      nombre,
-      comodidades,
-      privada,
-      precioHabitacion,
-      bañoPrivado
+      nombre: nombre,
+      cantCamas: cantCamas,
+      comodidades: comodidades,
+      tipoHabitacion: tipoHabitacion
     }, 
-      { where : { id }} 
+      { where : { id : id }} 
     )
-    console.log(habitacionUpdate)
 
     if(!habitacionUpdate) {
       throw boom.notFound('habitacion no encontrada');
@@ -109,16 +101,6 @@ class habitacionesService {
     return `Habitacion con id: ${id} fue borrada con exito`;
   }
 
-  async FilterByTypeRoom(privada) {
-    let Rooms;
-    Rooms = await Habitacion.findAll({where: {privada: privada}})
-    return Rooms;
-  }
-  async FilterWithBathroom() {
-    let Rooms;
-    Rooms = await Habitacion.findAll({where: {bañoPrivado: true}})
-    return Rooms;
-  }
 }
 
 module.exports = habitacionesService

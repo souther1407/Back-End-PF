@@ -25,7 +25,7 @@ validatorHandler(getHabitacionTipoSchema, 'query'),
       }
   
       res.status(201).json(habitaciones)
-      
+
     } catch(error) {
       return error
     }
