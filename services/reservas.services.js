@@ -2,30 +2,47 @@ const { sequelize } = require('../libs/sequelize')
 const { ReservaCama } = require('../db/models/reservaCama.model')
 const { Usuario } = require('../db/models/usuario.model')
 const { Cama } = require('../db/models/cama.model')
-const { Op } = require('sequelize')
+const { Habitacion } = require('../db/models/habitacion.model')
 
 class ReservaService {
 
-    async mostrarReservas(fecha){
+    async mostrarReservasByFecha(ingreso, egreso){
         
-        
+        const reservas =  await ReservaCama.findAll(
+            {
+                include: [
+                    {
+                        model: Habitacion,
+                    },
+                    {
+                        model: Cama
+                    }
+                ]
+            })
+        const reservasFiltradas = reservas.filter(r => 
+            (r.fecha_ingreso >= ingreso && r.fecha_ingreso <= egreso)
+            ||
+            (
+                (r.fecha_ingreso < ingreso && r.fecha_egreso >= ingreso && r.fecha_egreso <= egreso)
+                || 
+                (r.fecha_egreso > egreso && r.fecha_ingreso > ingreso && r.fecha_ingreso <= egreso))
+            )
+        return reservasFiltradas
+    }
+
+    async mostrar(){
         const reservas = await ReservaCama.findAll({
-            where: {
-                fecha_ingreso:{
-                    [Op.and]: fecha ? {[Op.eq]:fecha} : {[Op.gt]:new Date("1/1/1")}
-                }
-                   
+            include: 
+            [{
+                model: Habitacion
             },
-            include: Cama
+            {
+                model: Cama
+            }
+            ]
         })
-        
-        
-        return reservas;
-    }
-
-    async mostrarReservaById(){
-
-    }
+        return reservas
+    }   
 
     
 
@@ -35,15 +52,24 @@ class ReservaService {
             fecha_egreso: data.fecha_egreso,
             saldo: data.saldo
         })
-        for (let i = 0; i < data.arrCamas.length; i++) {
-            Cama.findByPk(data.arrCamas[i])
-            .then(cama => {
-                newReserva.setCamas(cama)
-            })
+        if(data.camas){
+            for (let i = 0; i < data.camas.length; i++) {
+                Cama.findByPk(data.camas[i])
+                .then(cama => {
+                    newReserva.addCama(cama)
+                })
+            }
+        }
+        if(data.habitaciones){
+            for (let i = 0; i < data.habitaciones.length; i++) {
+                Habitacion.findByPk(data.habitaciones[i])
+                .then(habitacion =>{
+                    newReserva.addHabitacion(habitacion)
+                })
+            }
         }
         Usuario.findByPk(idUser)
         .then(user =>{
-            console.log(user)
             newReserva.setUsuario(user)
         })
         return newReserva

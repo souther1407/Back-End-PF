@@ -19,6 +19,7 @@ router.get('/', async (req, res)=>{
 router.post('/',
  validatorHandler(crearHabitacionSchema, 'body'), // validation
   async (req, res)=>{
+    console.log('trayendo habitaciones')
     try {
       const body = req.body
       const nuevaHabitacion = await services.crear(body)
