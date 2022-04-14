@@ -6,6 +6,7 @@ const USER = encodeURIComponent(config.dbUser);
 const PASSWORD = encodeURIComponent(config.dbPassword);
 // const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`
 const URI = 'postgres://ebzvjeht:2vQxks0hV0POuEpWoQKyyFo-_Uoi66QW@heffalump.db.elephantsql.com/ebzvjeht'
+
 const sequelize = new Sequelize(URI, {
   dialect: 'postgres',
   logging: false,
@@ -13,7 +14,7 @@ const sequelize = new Sequelize(URI, {
 
 setupModels(sequelize);
 
-const {Usuario, Habitacion, Reserva, Cama, Huesped, Nacionalidades, TipoDocumento, HistorialOcupante,Imagenes } = sequelize.models;
+const {Usuario, Habitacion, Reserva, Cama, Huesped, Nacionalidades, TipoDocumento,Imagenes } = sequelize.models;
 
 const Historial = sequelize.define('Historial',{
   checkIn:{
@@ -25,6 +26,8 @@ checkOut:{
     allowed: false
 }
 })
+
+
 // relacion habitacion-camas 1 a muchos muchos a 1
 //  una habitacion tiene muchas camas
 // una cama pertenece a una habitacion
@@ -86,20 +89,16 @@ Huesped.belongsTo(TipoDocumento)
 Huesped.belongsToMany( Cama,{through: Historial})
 Cama.belongsToMany( Huesped,{through: Historial})
 
-<<<<<<< HEAD
-sequelize.sync({ force: true })
-=======
 
 //relacion imágenes con habitaciones
 
-Habitacion.hasMany(Imagenes)
+Habitacion.hasMany(Imagenes,{ onDelete: 'cascade'})
 Imagenes.belongsTo(Habitacion)
 
 
 
 
 sequelize.sync({ force: false })
->>>>>>> ea24bcb2608d3d323a8bf9a69c16734fc7f49b52
 
   .then(() => {
     console.log(`base de datos creada/actualizada`);

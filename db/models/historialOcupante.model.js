@@ -1,6 +1,6 @@
 const {Model, DataTypes, Sequelize} = require('sequelize')
 
-const HISTORIAL_OCUPANTE_TABLE = 'habitaciones';
+const HISTORIAL_OCUPANTE_TABLE = 'historial_ocupante';
 
 const HistorialOcupanteSchema = {
   

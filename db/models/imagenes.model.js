@@ -9,7 +9,7 @@ const ImagenesSchema = {
     allowNull: false,
     primaryKey: true,
   },
-  nombre: {
+  enlace: {
     type: DataTypes.STRING,
     allowNull: false,
     validate:{
