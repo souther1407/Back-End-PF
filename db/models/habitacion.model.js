@@ -29,6 +29,9 @@ const HabitacionSchema = {
     allowNull: false,
     defaultValue: false
   },
+  precio:{
+    type: DataTypes.INTEGER,
+  },
   banoPrivado:{
     type: DataTypes.BOOLEAN,
     allowNull: false,
