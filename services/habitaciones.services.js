@@ -2,6 +2,7 @@ const boom = require('@hapi/boom');
 
 const { Cama } = require('../db/models/cama.model');
 const { Habitacion } = require('../db/models/habitacion.model');
+const { ReservaCama } = require('../db/models/reservaCama.model');
 
 class habitacionesService {
 
@@ -43,20 +44,17 @@ class habitacionesService {
         console.error(error)
       }
     }
-
-
-      return habitacion
   }
 
   // eslint-disable-next-line class-methods-use-this
   async buscar() {
-    const habitacion = await Habitacion.findAll();
+    const habitacion = await Habitacion.findAll({include: ReservaCama});
     return habitacion;
   }
 
   // eslint-disable-next-line class-methods-use-this
   async mostrarByHabitacion(id){
-    const camas = await Cama.findAll({where: { HabitacionId : id}})
+    const camas = await Cama.findAll({where: { HabitacionId : id}, include: ReservaCama})
     return camas;
 }
 
@@ -64,7 +62,7 @@ class habitacionesService {
   async buscaruno(id) {
     let habitacion = Habitacion.findByPk(id);
     if(!habitacion.privada){
-      habitacion = Habitacion.findByPk(id, {include: [Cama]})
+      habitacion = Habitacion.findByPk(id, {include: [Cama, ReservaCama]})
     }
     if (!habitacion) {
       throw boom.notFound('no se encontro la habitacion')
