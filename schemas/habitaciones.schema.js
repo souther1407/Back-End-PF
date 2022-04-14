@@ -20,7 +20,6 @@ const crearHabitacionSchema = joi.object({
   banoPrivado: banoPrivado.required(),
   precioHabitacion,
   preciosCamas,
-  
 
 });
 
