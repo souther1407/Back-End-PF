@@ -20,8 +20,7 @@ function setupModels(sequelize) {
   Cama.init(CamaSchema, Cama.config(sequelize));
   Nacionalidades.init(nacionalidadesSchema,Nacionalidades.config(sequelize));
   TipoDocumento.init(tipoDocumentoSchema,TipoDocumento.config(sequelize));
-  Imagenes.init(ImagenesSchema,Imagenes.config(sequelize))
-
+  Imagenes.init(ImagenesSchema, Imagenes.config(sequelize));
 }
 
 module.exports = setupModels;
