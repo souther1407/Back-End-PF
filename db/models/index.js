@@ -6,7 +6,9 @@ const { Huesped, HuespedSchema } = require('./huesped.model');
 const {Nacionalidades,nacionalidadesSchema} = require("./nacionalidad.model")
 const {TipoDocumento,tipoDocumentoSchema} = require("./tipoDocumento.model");
 const { HistorialOcupante, HistorialOcupanteSchema } = require('./historialOcupante.model');
-const { Imagenes, ImagenesSchema} = require('./imagenes.model')
+
+const {Imagenes,ImagenesSchema} = require("./imagenes.model")
+
 
 function setupModels(sequelize) {
   Imagenes.init(ImagenesSchema, Imagenes.config(sequelize))
@@ -18,6 +20,8 @@ function setupModels(sequelize) {
   Cama.init(CamaSchema, Cama.config(sequelize));
   Nacionalidades.init(nacionalidadesSchema,Nacionalidades.config(sequelize));
   TipoDocumento.init(tipoDocumentoSchema,TipoDocumento.config(sequelize));
+  Imagenes.init(ImagenesSchema,Imagenes.config(sequelize))
+
 }
 
 module.exports = setupModels;
