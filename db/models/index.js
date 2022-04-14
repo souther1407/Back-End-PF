@@ -6,9 +6,12 @@ const { Huesped, HuespedSchema } = require('./huesped.model');
 const {Nacionalidades,nacionalidadesSchema} = require("./nacionalidad.model")
 const {TipoDocumento,tipoDocumentoSchema} = require("./tipoDocumento.model");
 const { HistorialOcupante, HistorialOcupanteSchema } = require('./historialOcupante.model');
+
 const {Imagenes,ImagenesSchema} = require("./imagenes.model")
 
+
 function setupModels(sequelize) {
+  Imagenes.init(ImagenesSchema, Imagenes.config(sequelize))
   HistorialOcupante.init(HistorialOcupanteSchema, HistorialOcupante.config(sequelize))
   Huesped.init(HuespedSchema, Huesped.config(sequelize))
   Usuario.init(UsuarioSchema, Usuario.config(sequelize));

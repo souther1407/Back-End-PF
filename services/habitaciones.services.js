@@ -3,6 +3,7 @@ const boom = require('@hapi/boom');
 const { Cama } = require('../db/models/cama.model');
 const { Habitacion } = require('../db/models/habitacion.model');
 const { Imagenes } = require('../db/models/imagenes.model');
+const { ReservaCama } = require('../db/models/reservaCama.model');
 
 class habitacionesService {
   async crear(data) {
@@ -95,10 +96,16 @@ class habitacionesService {
   }
 
   // eslint-disable-next-line class-methods-use-this
+  async mostrarByHabitacion(id){
+    const camas = await Cama.findAll({where: { HabitacionId : id}, include: ReservaCama})
+    return camas;
+}
+
+  // eslint-disable-next-line class-methods-use-this
   async buscaruno(id) {
     let habitacion = Habitacion.findByPk(id);
     if(!habitacion.privada){
-      habitacion = Habitacion.findByPk(id, {include: [Cama, Imagenes]})
+      habitacion = Habitacion.findByPk(id, {include: [Cama,Imagenes, ReservaCama]})
     }
     if (!habitacion) {
       throw boom.notFound('no se encontro la habitacion')

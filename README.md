@@ -86,7 +86,7 @@ bano : compartido | privado
 - ### Puede recibir ambos parametros y realizar una busqueda anidada o solo uno y realizar una busqueda simple.
 ---
 ## POST: /habitaciones
-- ### Recibe por body todos los datos necesrios para crear una habitación.
+- ### Recibe por body todos los datos necesarios para crear una habitación.
 
 ```javascript
 Datos a recibir por BODY.
@@ -149,3 +149,8 @@ se reemplaza "preciosCamas" por "precioHabitacion"
   }
 ]
  ```
+## GET /reservas/byFecha/?fecha_ingreso="2020-04-15"&fecha_egreso="2020-03-15"
+
+## GET /reservas
+
+## POST /reservas/:idUsuario
