@@ -8,7 +8,7 @@ const {TipoDocumento,tipoDocumentoSchema} = require("./tipoDocumento.model");
 const { HistorialOcupante, HistorialOcupanteSchema } = require('./historialOcupante.model');
 const {Imagenes,ImagenesSchema} = require("./imagenes.model")
 
-const {Imagenes,ImagenesSchema} = require("./imagenes.model")
+/* const {Imagenes,ImagenesSchema} = require("./imagenes.model") */
 
 
 function setupModels(sequelize) {
