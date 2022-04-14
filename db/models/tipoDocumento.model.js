@@ -11,7 +11,7 @@ const tipoDocumentoSchema = {
   },
   nombre: {
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
   },
 }
 
