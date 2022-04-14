@@ -83,7 +83,7 @@
 tipo : compartida | privada
 - ### Recibe por query el si la habitacion posee baño privado o no
 bano : compartido | privado
-- ### Puede recibir ambos parametros y realizazr una busqueda anidada o solo uno y realizar una busqueda simple.
+- ### Puede recibir ambos parametros y realizar una busqueda anidada o solo uno y realizar una busqueda simple.
 ---
 ## POST: /habitaciones
 - ### Recibe por body todos los datos necesrios para crear una habitación.

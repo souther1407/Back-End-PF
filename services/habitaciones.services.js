@@ -32,7 +32,7 @@ class habitacionesService {
         })
         for (let i = 0; i < data.cantCamas; i++) {
           Cama.create({
-            precio: data.preciosCamas[0]
+            precio: data.preciosCamas.length > 1 ? data.preciosCamas[i] : data.preciosCamas[0],
           })
           .then((cama)=>{
             habitacion.setCamas(cama)
@@ -51,6 +51,12 @@ class habitacionesService {
   // eslint-disable-next-line class-methods-use-this
   async buscar() {
     const habitacion = await Habitacion.findAll();
+    for (let i = 0; i < habitacion.length; i++) {
+      if(habitacion[i].privada === false){
+        habitacion[i] = await Habitacion.findByPk(habitacion[i].id, {include: [Cama]})
+      }
+      
+    }
     return habitacion;
   }
 
