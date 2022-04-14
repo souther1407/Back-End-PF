@@ -8,10 +8,12 @@ const ImagenesSchema = {
     autoIncrement: true,
     allowNull: false,
     primaryKey: true,
+    
   },
   enlace: {
     type: DataTypes.STRING,
     allowNull: false,
+    defaultValue:"https://w7.pngwing.com/pngs/331/812/png-transparent-bedroom-computer-icons-bed.png",
     validate:{
         isUrl:true
     }

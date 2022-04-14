@@ -14,7 +14,7 @@ const sequelize = new Sequelize(URI, {
 
 setupModels(sequelize);
 
-const {Usuario, Habitacion, Reserva, Cama, Huesped, Nacionalidades, TipoDocumento,Imagenes } = sequelize.models;
+const {Usuario, Habitacion, Reserva, Cama, Huesped, Nacionalidades, TipoDocumento, Imagenes } = sequelize.models;
 
 const Historial = sequelize.define('Historial',{
   checkIn:{
@@ -42,6 +42,7 @@ Cama.belongsTo(Habitacion);
 Usuario.hasMany(Reserva);
 Reserva.belongsTo(Usuario);
 
+
 //Relacion huesped Cama
 //una cama es ocupada por un huesped
 //un huesped puede ocupar una cama
@@ -55,6 +56,11 @@ Cama.belongsTo(Huesped)
 
 Reserva.belongsToMany(Cama,{through:"Reserva_Cama"});
 Cama.belongsToMany(Reserva,{through:"Reserva_Cama"});
+
+// relacion habitacion reserva  
+
+Reserva.belongsToMany(Habitacion,{through:"Reserva_Habitacion"});
+Habitacion.belongsToMany(Reserva,{through:"Reserva_Habitacion"});
 
 //relacion user nacionalidad
 //un usuario tiene una nacionalidad
@@ -99,7 +105,6 @@ Imagenes.belongsTo(Habitacion)
 
 
 sequelize.sync({ force: false })
-
   .then(() => {
     console.log(`base de datos creada/actualizada`);
 
