@@ -29,7 +29,7 @@ router.post('/',
 });
 
 router.get('/:id',
-validatorHandler(getHabitacionSchema, 'params'),
+  validatorHandler(getHabitacionSchema, 'params'),
   async (req, res)=>{
     try {
       const {id} = req.params;

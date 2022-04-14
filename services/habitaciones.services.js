@@ -62,6 +62,7 @@ class habitacionesService {
 
   // eslint-disable-next-line class-methods-use-this
   async buscaruno(id) {
+    if(typeof id !== "number") throw new Error("no papa")
     let habitacion = Habitacion.findByPk(id);
     if(!habitacion.privada){
       habitacion = Habitacion.findByPk(id, {include: [Cama]})

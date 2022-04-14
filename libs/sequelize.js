@@ -86,7 +86,7 @@ Huesped.belongsTo(TipoDocumento)
 Huesped.belongsToMany( Cama,{through: Historial})
 Cama.belongsToMany( Huesped,{through: Historial})
 
-sequelize.sync({ force: false })
+sequelize.sync({ force: true })
 
   .then(() => {
     console.log(`base de datos creada/actualizada`);

@@ -1,6 +1,6 @@
 const joi = require('joi')
 
-const id = joi.string();
+const id = joi.number().integer();
 const nombre = joi.string().min(3).max(15);
 const cantCamas = joi.number().integer().min(1);
 const tipo = joi.string().valid('privada', 'compartida');
