@@ -78,23 +78,40 @@
 ```
 - ### En caso de una Habitación privada omite la pripiedad camas.
 ---
-## GET:  / habitaciones /filter/withBathroom
-- ### devuelve un array con las habitaciones que continen baño privado.
-- ### NO recibe ningun tipo de dato, hace el filtrado de forma automatica.
-
+## GET: /habitacionestipo?tipo=compartida&bano=compartido
+- ### Recibe por query el tipo de habitación a buscar.
+tipo : compartida | privada
+- ### Recibe por query el si la habitacion posee baño privado o no
+bano : compartido | privado
+- ### Puede recibir ambos parametros y realizazr una busqueda anidada o solo uno y realizar una busqueda simple.
 ---
-## POST:  / habitacionestipo /
+## POST: /habitaciones
 - ### Recibe por body todos los datos necesrios para crear una habitación.
+
 ```javascript
+Datos a recibir por BODY.
+-------------------------
+
+Habitación compartida:
+
 {
-	"nombre": "Lunar",
+	"nombre": "Agua2",
   "comodidades": "Aire acondicionado, smart Tv, Frigobar",
   "cantCamas": 5,
   "privada": false,
-  "bañoPrivado": false,
-  "preciosCamas": [1500, 1500, 1500, 1200, 1000]
+  "banoPrivado": false,
+  "preciosCamas": [150, 1500, 1200, 1000]
 }
+
+En caso de querer que todas las camas compartidas tengan el mismo precio 
+"preciosCamas": [1500]
+
+Habitación Privada:
+se reemplaza "preciosCamas" por "precioHabitacion"
+ 
+ "precioHabitacion": 1500
 ```
+
 - ### Devuelve la Habitación creada.
 ---
 ## PATCH:  / habitaciones /:idHabitacion
