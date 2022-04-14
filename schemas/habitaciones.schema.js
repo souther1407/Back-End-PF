@@ -11,6 +11,7 @@ const banoPrivado = joi.boolean();
 const privada = joi.bool();
 const bano = joi.string().valid('privado', 'compartido');
 const descripcion = joi.string()
+const imagenes = joi.array()
 
 
 const crearHabitacionSchema = joi.object({
@@ -21,9 +22,8 @@ const crearHabitacionSchema = joi.object({
   banoPrivado: banoPrivado.required(),
   precioHabitacion,
   preciosCamas,
-  descripcion: descripcion.required()
-  
-
+  descripcion: descripcion.required(),
+  imagenes  
 });
 
 
@@ -36,6 +36,7 @@ const actualizarHabitacionSchema = joi.object({
   tipo,
   precioHabitacion,
   descripcion,
+  imagenes,
 });
 
 const getHabitacionSchema = joi.object({

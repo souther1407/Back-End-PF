@@ -2,20 +2,7 @@ const boom = require('@hapi/boom');
 
 const { Cama } = require('../db/models/cama.model');
 const { Habitacion } = require('../db/models/habitacion.model');
-
-
-// function cameadora (habitacion,preciosCamas, cantidadCamas) {
-//   for (let i = 0; i < cantidadCamas; i++) {
-//     setTimeout(()=>{
-//       Cama.create({
-//         precio: preciosCamas.length > 1 ? preciosCamas[i] : preciosCamas[0],
-//       })
-//       .then((cama)=>{
-//         habitacion.setCamas(cama);
-//       })
-//     },3000)
-//   }
-// }
+const { Imagenes } = require('../db/models/imagenes.model');
 
 class habitacionesService {
   async crear(data) {
@@ -30,6 +17,21 @@ class habitacionesService {
           precio: data.precioHabitacion,
           descripcion: data.descripcion,
         })
+        for (let i = 0; i < data.imagenes.length; i++) {
+          
+          Imagenes.create({
+            enlace: data.imagenes[i],
+          })
+          .then((imagen)=>{
+            habitacion.setImagenes(imagen);
+          })
+          .catch(error => console.log(error))
+          
+        }
+        
+        
+
+
         return habitacion
       } catch(error) {
         console.log(error)
@@ -50,6 +52,17 @@ class habitacionesService {
           precio: precioHabitacion,
           descripcion: data.descripcion,
         })
+        for (let i = 0; i < data.imagenes.length; i++) {
+          
+          Imagenes.create({
+            enlace: data.imagenes[i],
+          })
+          .then((imagen)=>{
+            habitacion.setImagenes(imagen);
+          })
+          .catch(error => console.log(error))
+        }
+
         for (let i = 0; i < data.cantCamas; i++) {
             Cama.create({
               precio: data.preciosCamas.length > 1 ? data.preciosCamas[i] : data.preciosCamas[0],
@@ -71,7 +84,10 @@ class habitacionesService {
     const habitacion = await Habitacion.findAll();
     for (let i = 0; i < habitacion.length; i++) {
       if(habitacion[i].privada === false){
-        habitacion[i] = await Habitacion.findByPk(habitacion[i].id, {include: [Cama]})
+        habitacion[i] = await Habitacion.findByPk(
+          habitacion[i].id,{
+            include: [Cama, Imagenes]},
+           )
       }
       
     }
@@ -79,16 +95,10 @@ class habitacionesService {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async mostrarByHabitacion(id){
-    const camas = await Cama.findAll({where: { HabitacionId : id}})
-    return camas;
-}
-
-  // eslint-disable-next-line class-methods-use-this
   async buscaruno(id) {
     let habitacion = Habitacion.findByPk(id);
     if(!habitacion.privada){
-      habitacion = Habitacion.findByPk(id, {include: [Cama]})
+      habitacion = Habitacion.findByPk(id, {include: [Cama, Imagenes]})
     }
     if (!habitacion) {
       throw boom.notFound('no se encontro la habitacion')
