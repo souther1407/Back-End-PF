@@ -81,12 +81,9 @@
 ## GET:  / habitaciones /filter/withBathroom
 - ### devuelve un array con las habitaciones que continen baño privado.
 - ### NO recibe ningun tipo de dato, hace el filtrado de forma automatica.
----
-## GET:  /habitaciones/filter?privada=true
-- ### Devuelve un array con las habitaciones que son privadas o compartidas segun se envie por query. En caso de querer obtener habitaciones privadas se coloca en true, en caso de querer obtener las habitaciones compartidas se coloca en false.
 
 ---
-## POST:  / habitaciones /
+## POST:  / habitacionestipo /
 - ### Recibe por body todos los datos necesrios para crear una habitación.
 ```javascript
 {
