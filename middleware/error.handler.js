@@ -8,6 +8,7 @@ function errorHandler (err, req, res, next) {
     message: err.message,
     stack: err.stack,
   })
+  next();
 }
 
 function boomErrorHandler (err, req, res, next) {
