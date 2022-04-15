@@ -39,6 +39,10 @@ const UsuarioSchema = {
     allowNull: false,
     type: DataTypes.STRING
   },
+  numeroDocumento:{
+    type:DataTypes.INTEGER,
+    allowNull:false
+  },
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE,

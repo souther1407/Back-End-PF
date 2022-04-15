@@ -17,6 +17,9 @@ const HabitacionSchema = {
   comodidades:{
     type: DataTypes.STRING,
   },
+  descripcion:{
+    type: DataTypes.STRING
+  },
   cantCamas: {
     type: DataTypes.INTEGER,
     allowNull: false
@@ -25,6 +28,9 @@ const HabitacionSchema = {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: false
+  },
+  precio:{
+    type: DataTypes.INTEGER,
   },
   banoPrivado:{
     type: DataTypes.BOOLEAN,

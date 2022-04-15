@@ -14,8 +14,12 @@ const HuespedSchema = {
     allowNull: false,
   },
   apellido:{
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
+  },
+  numeroDocumento:{
+    type: DataTypes.STRING,
+    allowNull:false
   }
 }
 
