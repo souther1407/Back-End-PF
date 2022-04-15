@@ -1,6 +1,6 @@
 const {Model, DataTypes, Sequelize} = require('sequelize')
 
-const IMAGENES_TABLE = 'imagenes';
+const IMAGEN_TABLE = 'imagenes';
 
 const ImagenesSchema = {
   id:{
@@ -10,7 +10,7 @@ const ImagenesSchema = {
     primaryKey: true,
     
   },
-  enlace: {
+  imagen: {
     type: DataTypes.STRING,
     allowNull: false,
     defaultValue:"https://w7.pngwing.com/pngs/331/812/png-transparent-bedroom-computer-icons-bed.png",
@@ -20,7 +20,7 @@ const ImagenesSchema = {
   }
 }
 
-class Imagenes extends Model {
+class Imagen extends Model {
   static associate() {
     // asociaciones
   }
@@ -28,12 +28,12 @@ class Imagenes extends Model {
   static config(sequelize) {
     return {
       sequelize,
-      tableName: IMAGENES_TABLE,
-      modelName: 'Imagenes',
+      tableName: IMAGEN_TABLE,
+      modelName: 'Imagen',
       timestamps: false
     }
   }
 }
 
 
-module.exports = { IMAGENES_TABLE, ImagenesSchema, Imagenes }
+module.exports = { IMAGEN_TABLE, ImagenesSchema, Imagen }
