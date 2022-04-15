@@ -21,11 +21,9 @@ async (req, res)=>{
 
 
 router.post('/',
- checkApiKey,
- validatorHandler(crearHabitacionSchema, 'body'), // validation
-  async (req, res)=>{
-    console.log('trayendo habitaciones')
-    try {
+validatorHandler(crearHabitacionSchema, 'body'), // validation
+async (req, res)=>{
+      try {
       const body = req.body
       const nuevaHabitacion = await services.crear(body)
       res.status(201).json(nuevaHabitacion)

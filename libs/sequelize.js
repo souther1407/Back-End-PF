@@ -13,7 +13,7 @@ const sequelize = new Sequelize(URI, {
 
 setupModels(sequelize);
 
-const {Usuario, Habitacion, Reserva, Cama, Huesped, Nacionalidades, TipoDocumento, Imagenes } = sequelize.models;
+const {Usuario, Habitacion, Reserva, Cama, Huesped, Nacionalidades, TipoDocumento, Imagen } = sequelize.models;
 
 const Historial = sequelize.define('Historial',{
   checkIn:{
@@ -95,8 +95,9 @@ Cama.belongsToMany( Huesped,{through: Historial})
 
 //relacion imágenes con habitaciones
 
-Habitacion.hasMany(Imagenes)
-Imagenes.belongsTo(Habitacion)
+Habitacion.hasMany(Imagen, {onDelete: 'cascade'});
+Imagen.belongsTo(Habitacion)
+
 
 
 
