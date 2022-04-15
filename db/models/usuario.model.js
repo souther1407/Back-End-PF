@@ -3,9 +3,9 @@ const {Model, DataTypes, Sequelize} = require('sequelize')
 const USUARIO_TABLE = 'usuarios';
 
 const UsuarioSchema = {
-  id: {
-    type: DataTypes.UUID,
-    defaultValue: Sequelize.UUIDV4,
+  dni: {
+    type: DataTypes.INTEGER,
+    /*defaultValue: Sequelize.UUIDV4,*/
     allowNull: false,
     primaryKey: true,
   },
@@ -25,7 +25,8 @@ const UsuarioSchema = {
   },
   nombreUser:{
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    unique: true,
   },
   email: {
     type: DataTypes.STRING,
@@ -35,7 +36,8 @@ const UsuarioSchema = {
     }
   },
   password: {
-    type: DataTypes.STRING,
+    allowNull: false,
+    type: DataTypes.STRING
   },
   createdAt: {
     allowNull: false,

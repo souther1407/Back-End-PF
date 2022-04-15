@@ -1,12 +1,18 @@
 const boom = require('@hapi/boom');
+const bcrypt = require('bcrypt')
 
 const { sequelize } = require('../libs/sequelize')
 const { Usuario } =  require('../db/models/usuario.model')
 
-class userService {
+class UserService {
 
   async crear(data) {
-    const nuevoUsuario = await Usuario.create(data)
+    const hash = await bcrypt.hash(data.password, 12)
+    const nuevoUsuario = await Usuario.create({
+      ...data,
+      password: hash
+    })
+    delete nuevoUsuario.dataValues.password;
     return nuevoUsuario; 
   }
 
@@ -15,8 +21,17 @@ class userService {
     return usuarios;
   }
 
-  async mostrarById(id) {
-    const usuario = await Usuario.findByPk(id);
+  async mostrarPorNombreUsuario(username) {
+    const usuarios =  await Usuario.findOne({
+      where: {
+        nombreUser:username
+      }
+    })
+    return usuarios;
+  }
+
+  async mostrarByDni(dni) {
+    const usuario = await Usuario.findByPk(dni);
     if (!usuario) {
       throw boom.notFound('el usuario solicitado no existe')
     }
@@ -24,7 +39,7 @@ class userService {
   }
 
   async update(id, changes) {
-    const usuario = await this.findOne(id)
+    const usuario = await Usuario.findOne(id)
     const respuesta = await usuario.update(changes);
     return {
       respuesta
@@ -32,10 +47,10 @@ class userService {
   }
 
   async delete(id) {
-    const usuario = await this.findOne(id)
+    const usuario = await Usuario.findOne(id)
     await usuario.destroy();
     return { id };
   }
 }
 
-module.exports = userService;
+module.exports = UserService;
