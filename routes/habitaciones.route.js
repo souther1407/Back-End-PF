@@ -9,7 +9,7 @@ const services = new habitacionesService
 
 
 router.get('/',
-checkApiKey,
+/*checkApiKey,*/
 async (req, res)=>{
   try{
     const habitaciones = await services.buscar();
