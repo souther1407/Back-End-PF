@@ -8,7 +8,7 @@ const services = new habitacionesService
 
 
 router.get('/',
-checkApiKey,
+/*checkApiKey,*/
 async (req, res)=>{
   const habitaciones = await services.buscar();
   res.json(habitaciones)

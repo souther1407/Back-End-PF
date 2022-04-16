@@ -40,12 +40,10 @@ class habitacionesService {
            }).catch(error => console.log(error))
          }
         
-        
-
-
         return habitacion
+
       } catch(error) {
-        console.log(error)
+        return boom.conflict(error.parent.detail)
       }
     }else{
       try {
@@ -102,23 +100,39 @@ class habitacionesService {
 
   // eslint-disable-next-line class-methods-use-this
   async buscar() {
-    const habitacion = await Habitacion.findAll();
+   try {
+    const habitacion = await Habitacion.findAll({
+      include: [{model:Imagen, attributes: [ 'imagen' ] },{model:Cama, attributes: [ 'id', 'precio', 'estado' ] }]
+    });
     for (let i = 0; i < habitacion.length; i++) {
-      if(habitacion[i].privada === false){
-        habitacion[i] = await Habitacion.findByPk(
-          habitacion[i].id,{
-            include: [Cama, Imagen]},
-           )
+      if (habitacion[i].privada === true) {delete habitacion[i].dataValues.Camas}
+      if (habitacion[i].Imagens.length<0) {habitacion[i].dataValues.Imagens.push("https://w7.pngwing.com/pngs/331/812/png-transparent-bedroom-computer-icons-bed.png")}
       }
+    
+
+    // for (let i = 0; i < habitacion.length; i++) {
+    //   if(habitacion[i].privada === false){
+    //     habitacion[i] = await Habitacion.findByPk(
+    //       habitacion[i].id,{
+    //         include: [Cama, Imagen]},
+    //        )
+    //   }
       
-    }
+    // }
     return habitacion;
+   } catch(error) {
+     return boom.badData(error)
+   }
   }
 
   // eslint-disable-next-line class-methods-use-this
   async mostrarByHabitacion(id){
-    const camas = await Cama.findAll({where: { HabitacionId : id}, include: ReservaCama})
+    try {
+      const camas = await Cama.findAll({where: { HabitacionId : id}, include: ReservaCama})
     return camas;
+    } catch(error) {
+      return boom.notFound(error.parent.detail)
+    }
 }
 
   // eslint-disable-next-line class-methods-use-this
@@ -139,10 +153,10 @@ class habitacionesService {
     const {nombre, cantCamas, comodidades, tipoHabitacion} = cambios;
 
     const habitacionUpdate = await Habitacion.update({ 
-      nombre: nombre,
-      cantCamas: cantCamas,
-      comodidades: comodidades,
-      tipoHabitacion: tipoHabitacion
+      nombre,
+      cantCamas,
+      comodidades,
+      tipoHabitacion
     }, 
       { where : { id : id }} 
     )
