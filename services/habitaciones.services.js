@@ -24,17 +24,15 @@ class habitacionesService {
         if(data.imagenes.length) {
           for (let i = 0; i < data.imagenes.length; i++) {
             Imagen.create({
-              imagen: data.imagenes.length ? data.imagenes[i] : data.imagenes[0]
-            
+              imagen: data.imagenes[0] 
           })
-           .then((imagen)=>{
+            .then((imagen)=>{
             habitacion.setImagens(imagen);
-           })
-           .catch(error => console.log(error))
-        }          
-         }else {
+            })
+            .catch(error => console.log(error))
+            }          
+        }else {
            Imagen.create({
-
            }).then((imagen)=>{
              habitacion.setImagens(imagen);
            }).catch(error => console.log(error))
