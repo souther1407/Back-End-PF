@@ -3,6 +3,7 @@ const habitacionesService = require('./../services/habitaciones.services')
 const validatorHandler = require('../middleware/validator.handler')
 const {checkApiKey} =require('../middleware/auth.handler')
 const { crearHabitacionSchema, actualizarHabitacionSchema, getHabitacionSchema} = require('../schemas/habitaciones.schema')
+const e = require('express')
 const router = express.Router()
 const services = new habitacionesService
 
@@ -10,8 +11,12 @@ const services = new habitacionesService
 router.get('/',
 checkApiKey,
 async (req, res)=>{
-  const habitaciones = await services.buscar();
-  res.json(habitaciones)
+  try{
+    const habitaciones = await services.buscar();
+    res.json(habitaciones)
+  }catch(e){
+    console.log(e)
+  }
 });
 
 // router.get('/filter', (req, res)=>{

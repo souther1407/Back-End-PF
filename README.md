@@ -4,79 +4,84 @@
 - ### Entrega un array con ojetos cuya extructura varia segun el tipo de habitacion.
 - ### Sí es una habitacion individual el objeto tendra la forma:
 ```javascript
-    {
-		"id": 1, 
-		"nombre": "Imperio",
-		"comodidades": "Aire acondicionado, smart Tv, Frigobar",
-		"cantCamas": 5,
-		"privada": true,
-		"bañoPrivado": false,
-		"createdAt": "2022-04-12T19:48:18.730Z" 
-	}
+    [{
+	"id": 1,
+	"nombre": String,
+	"comodidades": String,
+	"descripcion": String,
+	"cantCamas": Number,
+	"privada": Boolean,
+	"precio": Number,
+	"banoPrivado": Boolean,
+	"createdAt": "2022-04-15T13:00:26.870Z",
+	"Camas": Array Vacio,
+	"Imagens": [
+		{
+			"id": 1,
+			"imagen": "https://w7.pngwing.com/pngs/331/812/png-transparent-bedroom-computer-icons-bed.png",
+			"HabitacionId": 1
+		}, ...
+	],
+	"Reservas": []
+}, ...]
 ```
 - ### Sí es una habitacion compartida el objeto tendrá la forma:
 ```javascript
-  {
-      "id": 2,
-      "nombre": "galaxia",
-      "comodidades": "Aire acondicionado, smart Tv, Frigobar",
-      "cantCamas": 2,
-      "privada": false,
-      "bañoPrivado": false,
-      "createdAt": "2022-04-12T19:48:21.090Z",
-      "Camas": [
-        {
-        "id": "d2a265c5-f5df-4358-96c0-7221192792bf",
-          "precio": 1500,
-          "estado": "libre",
-          "HabitacionId": 2,
-          "HuespedId": null,
-          "ReservaId": null
-        },
-        {
-          "id": "3349dda6-40eb-4047-bf8f-b75eb20ad6a9",
-          "precio": 1500,
-          "estado": "libre",
-          "HabitacionId": 2,
-          "HuespedId": null,
-          "ReservaId": null
-        }
-      ]
-    }
+  [{
+	"id": 1,
+	"nombre": String,
+	"comodidades": String,
+	"descripcion": String,
+	"cantCamas": Number,
+	"privada": Boolean,
+	"precio": Number,
+	"banoPrivado": Boolean,
+	"createdAt": "2022-04-15T13:00:26.870Z",
+	"Camas": [
+    {
+			"id": "ca8f3891-3f6d-4bcb-ac08-f6dfb3eec7b7",
+			"precio": Number,
+			"estado": String,
+			"HabitacionId": 1,
+			"HuespedId": null
+		}, ...
+  ],
+	"Imagens": [
+		{
+			"id": 1,
+			"imagen": "https://w7.pngwing.com/pngs/331/812/png-transparent-bedroom-computer-icons-bed.png",
+			"HabitacionId": 1
+		}, ...
+	],
+	"Reservas": []
+}, ...]
 ```
 ---
 ## GET:  / habitaciones /:idHabitacion
 - ### Entrega un objeto con los datos de la habitación.
 ```javascript
 {
-	"id": 2,
-	"nombre": "galaxia",
-	"comodidades": "Aire acondicionado, smart Tv, Frigobar",
-	"cantCamas": 2,
-	"privada": false,
-	"bañoPrivado": false,
-	"createdAt": "2022-04-12T19:48:21.090Z",
-	"Camas": [
+	"id": 1,
+	"nombre": String,
+	"comodidades": String,
+	"descripcion": String,
+	"cantCamas": Number,
+	"privada": Boolean,
+	"precio": Number,
+	"banoPrivado": Boolean,
+	"createdAt": "2022-04-15T13:00:26.870Z",
+	"Camas": Array Vacio,
+	"Imagens": [
 		{
-			"id": "d2a265c5-f5df-4358-96c0-7221192792bf",
-			"precio": 1500,
-			"estado": "libre",
-			"HabitacionId": 2,
-			"HuespedId": null,
-			"ReservaId": null
-		},
-		{
-			"id": "3349dda6-40eb-4047-bf8f-b75eb20ad6a9",
-			"precio": 1500,
-			"estado": "libre",
-			"HabitacionId": 2,
-			"HuespedId": null,
-			"ReservaId": null
-		}
-	]
+			"id": 1,
+			"imagen": "https://w7.pngwing.com/pngs/331/812/png-transparent-bedroom-computer-icons-bed.png",
+			"HabitacionId": 1
+		}, ...
+	],
+	"Reservas": []
 }
 ```
-- ### En caso de una Habitación privada omite la pripiedad camas.
+- ### En caso de una Habitación privada la propiedad cama es un array vacio.
 ---
 ## GET: /habitacionestipo?tipo=compartida&bano=compartido
 - ### Recibe por query el tipo de habitación a buscar.
@@ -95,12 +100,14 @@ Datos a recibir por BODY.
 Habitación compartida:
 
 {
-	"nombre": "Agua2",
-  "comodidades": "Aire acondicionado, smart Tv, Frigobar",
+	"nombre": String,
+  "comodidades": String,
   "cantCamas": 5,
   "privada": false,
   "banoPrivado": false,
-  "preciosCamas": [150, 1500, 1200, 1000]
+  "preciosCamas": [1000],
+	"descripcion": "soy la descripcion",
+	"imagenes": ["https://media-cdn.tripadvisor.com/media/photo-s/16/af/28/82/dormitorio-de-12-camas.jpg", "https://pix10.agoda.net/hotelImages/285046/-1/5dc1a6d87c68b8ecc5528eff4c29c0ab.jpg?ca=7&ce=1&s=1024x768"]
 }
 
 En caso de querer que todas las camas compartidas tengan el mismo precio 

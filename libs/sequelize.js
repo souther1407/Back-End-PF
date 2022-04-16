@@ -5,7 +5,7 @@ const {Model, DataTypes} = require('sequelize')
 const USER = encodeURIComponent(config.dbUser);
 const PASSWORD = encodeURIComponent(config.dbPassword);
 const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`
-//const URI = 'postgres://ebzvjeht:2vQxks0hV0POuEpWoQKyyFo-_Uoi66QW@heffalump.db.elephantsql.com/ebzvjeht'
+// const URI = 'postgres://ebzvjeht:2vQxks0hV0POuEpWoQKyyFo-_Uoi66QW@heffalump.db.elephantsql.com/ebzvjeht'
 const sequelize = new Sequelize(URI, {
   dialect: 'postgres',
   logging: false,
