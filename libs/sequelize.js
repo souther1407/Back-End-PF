@@ -4,8 +4,11 @@ const setupModels = require('../db/models/index')
 const {Model, DataTypes} = require('sequelize')
 const USER = encodeURIComponent(config.dbUser);
 const PASSWORD = encodeURIComponent(config.dbPassword);
-const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`
-// const URI = 'postgres://ebzvjeht:2vQxks0hV0POuEpWoQKyyFo-_Uoi66QW@heffalump.db.elephantsql.com/ebzvjeht'
+
+// const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`
+const URI = 'postgres://ebzvjeht:2vQxks0hV0POuEpWoQKyyFo-_Uoi66QW@heffalump.db.elephantsql.com/ebzvjeht'
+
+
 const sequelize = new Sequelize(URI, {
   dialect: 'postgres',
   logging: false,
@@ -25,6 +28,8 @@ checkOut:{
     allowed: false
 }
 })
+
+
 // relacion habitacion-camas 1 a muchos muchos a 1
 //  una habitacion tiene muchas camas
 // una cama pertenece a una habitacion
@@ -94,6 +99,7 @@ Cama.belongsToMany( Huesped,{through: Historial})
 
 
 //relacion imágenes con habitaciones
+
 
 Habitacion.hasMany(Imagen, {onDelete: 'cascade'});
 Imagen.belongsTo(Habitacion)

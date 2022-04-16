@@ -4,7 +4,7 @@ const cors = require('cors')
 const { logErrors, errorHandler, boomErrorHandler } = require('./middleware/error.handler')
 
 const app = express();
-const port = 3005;
+const port = process.env.PORT || 3005;
 
 app.use(express.json());
 const whitelist = ['http://localhost:8080', 'https://heroku.heroku.com' ]
