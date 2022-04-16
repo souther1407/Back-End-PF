@@ -4,7 +4,7 @@ const USUARIO_TABLE = 'usuarios';
 
 const UsuarioSchema = {
   dni: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     /*defaultValue: Sequelize.UUIDV4,*/
     allowNull: false,
     primaryKey: true,
@@ -35,6 +35,7 @@ const UsuarioSchema = {
       isEmail: true,
     }
   },
+  tipo
   password: {
     allowNull: false,
     type: DataTypes.STRING

@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt')
 
 const { sequelize } = require('../libs/sequelize')
 const { Usuario } =  require('../db/models/usuario.model')
+const {Tipo_Documento} = require('../db/models/tipoDocumento.model')
+const {Nacionalidades} = require('../db/models/tipoDocumento.model')
 
 class UserService {
 
@@ -11,7 +13,9 @@ class UserService {
     const nuevoUsuario = await Usuario.create({
       ...data,
       password: hash
+     
     })
+    
     delete nuevoUsuario.dataValues.password;
     return nuevoUsuario; 
   }

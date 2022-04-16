@@ -6,8 +6,12 @@ const { Huesped, HuespedSchema } = require('./huesped.model');
 const {Nacionalidades,nacionalidadesSchema} = require("./nacionalidad.model")
 const {TipoDocumento,tipoDocumentoSchema} = require("./tipoDocumento.model");
 const { HistorialOcupante, HistorialOcupanteSchema } = require('./historialOcupante.model');
+
 const {Imagen,ImagenesSchema} = require("./imagen.model")
 const {Fecha,FechasSchema} = require("./fecha.model")
+
+
+/* const {Imagenes,ImagenesSchema} = require("./imagenes.model") */
 
 
 function setupModels(sequelize) {
