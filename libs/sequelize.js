@@ -105,7 +105,7 @@ Imagen.belongsTo(Habitacion)
 
 
 
-sequelize.sync({ force: true })
+sequelize.sync({ force: false })
   .then(() => {
     console.log(`base de datos creada/actualizada `);
 
