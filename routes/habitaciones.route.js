@@ -19,12 +19,6 @@ async (req, res)=>{
   }
 });
 
-// router.get('/filter', (req, res)=>{
-//   res.json('soy el filtro')
-// });
-
-
-
 router.post('/',
 validatorHandler(crearHabitacionSchema, 'body'), // validation
 async (req, res)=>{
@@ -48,19 +42,6 @@ router.get('/:id',
       res.status(404).json({
         message: error
       })
-    }
-});
-
-router.post('/',
- validatorHandler(crearHabitacionSchema, 'body'), // validation
-  async (req, res)=>{
-    console.log(req.body)
-    try {
-      const body = req.body
-      const nuevaHabitacion = await services.crear(body)
-      res.status(201).json(nuevaHabitacion)
-    } catch(error) {
-      res.status(error)
     }
 });
 
