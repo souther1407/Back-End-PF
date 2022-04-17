@@ -35,7 +35,6 @@ const UsuarioSchema = {
       isEmail: true,
     }
   },
-  tipo
   password: {
     allowNull: false,
     type: DataTypes.STRING
