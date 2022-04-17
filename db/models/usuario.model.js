@@ -17,6 +17,10 @@ const UsuarioSchema = {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  rol: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   telefono:{
     type: DataTypes.INTEGER,
   },
@@ -38,10 +42,6 @@ const UsuarioSchema = {
   password: {
     allowNull: false,
     type: DataTypes.STRING
-  },
-  numeroDocumento:{
-    type:DataTypes.INTEGER,
-    allowNull:false
   },
   createdAt: {
     allowNull: false,

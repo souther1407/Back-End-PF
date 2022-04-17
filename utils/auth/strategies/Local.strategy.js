@@ -6,21 +6,21 @@ const UserService = require('../../../services/usuarios.services');
 const service = new UserService();
 
 const LocalStrategy = new Strategy({
-    usernameField: 'nombreUser',
+    usernameField: 'email',
     passwordField: 'password'
   },
-  async (nombreUser, password, done) => {
+  async (email, password, done) => {
     try {
-      const user = await service.findByEmail(nombreUser);
-      if (!user) {
+      const usuario = await service.buscarPorEmail(email);
+      if (!usuario) {
         done(boom.unauthorized(), false);
       }
-      const isMatch = await bcrypt.compare(password, user.password);
+      const isMatch = await bcrypt.compare(password, usuario.password);
       if (!isMatch) {
         done(boom.unauthorized(), false);
       }
-      delete user.dataValues.password;
-      done(null, user);
+      delete usuario.dataValues.password;
+      done(null, usuario);
     } catch (error) {
       done(error, false);
     }

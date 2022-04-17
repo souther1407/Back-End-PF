@@ -18,7 +18,7 @@ const option = {
   }
 }
 app.use(cors()); /* en este momento esta dejando pasar todo*/
-//require('./utils/auth');
+require('./utils/auth');
 
 
 

@@ -25,10 +25,10 @@ class UserService {
     return usuarios;
   }
 
-  async mostrarPorNombreUsuario(username) {
+  async buscarPorEmail(email) {
     const usuarios =  await Usuario.findOne({
       where: {
-        nombreUser:username
+        email
       }
     })
     return usuarios;

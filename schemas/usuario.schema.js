@@ -11,6 +11,8 @@ const fechaNacimiento = Joi.date()
 const nombreUser = Joi.string().alphanum().min(8).max(14)
 const nacionalidad = Joi.string()
 const tipoDocumento = Joi.string()
+const genero = Joi.string().valid("masculino", "femenino", "otro")
+const rol = Joi.string().valid("cliente", "administrador", "recepcionista")
 
 const createUserSchema = Joi.object({
   dni: dni.required(),
@@ -23,6 +25,8 @@ const createUserSchema = Joi.object({
   fechaNacimiento: fechaNacimiento.required(),
   nacionalidad,
   tipoDocumento: tipoDocumento.required(),
+  genero: genero.required(),
+  rol: rol.required()
 });
 
 const updateUserSchema = Joi.object({
