@@ -15,10 +15,10 @@ const HabitacionSchema = {
     unique: true,
   },
   comodidades:{
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
   },
   descripcion:{
-    type: DataTypes.STRING
+    type: DataTypes.TEXT,
   },
   cantCamas: {
     type: DataTypes.INTEGER,
