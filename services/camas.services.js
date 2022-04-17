@@ -32,7 +32,7 @@ class camasServices {
     const {HabitacionId, precio} = data
     try {
         let habitacion = await Habitacion.findByPk( parseInt(HabitacionId));
-
+        if(!habitacion) 
         if(habitacion.privada){
             await Habitacion.update(
                 { cantCamas: habitacion.cantCamas + 1 },
