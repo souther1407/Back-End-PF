@@ -8,12 +8,14 @@ const {TipoDocumento,tipoDocumentoSchema} = require("./tipoDocumento.model");
 const { HistorialOcupante, HistorialOcupanteSchema } = require('./historialOcupante.model');
 
 const {Imagen,ImagenesSchema} = require("./imagen.model")
+// const {Fecha,FechasSchema} = require("./fecha.model")
 
 
 /* const {Imagenes,ImagenesSchema} = require("./imagenes.model") */
 
 
 function setupModels(sequelize) {
+  // Fecha.init(FechasSchema, Fecha.config(sequelize))
   Imagen.init(ImagenesSchema, Imagen.config(sequelize))
   HistorialOcupante.init(HistorialOcupanteSchema, HistorialOcupante.config(sequelize))
   Huesped.init(HuespedSchema, Huesped.config(sequelize))

@@ -3,22 +3,21 @@ const habitacionesService = require('./../services/habitaciones.services')
 const validatorHandler = require('../middleware/validator.handler')
 const {checkApiKey} =require('../middleware/auth.handler')
 const { crearHabitacionSchema, actualizarHabitacionSchema, getHabitacionSchema} = require('../schemas/habitaciones.schema')
+const e = require('express')
 const router = express.Router()
 const services = new habitacionesService
 
 
 router.get('/',
-checkApiKey,
+/*checkApiKey,*/
 async (req, res)=>{
-  const habitaciones = await services.buscar();
-  res.json(habitaciones)
+  try{
+    const habitaciones = await services.buscar();
+    res.json(habitaciones)
+  }catch(e){
+    console.log(e)
+  }
 });
-
-// router.get('/filter', (req, res)=>{
-//   res.json('soy el filtro')
-// });
-
-
 
 router.post('/',
 validatorHandler(crearHabitacionSchema, 'body'), // validation
@@ -43,19 +42,6 @@ router.get('/:id',
       res.status(404).json({
         message: error
       })
-    }
-});
-
-router.post('/',
- validatorHandler(crearHabitacionSchema, 'body'), // validation
-  async (req, res)=>{
-    console.log(req.body)
-    try {
-      const body = req.body
-      const nuevaHabitacion = await services.crear(body)
-      res.status(201).json(nuevaHabitacion)
-    } catch(error) {
-      res.status(error)
     }
 });
 
