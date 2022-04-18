@@ -25,7 +25,7 @@ function chequearRoles(...roles) {
     if (roles.includes(user.roles)){
         next()
     }else {
-        next(boom.unauthorized('necesitas credenciales de administrador'))
+        next(boom.unauthorized())
     }
     }
 }

@@ -18,6 +18,7 @@ async (req, res, next) => {
 });
 
 router.get('/:dni',
+passport.authenticate('jwt', {session: false}),
 chequearRoles(['administrador', 'recepcionista']),
   validatorHandler(getUserSchema, 'params'),
   async (req, res, next) => {
@@ -55,7 +56,7 @@ router.patch('/:id',
     try {
       const { id } = req.params;
       const body = req.body;
-      const category = await service.update(id, body);
+      const category = await service.actualizar(id, body);
       res.json(category);
     } catch (error) {
       next(error);
@@ -65,6 +66,7 @@ router.patch('/:id',
 
 router.delete('/:id',
   passport.authenticate('jwt', {session: false}),
+  chequearRoles(['administrador']),
   validatorHandler(getUserSchema, 'params'),
   async (req, res, next) => {
     try {

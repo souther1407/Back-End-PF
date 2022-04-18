@@ -4,7 +4,8 @@ const jwt = require('jsonwebtoken');
 const { Usuario } = require('../db/models/usuario.model');
 const {config} = require('../config/config.js')
 
-
+const AuthService = require('../services/auth.services');
+const service = new AuthService
 const router = express.Router();
 
 router.post('/login', 
@@ -12,17 +13,18 @@ passport.authenticate('local', {session: false}),
 async (req, res, next) => {
   try {
     const usuraio = req.user.dataValues;
-    const payload = {
-      sub:usuraio.dni,
-      role: usuraio.rol,
-    }
-    const token = jwt.sign(payload, config.jwtSecret );
-    console.log(token)
-    res.json({
-      usuario :usuraio.email,
-      rol: usuraio.rol,
-      token
-    });
+    res.json(service.firmarToken(usuraio))
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post('/recuperacion', 
+async (req, res, next) => {
+  try { 
+    const { email } = req.body.email
+    const respuesta = await service.enviarRecuperacion(req.body.email)
+    res.json(respuesta);
   } catch (error) {
     next(error);
   }

@@ -42,8 +42,8 @@ class UserService {
     return usuario;
   }
 
-  async update(id, changes) {
-    const usuario = await Usuario.findOne(id)
+  async actualizar(dni, changes) {
+    const usuario = await Usuario.findByPk(dni)
     const respuesta = await usuario.update(changes);
     return {
       respuesta

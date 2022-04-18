@@ -1,3 +1,5 @@
+const boom = require('@hapi/boom')
+
 function logErrors (err, req, res, next) {
   console.error(err);
   next(err);
@@ -23,10 +25,18 @@ function boomErrorHandler (err, req, res, next) {
 next(err);
 }
 
+function error404Handler (req, res, next) {
+  res.status(404)
+  res.send ({
+  message: boom.notFound('el recurso que busca no existe')
+  })
+  next()
+}
 
 
 module.exports= {
   logErrors,
   errorHandler,
-  boomErrorHandler
+  boomErrorHandler,
+  error404Handler
 }
