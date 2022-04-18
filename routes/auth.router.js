@@ -30,5 +30,16 @@ async (req, res, next) => {
   }
 });
 
+router.post('/cambiar-password', 
+
+async (req, res, next) => {
+  try { 
+    const { token, newPassword } = req.body;
+    const respuesta = await service.cambiarPaswword(token, newPassword)
+    res.json(respuesta);
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;

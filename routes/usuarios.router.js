@@ -66,7 +66,7 @@ router.patch('/:id',
 
 router.delete('/:id',
   passport.authenticate('jwt', {session: false}),
-  chequearRoles(['administrador']),
+  chequearRoles(['rececionista']),
   validatorHandler(getUserSchema, 'params'),
   async (req, res, next) => {
     try {

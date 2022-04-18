@@ -70,6 +70,24 @@ class AuthServices {
     const respuesta = await this.enviarEmail(mail);
     return respuesta;
     }
+
+    async cambiarPaswword(token, newPassword){
+
+      try {
+        const payload = jwt.verify(token, config.jwtRecuperacion);
+        const usuario = await service.mostrarByDni(payload.sub);
+        if (usuario.tokenRecuperacion !== token){
+          throw boom.unauthorized();
+        }
+        const hash = await bcrypt.hash(newPassword, 12)
+        await service.actualizar(usuario.dni, {tokenRecuperacion: null, password: hash })
+        return { message: 'password actualizado'}
+      } catch(error) {
+        throw boom.unauthorized()
+        
+      }
+
+    }
 }
 
 
