@@ -1,7 +1,7 @@
 const express = require('express');
 const UserService = require('../services/usuarios.services');
 const validatorHandler = require('../middleware/validator.handler');
-const {chequearAdminRole} = require('../middleware/auth.handler')
+const {chequearRoles} = require('../middleware/auth.handler')
 const { updateUserSchema, createUserSchema, getUserSchema } = require('../schemas/usuario.schema');
 const passport = require('passport'); 
 const router = express.Router();
@@ -18,6 +18,7 @@ async (req, res, next) => {
 });
 
 router.get('/:dni',
+chequearRoles(['administrador', 'recepcionista']),
   validatorHandler(getUserSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -32,7 +33,7 @@ router.get('/:dni',
 
 router.post('/',
  passport.authenticate('jwt', {session: false}),
- chequearAdminRole,
+ chequearRoles(['administrador']),
   validatorHandler(createUserSchema, 'body'), 
   async (req, res, next) => {
     try {
