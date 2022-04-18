@@ -11,17 +11,16 @@ router.post('/login',
 passport.authenticate('local', {session: false}),
 async (req, res, next) => {
   try {
-    const usuraio = req.user;
+    const usuraio = req.user.dataValues;
     const payload = {
-      sub:usuraio.id,
+      sub:usuraio.dni,
       role: usuraio.rol,
     }
-
     const token = jwt.sign(payload, config.jwtSecret );
     console.log(token)
     res.json({
-      usuario :usuraio.dataValues.email,
-      rol: usuraio.dataValues.rol,
+      usuario :usuraio.email,
+      rol: usuraio.rol,
       token
     });
   } catch (error) {

@@ -18,19 +18,15 @@ const UsuarioSchema = {
     allowNull: false,
   },
   rol: {
-    type: DataTypes.STRING,
+    type: DataTypes.ENUM('administrador', 'recepcionista',
+    'cliente'),
     allowNull: false,
   },
   telefono:{
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
   },
   direccion:{
     type: DataTypes.STRING,
-  },
-  nombreUser:{
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
   },
   email: {
     type: DataTypes.STRING,
