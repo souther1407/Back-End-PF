@@ -52,8 +52,9 @@ router.post("/auth/google", async (req, res) => {
   const { googleId } = req.body;
   console.log(googleId)
   const token = req.headers.authorization.split(" ")[1]
+  console.log(req.headers.authorization)
   try {
-    res.json({ success: true, googleId})
+    res.json({ success: true, googleId, token})
   } catch (error) {
     res.json(error)
 }
