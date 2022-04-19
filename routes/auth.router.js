@@ -2,10 +2,9 @@ const express = require('express');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const { Usuario } = require('../db/models/usuario.model');
-const {config} = require('../config/config.js')
-
+const { checkGoogleToken } = require('../middleware/auth.handler.js');
 const AuthService = require('../services/auth.services');
-const service = new AuthService
+const service = new AuthService;
 const router = express.Router();
 
 router.post('/login', 
@@ -43,13 +42,13 @@ async (req, res, next) => {
 });
 
 router.post("/auth/google",(req, res) => {
-  /* const { token } = req.body; */
-  console.log(req.body)
-  res.json({body:req.body})
+  const { token } = req.body;
+  const payload = jwt.verify(token, "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")
+  res.json({payload})
   //TODO: busco el googleId en la base, si no está, registro el usuario
 })
 
-router.get("/googleProtegida", passport.authenticate("google"), (req, res) => {
+router.get("/googleProtegida",passport.authorize("google-authz"), (req, res) => {
   res.json({listo: "ok"})
 })
 
