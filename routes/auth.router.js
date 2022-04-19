@@ -43,8 +43,13 @@ async (req, res, next) => {
 
 router.post("/auth/google",(req, res) => {
   const { token } = req.body;
-  const payload = jwt.verify(token, "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")
-  res.json({payload})
+  try {
+    const payload = jwt.verify(token, "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")
+    
+    res.json({payload})
+  } catch (error) {
+    res.json(error)
+  }
   //TODO: busco el googleId en la base, si no está, registro el usuario
 })
 
