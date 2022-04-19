@@ -72,8 +72,7 @@ class AuthServices {
     }
 
     async cambiarPaswword(token, newPassword){
-
-      try {
+       try {
         const payload = jwt.verify(token, config.jwtRecuperacion);
         const usuario = await service.mostrarByDni(payload.sub);
         if (usuario.tokenRecuperacion !== token){

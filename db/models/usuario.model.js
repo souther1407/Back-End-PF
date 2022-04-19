@@ -39,6 +39,11 @@ const UsuarioSchema = {
     allowNull: false,
     type: DataTypes.STRING
   },
+  genero: {
+    allowNull: false,
+    type: DataTypes.ENUM('masculino', 'femenino',
+    'otro')
+  },
   tokenRecuperacion: {
     field: 'recovery_token',
     allowNull: true,

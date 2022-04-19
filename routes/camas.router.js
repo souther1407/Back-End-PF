@@ -3,7 +3,7 @@ const router = express.Router();
 
 const camasServices = require('../services/camas.services');
 const validatorHandler = require('../middleware/validator.handler');
-const {crearCamaSchema, actualizarCamaSchema, getCamaSchema} = require('../schemas/camas.schema');
+const {crearCamaSchema, actualizarCamaSchema, getCamaSchema, borrarCama} = require('../schemas/camas.schema');
 
 
 
@@ -49,6 +49,16 @@ router.patch('/:id', async (req, res)=> {
     const body = req.body
     const camaUpdate = await services.actualizar(id, body)
     res.json(camaUpdate)
+  } catch (error) {
+    res.status(error)
+  }
+})
+
+router.delete('/:id', async (req, res)=> {
+  try {
+    const {id} = req.params
+    const camaBorrada= await services.borrarCama(id)
+    res.json(camaBorrada)
   } catch (error) {
     res.status(error)
   }

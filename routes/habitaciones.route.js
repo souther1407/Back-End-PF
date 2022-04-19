@@ -16,15 +16,9 @@ async (req, res)=>{
   res.json(habitaciones)
 });
 
-// router.get('/filter', (req, res)=>{
-//   res.json('soy el filtro')
-// });
-
-
-
 router.post('/',
 passport.authenticate('jwt', {session: false}),
-chequearRoles(['administrador']),
+/*chequearRoles(['administrador']),*/
 validatorHandler(crearHabitacionSchema, 'body'), // validation
 async (req, res)=>{
       try {

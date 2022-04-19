@@ -59,6 +59,28 @@ class camasServices {
         }
         return 'Cama actualizada';
     }
+
+
+    async borrarCama(id){
+    
+    const cama = await Cama.findByPk(id)
+    if (!cama) {
+     return boom.notFound('la cama no existe') }
+    
+    const habitacion = await Habitacion.findByPk(cama.HabitacionId)
+    const camaBorrada = await Cama.destroy({where:{id}})
+    const actHabit = await Habitacion.update(
+    {cantCamas: habitacion.cantCamas - 1}, 
+        {where:{id:cama.HabitacionId}} )
+    
+    //    const habitacion = await Habitacion.update()
+       
+       return camaBorrada;
+        }
+
 }
+
+
+
 
 module.exports = camasServices;

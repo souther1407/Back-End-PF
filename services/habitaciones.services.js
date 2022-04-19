@@ -7,8 +7,8 @@ const { ReservaCama } = require('../db/models/reservaCama.model');
 
 class habitacionesService {
   async crear(data) {
-    console.log(data.imagenes)
-    if(data.privada === true){
+    console.log(data.imagenes);
+    if (data.privada === true) {
       try {
         const habitacion = await Habitacion.create({
           nombre: data.nombre,
@@ -18,40 +18,41 @@ class habitacionesService {
           banoPrivado: data.banoPrivado,
           precio: data.precioHabitacion,
           descripcion: data.descripcion,
-          
-        })
+        });
 
-        if(data.imagenes.length) {
+        if (data.imagenes.length) {
           for (let i = 0; i < data.imagenes.length; i++) {
             Imagen.create({
-             imagen: data.imagenes[i]
-           })
-           .then((imagen)=>{
-             habitacion.setImagens(imagen);
-           })
-           .catch(error => console.log(error))
-        }          
-         }else {
-           Imagen.create({
+              imagen: data.imagenes[i],
+            })
+              .then((imagen) => {
+                habitacion.setImagens(imagen);
+              })
+              .catch((error) => console.log(error));
+          }
+        } else {
+          Imagen.create({})
+            .then((imagen) => {
+              habitacion.setImagens(imagen);
+            })
+            .catch((error) => console.log(error));
+        }
 
-           }).then((imagen)=>{
-             habitacion.setImagens(imagen);
-           }).catch(error => console.log(error))
-         }
-        
-        return habitacion
-
-      } catch(error) {
-        return boom.conflict(error.parent.detail)
+        return habitacion;
+      } catch (error) {
+        return boom.conflict(error.parent.detail);
       }
-    }else{
+    } else {
       try {
         let precioHabitacion = 0;
+        if(data.preciosCamas.length > 1 && data.preciosCamas.length !== data.cantCamas ){
+          return boom.badData('falta precio de una cama')
+        }
         for (let i = 0; i < data.cantCamas; i++) {
-         // eslint-disable-next-line no-unused-expressions
-         data.preciosCamas.length > 1 ? 
-         precioHabitacion += data.preciosCamas[i] : 
-         precioHabitacion = data.preciosCamas[0] * data.cantCamas;
+          // eslint-disable-next-line no-unused-expressions
+          data.preciosCamas.length > 1
+            ? (precioHabitacion += data.preciosCamas[i])
+            : (precioHabitacion = data.preciosCamas[0] * data.cantCamas);
         }
         const habitacion = await Habitacion.create({
           nombre: data.nombre,
@@ -61,124 +62,152 @@ class habitacionesService {
           banoPrivado: data.banoPrivado,
           precio: precioHabitacion,
           descripcion: data.descripcion,
-         })
-        if(data.imagenes.length) {
+        });
+        if (data.imagenes.length) {
           for (let i = 0; i < data.imagenes.length; i++) {
             Imagen.create({
-             imagen: data.imagenes.length ? data.imagenes[i] : data.imagenes[0]
-             
-           })
-           .then((imagen)=>{
-             habitacion.setImagens(imagen);
-           })
-           .catch(error => console.log(error))
-        }          
-         }else {
-           Imagen.create({
-
-           }).then((imagen)=>{
-             habitacion.setImagens(imagen);
-           }).catch(error => console.log(error))
-         }
-       
-        for (let i = 0; i < data.cantCamas; i++) {
-            Cama.create({
-              precio: data.preciosCamas.length > 1 ? data.preciosCamas[i] : data.preciosCamas[0],
+              imagen: data.imagenes.length
+                ? data.imagenes[i]
+                : data.imagenes[0],
             })
-            .then((cama)=>{
+              .then((imagen) => {
+                habitacion.setImagens(imagen);
+              })
+              .catch((error) => console.log(error));
+          }
+        } else {
+          Imagen.create({})
+            .then((imagen) => {
+              habitacion.setImagens(imagen);
+            })
+            .catch((error) => console.log(error));
+        }
+
+        for (let i = 0; i < data.cantCamas; i++) {
+          Cama.create({
+            precio:
+              data.preciosCamas.length > 1
+                ? data.preciosCamas[i]
+                : data.preciosCamas[0],
+          })
+            .then((cama) => {
               habitacion.setCamas(cama);
             })
-            .catch(error => boom.badData(error.message))
+            .catch((error) => boom.badData(error.message));
         }
-        return habitacion
-      } catch(error) {
-        return boom.conflict(error.parent.detail)
+        return habitacion;
+      } catch (error) {
+        return boom.conflict(error.parent.detail);
       }
     }
   }
 
   // eslint-disable-next-line class-methods-use-this
   async buscar() {
-   try {
-    const habitacion = await Habitacion.findAll({
-      include: [{model:Imagen, attributes: [ 'imagen' ] },{model:Cama, attributes: [ 'id', 'precio', 'estado' ] }]
-    });
-    for (let i = 0; i < habitacion.length; i++) {
-      if (habitacion[i].privada === true) {delete habitacion[i].dataValues.Camas}
-      if (habitacion[i].Imagens.length<0) {habitacion[i].dataValues.Imagens.push("https://w7.pngwing.com/pngs/331/812/png-transparent-bedroom-computer-icons-bed.png")}
+    try {
+      const habitacion = await Habitacion.findAll({
+        include: [
+          { model: Imagen, attributes: ['imagen'] },
+          { model: Cama, attributes: ['id', 'precio', 'estado'] },
+        ],
+      });
+      for (let i = 0; i < habitacion.length; i++) {
+        if (habitacion[i].privada === true) {
+          delete habitacion[i].dataValues.Camas;
+        }
+        if (habitacion[i].Imagens.length < 0) {
+          habitacion[i].dataValues.Imagens.push(
+            'https://w7.pngwing.com/pngs/331/812/png-transparent-bedroom-computer-icons-bed.png'
+          );
+        }
       }
-    
 
-    // for (let i = 0; i < habitacion.length; i++) {
-    //   if(habitacion[i].privada === false){
-    //     habitacion[i] = await Habitacion.findByPk(
-    //       habitacion[i].id,{
-    //         include: [Cama, Imagen]},
-    //        )
-    //   }
-      
-    // }
-    return habitacion;
-   } catch(error) {
-     return boom.badData(error)
-   }
+      // for (let i = 0; i < habitacion.length; i++) {
+      //   if(habitacion[i].privada === false){
+      //     habitacion[i] = await Habitacion.findByPk(
+      //       habitacion[i].id,{
+      //         include: [Cama, Imagen]},
+      //        )
+      //   }
+
+      // }
+      return habitacion;
+    } catch (error) {
+      return boom.badData(error);
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async mostrarByHabitacion(id){
+  async mostrarByHabitacion(id) {
     try {
-      const camas = await Cama.findAll({where: { HabitacionId : id}, include: ReservaCama})
-    return camas;
-    } catch(error) {
-      return boom.notFound(error.parent.detail)
+      const camas = await Cama.findAll({
+        where: { HabitacionId: id },
+        include: ReservaCama,
+      });
+      return camas;
+    } catch (error) {
+      return boom.notFound(error.parent.detail);
     }
-}
+  }
 
   // eslint-disable-next-line class-methods-use-this
   async buscaruno(id) {
-    if(isNaN(Number(id))) throw new Error("no papa")
+    if (isNaN(Number(id))) throw new Error('no papa');
     let habitacion = Habitacion.findByPk(id);
-    if(!habitacion.privada){
-      habitacion = Habitacion.findByPk(id, {include: [Cama,Imagen, ReservaCama]})
+    if (!habitacion.privada) {
+      habitacion = Habitacion.findByPk(id, {
+        include: [Cama, Imagen, ReservaCama],
+      });
     }
     if (!habitacion) {
-      throw boom.notFound('no se encontro la habitacion')
+      throw boom.notFound('no se encontro la habitacion');
     }
     return habitacion;
   }
 
   // eslint-disable-next-line class-methods-use-this
   async actualizar(id, cambios) {
-    const {nombre, cantCamas, comodidades, tipoHabitacion} = cambios;
-
-    const habitacionUpdate = await Habitacion.update({ 
+    const {
       nombre,
-      cantCamas,
-      comodidades,
-      tipoHabitacion
-    }, 
-      { where : { id : id }} 
-    )
+        cantCamas,
+        comodidades,
+        privada,
+        banoPrivado,
+        tipo,
+        precioHabitacion,
+        descripcion,
+        imagenes,
+    } = cambios;
 
-    if(!habitacionUpdate) {
+    const habitacionUpdate = await Habitacion.update(
+      {
+        nombre,
+        cantCamas,
+        comodidades,
+        privada,
+        banoPrivado,
+        tipo,
+        precioHabitacion,
+        descripcion,
+        imagenes,
+      },
+      { where: { id: id } }
+    );
+
+    if (!habitacionUpdate) {
       throw boom.notFound('habitacion no encontrada');
     }
     return habitacionUpdate;
-
   }
 
   async borrar(id) {
-    const habitacionDelete = Habitacion.destroy({where: { id: id}})
+    const habitacionDelete = Habitacion.destroy({ where: { id: id } });
 
-    if(!habitacionDelete) {
+    if (!habitacionDelete) {
       throw boom.notFound('habitacion no encontrada');
     }
     return `Habitacion con id: ${id} fue borrada con exito`;
   }
-
 }
 
-module.exports = habitacionesService
-
-
-
+module.exports = habitacionesService;
