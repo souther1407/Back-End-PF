@@ -46,13 +46,12 @@ async (req, res, next) => {
 router.get("/prohibido",passport.authorize("google"), (req, res) =>{
   res.json({listo:"df"})
 })
+
 router.post("/auth/google", async (req, res) => {
-  const { googleId, } = req.body;
+  const { googleId } = req.body;
+  console.log(req.headers.authorization)
   try {
-    const [user,existe] = await Usuario.findOrCreate({
-      where:{ googleId }
-    })
-    res.json({ success: true, msg: "usuario creado con éxito" })
+    res.json({ success: true, token:req.headers.authorization})
   } catch (error) {
     res.json(error)
 }
