@@ -43,14 +43,14 @@ async (req, res, next) => {
 });
 
 router.post("/auth/google",(req, res) => {
-  /* const { googleId, name, familyName, email } = req.body; */
+  /* const { token } = req.body; */
   console.log(req.body)
   res.json({body:req.body})
   //TODO: busco el googleId en la base, si no está, registro el usuario
 })
 
-router.get("/googleProtegida", passport.authenticate("google",{} ,(req, res) => {
-  res.json({permiso: "ok"})
-}))
+router.get("/googleProtegida", passport.authenticate("google"), (req, res) => {
+  res.json({listo: "ok"})
+})
 
 module.exports = router;
