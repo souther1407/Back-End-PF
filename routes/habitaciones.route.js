@@ -1,3 +1,4 @@
+
 const express = require('express');
 const habitacionesService = require('./../services/habitaciones.services');
 const validatorHandler = require('../middleware/validator.handler');
@@ -9,18 +10,18 @@ const {chequearRoles} = require('../middleware/auth.handler');
 const passport = require('passport'); 
 
 
+
+
 router.get('/',
 /*checkApiKey,*/
 async (req, res)=>{
-  const habitaciones = await services.buscar();
-  res.json(habitaciones)
+  try{
+    const habitaciones = await services.buscar();
+    res.json(habitaciones)
+  }catch(e){
+    console.log(e)
+  }
 });
-
-// router.get('/filter', (req, res)=>{
-//   res.json('soy el filtro')
-// });
-
-
 
 router.post('/',
 passport.authenticate('jwt', {session: false}),

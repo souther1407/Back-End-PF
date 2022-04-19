@@ -76,7 +76,7 @@ Usuario.belongsTo(Nacionalidades)
 Nacionalidades.hasMany(Huesped)
 Huesped.belongsTo(Nacionalidades)
 
- 
+
 // un user tiene una tipoDocumento
 // un tipoDocumento pertenece a un user
 
