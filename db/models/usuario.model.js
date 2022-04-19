@@ -9,6 +9,10 @@ const UsuarioSchema = {
     allowNull: false,
     primaryKey: true,
   },
+  googleId:{
+    type: DataTypes.STRING,
+    allowNull:true
+  },
   nombre: {
     type: DataTypes.STRING,
     allowNull: false,

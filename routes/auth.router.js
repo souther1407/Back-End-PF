@@ -42,4 +42,12 @@ async (req, res, next) => {
   }
 });
 
+router.post("/auth/google",(req, res) => {
+  /* const { googleId, name, familyName, email } = req.body; */
+  console.log(req.body)
+  res.json({googleId:req.body.googleId})
+  //TODO: busco el googleId en la base, si no está, registro el usuario
+})
+
+
 module.exports = router;
