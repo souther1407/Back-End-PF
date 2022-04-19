@@ -7,6 +7,7 @@ const AuthService = require('../services/auth.services');
 const service = new AuthService;
 const router = express.Router();
 
+require("../middleware/auth.handler")
 const SECRET = "kirikocho"
 
 router.post('/login', 
