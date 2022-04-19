@@ -51,7 +51,6 @@ router.get("/prohibido",passport.authorize("google"), (req, res) =>{
 router.post("/auth/google", async (req, res) => {
   const { googleId } = req.body;
   const token = req.headers.authorization.split(" ")[1]
-  
   try {
     res.json({ success: true, googleId})
   } catch (error) {
@@ -62,8 +61,8 @@ router.post("/auth/google", async (req, res) => {
   //TODO: busco el googleId en la base, si no está, registro el usuario
 
 
-router.post("/signup",(req ,res) => {
+/* router.post("/signup",(req ,res) => {
   const {} =
 })
-
+ */
 module.exports = router;
