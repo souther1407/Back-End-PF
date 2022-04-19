@@ -44,8 +44,9 @@ async (req, res, next) => {
 router.post("/auth/google",(req, res) => {
   const { token } = req.body;
   try {
+    console.log(token)
     const payload = jwt.verify(token, "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")
-    
+  
     res.json({payload})
   } catch (error) {
     res.json(error)
