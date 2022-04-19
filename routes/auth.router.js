@@ -49,7 +49,7 @@ router.post("/auth/google",(req, res) => {
   //TODO: busco el googleId en la base, si no está, registro el usuario
 })
 
-router.get("/googleProtegida", passport.authorize("google",{} ,(req, res) => {
+router.get("/googleProtegida", passport.authenticate("google",{} ,(req, res) => {
   res.json({permiso: "ok"})
 }))
 
