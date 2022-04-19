@@ -1,4 +1,4 @@
-const boom = require('@hapi/boom')
+/* const boom = require('@hapi/boom')
 
 function logErrors (err, req, res, next) {
   console.error(err);
@@ -32,7 +32,7 @@ function error404Handler (req, res, next) {
   })
   next()
 }
-
+ */
 
 module.exports= {
   logErrors,
