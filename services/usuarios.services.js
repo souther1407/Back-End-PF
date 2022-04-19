@@ -50,7 +50,7 @@ class UserService {
     };
   }
 
-  async delete(id) {
+  async delete(dni) {
     const usuario = await Usuario.findOne(id)
     await usuario.destroy();
     return { id };
