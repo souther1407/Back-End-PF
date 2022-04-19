@@ -56,11 +56,13 @@ router.post("/auth/google", async (req, res) => {
   } catch (error) {
     res.json(error)
 }
+})
+
   //TODO: busco el googleId en la base, si no está, registro el usuario
 
 
-router.post("/signup",(req ,res) => {
+/* router.post("/signup",(req ,res) => {
 
-})
+}) */
 
-module.exports = router
+module.exports = router;
