@@ -42,9 +42,10 @@ async (req, res, next) => {
 });
 
 router.post("/auth/google",(req, res) => {
-  const { token } = req.body;
+  const { token, googleId } = req.body;
   try {
-    console.log(token)
+    console.log("googleId", googleId)
+    console.log("token",token)
     const payload = jwt.verify(token, "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")
   
     res.json({payload})
