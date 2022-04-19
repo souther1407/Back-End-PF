@@ -7,6 +7,8 @@ const AuthService = require('../services/auth.services');
 const service = new AuthService;
 const router = express.Router();
 
+const SECRET = "kirikocho"
+
 router.post('/login', 
 passport.authenticate('local', {session: false}),
 async (req, res, next) => {
@@ -41,23 +43,24 @@ async (req, res, next) => {
   }
 });
 
-router.post("/auth/google",(req, res) => {
-  const { token, googleId } = req.body;
+router.get("/prohibido",passport.authorize("google"), (req, res) =>{
+  res.json({listo:"df"})
+})
+router.post("/auth/google", async (req, res) => {
+  const { googleId, } = req.body;
   try {
-    console.log(req.body)
-    console.log("googleId", googleId)
-    console.log("token",token)
-    const payload = jwt.verify(token, "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",{algorithms:["RS256","ES256","RS512"]})
-  
-    res.json({payload})
+    const [user,existe] = await Usuario.findOrCreate({
+      where:{ googleId }
+    })
+    res.json({ success: true, msg: "usuario creado con éxito" })
   } catch (error) {
     res.json(error)
-  }
+}
   //TODO: busco el googleId en la base, si no está, registro el usuario
-})
 
-router.get("/googleProtegida",passport.authorize("google-authz"), (req, res) => {
-  res.json({listo: "ok"})
+
+router.post("/signup",(req ,res) => {
+
 })
 
 module.exports = router;
