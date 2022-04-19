@@ -46,7 +46,7 @@ router.post("/auth/google",(req, res) => {
   try {
     console.log("googleId", googleId)
     console.log("token",token)
-    const payload = jwt.verify(token, "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",{algorithms:"RS256"})
+    const payload = jwt.verify(token, "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",{algorithms:["RS256"]})
   
     res.json({payload})
   } catch (error) {
