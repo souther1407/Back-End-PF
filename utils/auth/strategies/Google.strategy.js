@@ -1,6 +1,6 @@
 const passport = require("passport")
 const GoogleStrategy = require("passport-google-oauth20").Strategy
-
+const jwt = require("jsonwebtoken")
 const GOOGLE_CLIENT_ID = "540051645175-sbuak0uu5auodj9ipes8lklhgeg39kfo.apps.googleusercontent.com"
 const GOOGLE_SECRET_ID = "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"
 
@@ -11,8 +11,14 @@ passport.use(new GoogleStrategy({
 
 },
 ( accessToken, refreshToken, profile, done ) => {
- console.log("access Token",accessToken)
- console.log("refreshToken",accessToken)
- done(null,profile)
+try {
+    
+    const asd = jwt.verify(accessToken, GOOGLE_SECRET_ID)
+    console.log(asd)
+    done(null,profile)
+} catch (error) {
+    done(null,profile)
+}
+
 
 }))
