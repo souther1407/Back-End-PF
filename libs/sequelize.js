@@ -76,6 +76,7 @@ Usuario.belongsTo(Nacionalidades)
 Nacionalidades.hasMany(Huesped)
 Huesped.belongsTo(Nacionalidades)
 
+
 // un user tiene una tipoDocumento
 // un tipoDocumento pertenece a un user
 
@@ -100,9 +101,6 @@ Cama.belongsToMany( Huesped,{through: Historial})
 
 Habitacion.hasMany(Imagen, {onDelete: 'cascade'});
 Imagen.belongsTo(Habitacion)
-
-
-
 
 
 sequelize.sync({ force: false })

@@ -25,19 +25,22 @@ class habitacionesService {
         if(data.imagenes.length) {
           for (let i = 0; i < data.imagenes.length; i++) {
             Imagen.create({
-              imagen: data.imagenes[0] 
-            })
-            .then((imagen)=>{
-            habitacion.setImagens(imagen);
-            })
-            .catch(error => console.log(error))
-          }          
-        }else {
-            Imagen.create()
-            .then((imagen)=>{
-              habitacion.setImagens(imagen);
-            }).catch(error => console.log(error))
-        }
+
+             imagen: data.imagenes[i]
+           })
+           .then((imagen)=>{
+             habitacion.setImagens(imagen);
+           })
+           .catch(error => console.log(error))
+        }          
+         }else {
+           Imagen.create({
+
+           }).then((imagen)=>{
+             habitacion.setImagens(imagen);
+           }).catch(error => console.log(error))
+         }
+
         
         return habitacion
 
@@ -100,7 +103,9 @@ class habitacionesService {
 
   // eslint-disable-next-line class-methods-use-this
   async buscar() {
+
     try {
+
     const habitacion = await Habitacion.findAll({
       include: [{model:Imagen, attributes: [ 'imagen' ] },{model:Cama, attributes: [ 'id', 'precio', 'estado' ] }]
     });
@@ -126,14 +131,16 @@ class habitacionesService {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  // async mostrarByHabitacion(id){
-  //   try {
-  //     const camas = await Cama.findAll({where: { HabitacionId : id}, include: ReservaCama})
-  //   return camas;
-  //   } catch(error) {
-  //     return boom.notFound(error.parent.detail)
-  //   }
-  // }
+
+  async mostrarByHabitacion(id){
+    try {
+      const camas = await Cama.findAll({where: { HabitacionId : id}, include: ReservaCama})
+    return camas;
+    } catch(error) {
+      return boom.notFound(error.parent.detail)
+    }
+}
+
 
   // eslint-disable-next-line class-methods-use-this
   async buscaruno(id) {
@@ -156,8 +163,8 @@ class habitacionesService {
       nombre,
       cantCamas,
       comodidades,
-      tipoHabitacion,
-      descripcion
+      tipoHabitacion
+
     }, 
       { where : { id : id }} 
     )
