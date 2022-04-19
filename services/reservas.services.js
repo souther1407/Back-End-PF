@@ -1,8 +1,11 @@
+const boom = require('@hapi/boom');
 const { sequelize } = require('../libs/sequelize')
 const { ReservaCama } = require('../db/models/reservaCama.model')
 const { Usuario } = require('../db/models/usuario.model')
 const { Cama } = require('../db/models/cama.model')
 const { Habitacion } = require('../db/models/habitacion.model')
+const jwt = require('jsonwebtoken');
+const { config } = require('../config/config')
 
 class ReservaService {
 
@@ -46,7 +49,7 @@ class ReservaService {
 
     
 
-    async crearReserva(idUser, data){
+    async crearReserva(data, token){
         const newReserva = await ReservaCama.create({
             fecha_ingreso: data.fecha_ingreso,
             fecha_egreso: data.fecha_egreso,
@@ -68,13 +71,27 @@ class ReservaService {
                 })
             }
         }
-        Usuario.findByPk(idUser)
+        const tokenInfo = token.split(' ')
+        const payload = jwt.verify(tokenInfo[1], config.jwtSecret)
+        console.log(payload)
+
+        Usuario.findByPk(payload.sub)
         .then(user =>{
             newReserva.setUsuario(user)
         })
         return newReserva
     }
 
+    async eliminarReserva(id){
+        const reserva = await ReservaCama.destroy({where: {id}})
+        if(!reserva){
+            boom.notFound('Reserva no encontrada')
+        }
+        return `La reserva con ID: ${id} se ha borrado con exito`
+    }
+    async actualizarReserva(){
+
+    }
     // async cargarHuespedes(data, id_reserva){
     //     const reserva = await ReservaCama.findOne({
     //         where: {
@@ -99,12 +116,7 @@ class ReservaService {
     //     return 'Huespedes Cargados'
     // }
 
-    async eliminarReserva(){
-
-    }
-    async actualizarReserva(){
-
-    }
+    
 }
 
 module.exports = ReservaService;

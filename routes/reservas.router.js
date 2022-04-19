@@ -37,14 +37,26 @@ router.get('/', async (req, res)=>{
 //     }
 // )
 
-router.post('/:id',
+router.delete('/:id', 
     validatorHandler(getReservaId, 'params'),
+    async (req,res) =>{
+        try {
+            const {id} = req.params
+            const deleteReserva = await services.eliminarReserva(id)
+            res.status(200).json(deleteReserva)
+        } catch (error) {
+            res.status(error)
+        }
+
+    })
+
+router.post('/',
     validatorHandler(crearReservaSchema, 'body'),
   async (req, res)=>{
     try {
-        const {id} = req.params
+        const token = req.headers['authorization'];
         const body = req.body
-        const newReserva = await services.crearReserva(id, body)
+        const newReserva = await services.crearReserva(body, token)
         res.status(201).json(newReserva)
     } catch(error) {
         res.status(error)
