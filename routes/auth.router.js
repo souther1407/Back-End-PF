@@ -57,7 +57,7 @@ router.get("/prohibido",passport.authorize("google"), (req, res) =>{
 router.post("/auth/google", async (req, res) => {
   const { googleId } = req.body;
   console.log(googleId)
-  console.log
+  console.log(token)
   const token = req.headers.authorization.split(" ")[1]
   const payload = jwt.decode(token)
   try {
