@@ -82,7 +82,9 @@ router.post("/signup",async (req ,res) => {
     }else{
        existeUsuario = await Usuario.findOne({where:{dni}});
     }
-  
+    console.log(existeUsuarioGoogle)
+    console.log(existeUsuario)
+
     if(existeUsuarioGoogle !== null || existeUsuario !== null){
 
       return res.json({success: false, msg:"Ya existe el usuario"})
