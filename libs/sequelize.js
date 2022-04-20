@@ -107,7 +107,7 @@ sequelize.sync({ force: false })
   .then(() => {
     console.log(`base de datos creada/actualizada `);
     //TEST: paises mockeados
-    Nacionalidades.create({ nombre: "Argentina"})
+    /* Nacionalidades.create({ nombre: "Argentina"})
     Nacionalidades.create({ nombre: "Brasil"})
     Nacionalidades.create({ nombre: "Kazajistán"})
     Nacionalidades.create({ nombre: "Venezuela"})
@@ -124,7 +124,7 @@ sequelize.sync({ force: false })
     Nacionalidades.create({ nombre: "Bolivia"})
     Nacionalidades.create({ nombre: "Chile"})
     Nacionalidades.create({ nombre: "Paraguay"})
-    Nacionalidades.create({ nombre: "Papua Nueva Guinea"})
+    Nacionalidades.create({ nombre: "Papua Nueva Guinea"}) */
 
     
   })
