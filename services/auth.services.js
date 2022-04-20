@@ -24,7 +24,7 @@ class AuthServices {
       return usuario
     }
 
-          firmarToken(usuario){
+     firmarToken(usuario){
         const payload = {
         sub:usuario.dni,
         role: usuario.rol,

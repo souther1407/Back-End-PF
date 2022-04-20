@@ -13,8 +13,6 @@ const bcrypt = require('bcrypt');
 
 const router = express.Router();
 
-require("../utils/auth/strategies/Google.strategy")
-const SECRET = "kirikocho"
 
 router.post('/login', 
 passport.authenticate('local', {session: false}),
@@ -50,9 +48,7 @@ async (req, res, next) => {
   }
 });
 
-router.get("/prohibido",passport.authorize("google"), (req, res) =>{
-  res.json({listo:"df"})
-})
+
 
 router.post("/auth/google", async (req, res) => {
   const { googleId } = req.body;
@@ -95,7 +91,8 @@ router.post("/signup",async (req ,res) => {
         nombre:name,
         apellido:lastname,
         email,
-        password:await bcrypt.hash(password+email,12),genero:genre,
+        password:await bcrypt.hash(password,12),
+        genero:genre,
         fechaNacimiento:birthdate,
         rol:"cliente",
         nacionalidad:nationality,
