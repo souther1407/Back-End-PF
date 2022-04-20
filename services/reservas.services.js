@@ -6,6 +6,8 @@ const { Cama } = require('../db/models/cama.model')
 const { Habitacion } = require('../db/models/habitacion.model')
 const jwt = require('jsonwebtoken');
 const { config } = require('../config/config')
+const { Op } = require('sequelize');
+const { isNumber } = require('util');
 
 class ReservaService {
 
@@ -37,49 +39,68 @@ class ReservaService {
         const reservas = await ReservaCama.findAll({
             include: 
             [{
-                model: Habitacion
+                attributes: ['id'],
+                model: Habitacion,
+                through: {attributes: []} 
             },
             {
-                model: Cama
-            }
+                attributes: [ "HabitacionId",'id'],
+                model: Cama,
+                through: {attributes: []}
+            },
             ]
         })
         return reservas
-    }   
-
+    }
     
-
     async crearReserva(data, token){
-        const newReserva = await ReservaCama.create({
-            fecha_ingreso: data.fecha_ingreso,
-            fecha_egreso: data.fecha_egreso,
-            saldo: data.saldo
-        })
-        if(data.camas){
-            for (let i = 0; i < data.camas.length; i++) {
-                Cama.findByPk(data.camas[i])
-                .then(cama => {
-                    newReserva.addCama(cama)
-                })
-            }
-        }
-        if(data.habitaciones){
-            for (let i = 0; i < data.habitaciones.length; i++) {
-                Habitacion.findByPk(data.habitaciones[i])
-                .then(habitacion =>{
-                    newReserva.addHabitacion(habitacion)
-                })
-            }
-        }
         const tokenInfo = token.split(' ')
-        const payload = jwt.verify(tokenInfo[1], config.jwtSecret)
-        console.log(payload)
+        const tokendec = jwt.decode(tokenInfo[1])
 
-        Usuario.findByPk(payload.sub)
-        .then(user =>{
-            newReserva.setUsuario(user)
-        })
-        return newReserva
+        try {
+            const newReserva = await ReservaCama.create({
+                fecha_ingreso: data.fecha_ingreso,
+                fecha_egreso: data.fecha_egreso,
+                saldo: data.saldo
+            })
+            if(data.camas){
+                for (let i = 0; i < data.camas.length; i++) {
+                    const cama = await Cama.findByPk(data.camas[i])
+                    if(!cama) { return `no existe la cama con id ${data.camas[i]}`}
+                    Cama.findByPk(data.camas[i])
+                    .then(cama => {
+                        newReserva.addCama(cama)
+                    })
+                    .catch(error => { return boom.badData(error)})
+                }
+            }
+            if(data.habitaciones){
+                for (let i = 0; i < data.habitaciones.length; i++) {
+                    const habitacion = await Habitacion.findByPk(data.habitaciones[i])
+                    if(!habitacion) { return `no existe la habitacion con id ${data.habitaciones[i]}`}
+                    if(habitacion.dataValues.privada){
+                        Habitacion.findByPk(data.habitaciones[i])
+                        .then(habitacion =>{
+                            newReserva.addHabitacion(habitacion)
+                        }).catch(error => {return boom.badData(error)})
+                    }else{
+                        return 'Estas mandando un id de una habitación compartida'
+                    }
+                }
+            }
+        
+    
+            Usuario.findByPk(tokendec.sub)
+            .then(user =>{
+                newReserva.setUsuario(user)
+            })
+            return newReserva
+        } catch (error) {
+            console.log(error)
+            return error
+            
+        }
+
     }
 
     async eliminarReserva(id){
@@ -92,6 +113,7 @@ class ReservaService {
     async actualizarReserva(){
 
     }
+
     // async cargarHuespedes(data, id_reserva){
     //     const reserva = await ReservaCama.findOne({
     //         where: {
@@ -116,7 +138,111 @@ class ReservaService {
     //     return 'Huespedes Cargados'
     // }
 
-    
+    async mostrardisponibilidad(data){
+        try{
+            const { fecha_ingreso, fecha_egreso } = data
+            const reservas = await ReservaCama.findAll({
+                include: [
+                    {
+                        attributes:['id'],
+                        model: Habitacion,
+                        through: {attributes: []}
+                    },
+                    {
+                        attributes:['HabitacionId','id'],
+                        model: Cama,
+                        through: {attributes: []}
+                    }
+                ],
+                where: {
+                    fecha_ingreso: {
+                        [Op.between]: [fecha_ingreso, fecha_egreso]
+                    },
+                }
+            })
+
+            let noDisponibles = [];
+            let disponibles = [];
+
+            reservas.map(r =>{
+                if(r.Habitacions.length) r.Habitacions.map(h =>{
+                noDisponibles.push(h.id)
+                }) 
+                if(r.Camas.length) r.Camas.map(c =>{
+                noDisponibles.push(c.id)
+                })
+            })
+            
+            for (let i = 0; i < noDisponibles.length; i++) {
+                if( typeof(noDisponibles[i]) !== 'number'){
+                    const habitacionCama = await Cama.findByPk(noDisponibles[i]);
+                    let habitacion = await Habitacion.findByPk(habitacionCama.HabitacionId);
+                    if(!disponibles.length){
+                        disponibles.push({idHabitacion: habitacionCama.HabitacionId, cantidadCamas: habitacion.cantCamas, camasDisponible: habitacion.cantCamas})
+                    }
+                    
+                    for (let j = 0; j < disponibles.length; j++) {
+                        if (disponibles[j].idHabitacion === habitacionCama.HabitacionId){
+                            disponibles[j].camasDisponible--
+                        }else{
+                            disponibles.push({idHabitacion: habitacionCama.HabitacionId, cantidadCamas: habitacion.cantCamas, camasDisponible: habitacion.cantCamas})
+                        }
+                    }
+                }
+            }
+
+            let habitaciones = await Habitacion.findAll({where: {privada: true}, attributes: ['id']})
+            console.log('no disponibles: ',noDisponibles)
+            
+            for (let i = 0; i < habitaciones.length; i++) {
+                if(!noDisponibles.includes(habitaciones[i].id)) disponibles.push({idHabitacion: habitaciones[i].id})
+            }
+
+            let habitacionesCompartidas = await Habitacion.findAll({where: {privada: false}, attributes:['id','cantCamas'] ,include: [{model: Cama, attributes: ['id']}]})
+            
+
+            console.log('disponibles 1: ',disponibles)
+            
+            
+            for (let i = 0; i < habitacionesCompartidas.length; i++) {
+                console.log('habitacion compartida ' + i + ' ',habitacionesCompartidas[i])
+                let verificar = false;
+                for (let j = 0; j < disponibles.length; j++) {
+                    if(disponibles[j].idHabitacion === habitacionesCompartidas[i].id) { 
+                        verificar = true
+                        continue;
+                    }else if(j === disponibles.length - 1 && verificar === false){
+                        disponibles.push({idHabitacion: habitacionesCompartidas[i].id, cantidadCamas: habitacionesCompartidas[i].cantCamas, camasDisponible: habitacionesCompartidas[i].cantCamas})
+                    }
+                }
+            }
+            console.log('disponibles: ',disponibles)
+
+            return disponibles
+
+
+        }catch(error){
+            console.log(error)
+            return error;
+        }
+    }
+
+    async mostrardisponibilidadById(data){
+        try {
+            const { id } = data
+            console.log(id)
+            const reservas = await Habitacion.findAll({
+                where: { id },
+                include: [{ model: Cama }]
+            })
+            return reservas
+        } catch (error) {
+            console.log(error)
+            return error
+        }
+    }
+
+
 }
 
 module.exports = ReservaService;
