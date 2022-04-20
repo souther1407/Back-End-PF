@@ -30,6 +30,10 @@ const UsuarioSchema = {
   telefono:{
     type: DataTypes.STRING,
   },
+  fechaNacimiento: {
+    type:DataTypes.DATEONLY,
+    allowNull:true
+  },
   direccion:{
     type: DataTypes.STRING,
   },
