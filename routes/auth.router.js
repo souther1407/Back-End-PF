@@ -72,8 +72,8 @@ router.post("/auth/google", async (req, res) => {
 router.post("/signup",async (req ,res) => {
 
   const {dni,googleId,nombre,apellido,email,password} = req.body;
-  let existeUsuarioGoogle;
-  let existeUsuario;
+  let existeUsuarioGoogle = null;
+  let existeUsuario = null;
 
   try {
     
@@ -82,8 +82,7 @@ router.post("/signup",async (req ,res) => {
     }else{
        existeUsuario = await Usuario.findOne({where:{dni}});
     }
-    console.log(existeUsuarioGoogle)
-    console.log(existeUsuario)
+    
 
     if(existeUsuarioGoogle !== null || existeUsuario !== null){
 
