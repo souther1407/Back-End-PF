@@ -33,8 +33,8 @@ chequearRoles(['administrador', 'recepcionista']),
 );
 
 router.post('/',
- passport.authenticate('jwt', {session: false}),
- chequearRoles(['administrador']),
+ /* passport.authenticate('jwt', {session: false}),
+ chequearRoles(['administrador']), */
   validatorHandler(createUserSchema, 'body'), 
   async (req, res, next) => {
     try {
