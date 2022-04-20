@@ -62,7 +62,7 @@ router.post("/auth/google", async (req, res) => {
   console.log(token)
   const payload = jwt.decode(token)
   try {
-    res.json({ success: true, googleId, payload})
+    res.json({ success: true, googleId, payload, body:req.body})
   } catch (error) {
     res.json(error)
 }

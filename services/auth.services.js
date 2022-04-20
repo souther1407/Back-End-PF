@@ -7,7 +7,8 @@ const {config} = require('../config/config');
 const UserService = require("./usuarios.services");
 const service = new UserService();
 
-
+//prueba token
+const SECRET= "nsz6ti0v8bXql5yjaR9ZADkYLeHWEcfF"
 class AuthServices {
 
     async traerUsuario(email, password){
@@ -28,7 +29,7 @@ class AuthServices {
         sub:usuario.dni,
         role: usuario.rol,
         }
-        const token = jwt.sign(payload, config.jwtSecret );
+        const token = jwt.sign(payload, SECRET );
         
         return ({
         usuario :usuario.email,
