@@ -68,8 +68,6 @@ router.post("/auth/google", async (req, res) => {
 })
 
   //TODO: busco el googleId en la base, si no está, registro el usuario
-
-
 router.post("/signup",async (req ,res) => {
 
   const {dni,googleId,nombre,apellido,email,password} = req.body;
@@ -99,6 +97,16 @@ router.post("/signup",async (req ,res) => {
     res.status(400).json({error})
   }
 
+})
+
+router.post("/registradoGoogle", async (req, res) => {
+  const {googleId} = req.body;
+  try {
+    const registrado = await Usuario.findOne({ where: { googleId }})
+    res.json({success: registrado !== null})
+  } catch (error) {
+    res.status(400).json({ error })
+  }
 })
 
 module.exports = router;
