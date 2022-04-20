@@ -71,7 +71,7 @@ router.post("/auth/google", async (req, res) => {
   //TODO: busco el googleId en la base, si no está, registro el usuario
 router.post("/signup",async (req ,res) => {
 
-  const {dni,googleId,nombre,apellido,email,password} = req.body;
+  const {dni,googleId,nombre,apellido,email,password,rol,genero} = req.body;
   let existeUsuarioGoogle = null;
   let existeUsuario = null;
 
