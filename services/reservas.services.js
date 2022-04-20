@@ -178,21 +178,31 @@ class ReservaService {
                     const habitacionCama = await Cama.findByPk(noDisponibles[i]);
                     let habitacion = await Habitacion.findByPk(habitacionCama.HabitacionId);
                     if(!disponibles.length){
-                        disponibles.push({idHabitacion: habitacionCama.HabitacionId, cantidadCamas: habitacion.cantCamas, camasDisponible: habitacion.cantCamas})
+                        disponibles.push({
+                            idHabitacion: habitacionCama.HabitacionId, 
+                            cantidadCamas: habitacion.cantCamas, 
+                            camasDisponible: habitacion.cantCamas,
+                            camasDisponiblesIds: [noDisponibles[i]]
+                        })
                     }
                     
                     for (let j = 0; j < disponibles.length; j++) {
                         if (disponibles[j].idHabitacion === habitacionCama.HabitacionId){
-                            disponibles[j].camasDisponible--
+                            disponibles[j].camasDisponible--;
+                            disponibles[j].camasDisponiblesIds.includes(noDisponibles[i]) ? null : disponibles[j].camasDisponiblesIds.push(noDisponibles[i]);
                         }else{
-                            disponibles.push({idHabitacion: habitacionCama.HabitacionId, cantidadCamas: habitacion.cantCamas, camasDisponible: habitacion.cantCamas})
+                            disponibles.push({
+                                idHabitacion: habitacionCama.HabitacionId, 
+                                cantidadCamas: habitacion.cantCamas, 
+                                camasDisponible: habitacion.cantCamas,
+                                camasDisponiblesIds: [...disponibles[i].camasDisponiblesIds, noDisponibles[i]]
+                            })
                         }
                     }
                 }
             }
 
             let habitaciones = await Habitacion.findAll({where: {privada: true}, attributes: ['id']})
-            console.log('no disponibles: ',noDisponibles)
             
             for (let i = 0; i < habitaciones.length; i++) {
                 if(!noDisponibles.includes(habitaciones[i].id)) disponibles.push({idHabitacion: habitaciones[i].id})
@@ -200,23 +210,22 @@ class ReservaService {
 
             let habitacionesCompartidas = await Habitacion.findAll({where: {privada: false}, attributes:['id','cantCamas'] ,include: [{model: Cama, attributes: ['id']}]})
             
-
-            console.log('disponibles 1: ',disponibles)
-            
-            
             for (let i = 0; i < habitacionesCompartidas.length; i++) {
-                console.log('habitacion compartida ' + i + ' ',habitacionesCompartidas[i])
                 let verificar = false;
                 for (let j = 0; j < disponibles.length; j++) {
                     if(disponibles[j].idHabitacion === habitacionesCompartidas[i].id) { 
                         verificar = true
                         continue;
                     }else if(j === disponibles.length - 1 && verificar === false){
-                        disponibles.push({idHabitacion: habitacionesCompartidas[i].id, cantidadCamas: habitacionesCompartidas[i].cantCamas, camasDisponible: habitacionesCompartidas[i].cantCamas})
+                        disponibles.push({
+                            idHabitacion: habitacionesCompartidas[i].id, 
+                            cantidadCamas: habitacionesCompartidas[i].cantCamas, 
+                            camasDisponible: habitacionesCompartidas[i].cantCamas,
+                            camasDisponiblesIds: habitacionesCompartidas[i].Camas.map(c => c.id)
+                        })
                     }
                 }
             }
-            console.log('disponibles: ',disponibles)
 
             return disponibles
 
