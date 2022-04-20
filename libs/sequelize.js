@@ -106,6 +106,25 @@ Imagen.belongsTo(Habitacion)
 sequelize.sync({ force: false })
   .then(() => {
     console.log(`base de datos creada/actualizada `);
+    //TEST: paises mockeados
+    Nacionalidades.create({ nombre: "Argentina"})
+    Nacionalidades.create({ nombre: "Brasil"})
+    Nacionalidades.create({ nombre: "Kazajistán"})
+    Nacionalidades.create({ nombre: "Venezuela"})
+    Nacionalidades.create({ nombre: "Burkina Faso"})
+    Nacionalidades.create({ nombre: "Luxemburgo"})
+    Nacionalidades.create({ nombre: "Uruguay"})
+    Nacionalidades.create({ nombre: "China"})
+    Nacionalidades.create({ nombre: "Grecia"})
+    Nacionalidades.create({ nombre: "Finlandia"})
+    Nacionalidades.create({ nombre: "Senegal"})
+    Nacionalidades.create({ nombre: "Qatar"})
+    Nacionalidades.create({ nombre: "España"})
+    Nacionalidades.create({ nombre: "Portugal"})
+    Nacionalidades.create({ nombre: "Bolivia"})
+    Nacionalidades.create({ nombre: "Chile"})
+    Nacionalidades.create({ nombre: "Paraguay"})
+    Nacionalidades.create({ nombre: "Papua Nueva Guinea"})
 
     
   })
