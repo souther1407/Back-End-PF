@@ -1,3 +1,4 @@
+const { allow } = require('joi');
 const {Model, DataTypes, Sequelize} = require('sequelize')
 
 const USUARIO_TABLE = 'usuarios';
@@ -47,6 +48,10 @@ const UsuarioSchema = {
     field: 'recovery_token',
     allowNull: true,
     type: DataTypes.STRING
+  },
+  genero:{
+    type: DataTypes.ENUM("femenino","masculino","no-binario"),
+    allowNull: false,
   },
   createdAt: {
     allowNull: false,
