@@ -226,7 +226,7 @@ class ReservaService {
             return error;
         }
     }
-
+// creando un pull 
     async mostrardisponibilidadById(data){
         try {
             const { id } = data
