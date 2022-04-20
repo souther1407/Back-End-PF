@@ -10,6 +10,14 @@ const UsuarioSchema = {
     allowNull: false,
     primaryKey: true,
   },
+  //TODO:cambiar luego prueba
+  tipoDocumento:{
+    type: DataTypes.STRING
+  },
+  //TODO:cambiar luego prueba
+  nacionalidad: {
+    type: DataTypes.STRING
+  },
   googleId:{
     type: DataTypes.STRING,
     allowNull:true
@@ -44,6 +52,7 @@ const UsuarioSchema = {
       isEmail: true,
     }
   },
+
   password: {
     allowNull: false,
     type: DataTypes.STRING

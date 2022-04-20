@@ -70,8 +70,7 @@ router.post("/auth/google", async (req, res) => {
 
   //TODO: busco el googleId en la base, si no está, registro el usuario
 router.post("/signup",async (req ,res) => {
-
-  const {dni,googleId,name,lastname,email,password,genre,birthdate} = req.body;
+  const {dni,googleId,name,lastname,email,password,genre,birthdate,nationality,typeofdocument} = req.body;
   let existeUsuarioGoogle = null;
   let existeUsuario = null;
   console.log(req.body)
@@ -98,7 +97,9 @@ router.post("/signup",async (req ,res) => {
         email,
         password:await bcrypt.hash(password+email,12),genero:genre,
         fechaNacimiento:birthdate,
-        rol:"cliente"
+        rol:"cliente",
+        nacionalidad:nationality,
+        tipoDocumento:typeofdocument,
       })
       res.json({success:true, msg:"Usuario creado con éxito"})
 
