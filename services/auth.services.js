@@ -9,7 +9,7 @@ const service = new UserService();
 
 //prueba token
 const SECRET= "nsz6ti0v8bXql5yjaR9ZADkYLeHWEcfF"
-const SECRET_RECUPERACION =
+/* const SECRET_RECUPERACION = */
 class AuthServices {
 
     async traerUsuario(email, password){
