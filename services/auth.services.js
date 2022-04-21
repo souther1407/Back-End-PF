@@ -64,8 +64,10 @@ class AuthServices {
     }
     const payload = {sub: usuario.dni };
     const token = jwt.sign(payload, SECRET, {expiresIn: '10min'} );
-    const link = `http://rodrigoquintero.tamarindorivas.com?token=${token}`
-    await service.actualizar(usuario.dni, {tokenRecuperacion: token })
+    //TODO: cambiar luego
+    /* const link = `http://rodrigoquintero.tamarindorivas.com?token=${token}` */
+    const link = `http://localhost:3000/changepassword?token=${token}`;
+    await service.actualizar(usuario.dni, {tokenRecuperacion: token });
     const mail = {
     from: 'WebMaster',
     to: `${usuario.email}`, 
