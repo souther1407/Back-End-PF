@@ -55,6 +55,7 @@ class AuthServices {
 
     async enviarRecuperacion(email){
     const usuario = await service.buscarPorEmail(email);
+    console.log(usuario)
     if (!usuario) {
     throw boom.unauthorized();
     }
