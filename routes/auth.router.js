@@ -29,7 +29,7 @@ router.post('/recuperacion',
 async (req, res, next) => {
   try { 
     const { email } = req.body.email
-    const respuesta = await service.enviarRecuperacion(req.body.email)
+    const respuesta = await service.enviarRecuperacion(email)
     res.json(respuesta);
   } catch (error) {
     next(error);
