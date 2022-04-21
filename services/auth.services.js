@@ -9,6 +9,7 @@ const service = new UserService();
 
 //prueba token
 const SECRET= "nsz6ti0v8bXql5yjaR9ZADkYLeHWEcfF"
+const SECRET_RECUPERACION =
 class AuthServices {
 
     async traerUsuario(email, password){
@@ -38,15 +39,17 @@ class AuthServices {
     });
     }
 
-
+  
     async enviarEmail(infomail) {
+    const MAIL = "rodrigo.m.quintero@gmail.com"
+    const PASSWORD = "icrpozbjzczgvwpz"
     const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     secure: true,
     port: 465,
     auth: {
-    user: config.email,
-    pass: config.emailPassword
+    user: MAIL,
+    pass: PASSWORD
             }
         });
     await transporter.sendMail(infomail);
