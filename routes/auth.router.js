@@ -37,7 +37,6 @@ async (req, res, next) => {
 });
 
 router.post('/cambiar-password', 
-
 async (req, res, next) => {
   try { 
     const { token, newPassword } = req.body;
