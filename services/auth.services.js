@@ -9,7 +9,7 @@ const service = new UserService();
 
 //prueba token
 const SECRET= "nsz6ti0v8bXql5yjaR9ZADkYLeHWEcfF"
-/* const SECRET_RECUPERACION = */
+/* const SECRET_RECUPERACION = "DtQARYqUCcIHXrlvdo5pKEnJaZ4L2STg" */
 class AuthServices {
 
     async traerUsuario(email, password){
@@ -79,7 +79,7 @@ class AuthServices {
     async cambiarPaswword(token, newPassword){
 
       try {
-        const payload = jwt.verify(token, config.jwtRecuperacion);
+        const payload = jwt.verify(token, SECRET);
         const usuario = await service.mostrarByDni(payload.sub);
         if (usuario.tokenRecuperacion !== token){
           throw boom.unauthorized();
