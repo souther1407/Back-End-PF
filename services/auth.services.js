@@ -60,7 +60,7 @@ class AuthServices {
     throw boom.unauthorized();
     }
     const payload = {sub: usuario.dni };
-    const token = jwt.sign(payload, config.jwtRecuperacion, {expiresIn: '10min'} );
+    const token = jwt.sign(payload, SECRET, {expiresIn: '10min'} );
     const link = `http://rodrigoquintero.tamarindorivas.com?token=${token}`
     await service.actualizar(usuario.dni, {tokenRecuperacion: token })
     const mail = {
