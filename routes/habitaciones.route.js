@@ -73,8 +73,8 @@ validatorHandler(actualizarHabitacionSchema, 'body'),
 });
 
 router.delete('/:id', 
-passport.authenticate('jwt', {session: false}),
-chequearRoles(['administrador']),
+// passport.authenticate('jwt', {session: false}),
+// chequearRoles(['administrador']),
 async (req, res)=>{
   try {
     const { id } = req.params
