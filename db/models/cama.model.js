@@ -27,7 +27,7 @@ const CamaSchema = {
   },
   nombre:{
     type: DataTypes.STRING,
-    allowNull: false,
+    // allowNull: false,
   }
 }
 
