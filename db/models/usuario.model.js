@@ -12,7 +12,7 @@ const UsuarioSchema = {
   },
   //TODO:cambiar luego prueba
   tipoDocumento:{
-    type: DataTypes.ENUM("DNI","PASAPORTE")
+    type: DataTypes.ENUM("DNI","PASAPORTE"),
     allowNull: false,
     primaryKey:true,
   },
