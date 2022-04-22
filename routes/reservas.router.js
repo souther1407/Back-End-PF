@@ -52,18 +52,21 @@ router.get('/disponibilidad/:id', async (req, res)=>{
     }
 });
 
-// router.patch('/:id',
-//     async (req, res) => {
-//         try {
-//             const {id} = req.params
-//             const body = req.body
-//             const updateHuesped = await services.cargarHuespedes(body, id) 
-//             res.status(200).json(updateHuesped)
-//         } catch (error) {
-//             res.status(error)
-//         }
-//     }
-// )
+router.patch('/:id',
+    passport.authenticate('jwt', {session: false}),
+    validatorHandler(getReservaId, 'params'),
+    validatorHandler(createArrayHuespedesSchema, 'body'),
+    async (req, res) => {
+        try {
+            const {id} = req.params
+            const body = req.body
+            const updateHuesped = await services.cargarHuespedes(body, id) 
+            res.status(200).json(updateHuesped)
+        } catch (error) {
+            res.status(error)
+        }
+    }
+)
 
 router.delete('/:id', 
     validatorHandler(getReservaId, 'params'),
