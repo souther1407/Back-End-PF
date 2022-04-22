@@ -12,7 +12,7 @@ const UsuarioSchema = {
   },
   //TODO:cambiar luego prueba
   tipoDocumento:{
-    type: DataTypes.ENUM("DNI","PASAPORTE"),
+    type: DataTypes.ENUM("DNI","Passport","Driver License"),
     allowNull: false,
     primaryKey:true,
   },
@@ -46,6 +46,14 @@ const UsuarioSchema = {
   },
   direccion:{
     type: DataTypes.STRING,
+  },
+  avatar: {
+    type: DataTypes.STRING,
+    allowNull:false,
+    defaultValue: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCzX-3KiQKCFelbSyqinJZBVDi2zS1Mefd8Q&usqp=CAU",
+    validate: {
+      isUrl: true
+    }
   },
   email: {
     type: DataTypes.STRING,
