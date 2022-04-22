@@ -49,6 +49,11 @@ const UsuarioSchema = {
     allowNull: true,
     type: DataTypes.STRING
   },
+  refreshToken: {
+    field: 'refresh_token',
+    allowNull: true,
+    type: DataTypes.STRING
+  },
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE,

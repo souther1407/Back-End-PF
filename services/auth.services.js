@@ -2,7 +2,7 @@ const boom = require('@hapi/boom');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
-
+const { Usuario } = require('../db/models/usuario.model');
 const {config} = require('../config/config');
 const UserService = require("./usuarios.services");
 const service = new UserService();
@@ -23,17 +23,20 @@ class AuthServices {
       return usuario
     }
 
-          firmarToken(usuario){
+    async firmarToken(usuario){
         const payload = {
         sub:usuario.dni,
         role: usuario.rol,
         }
-        const token = jwt.sign(payload, config.jwtSecret );
-        
+        const token = jwt.sign(payload, config.jwtSecret, {expiresIn: '1h'} );
+        const refreshToken = jwt.sign(payload, config.jwtRefresh, {expiresIn: '10d'} );
+        await service.actualizar(usuario.dni, {refreshToken: refreshToken });
         return ({
         usuario :usuario.email,
         rol: usuario.rol,
-        token
+        
+        token,
+        refreshToken
     });
     }
 
@@ -83,10 +86,35 @@ class AuthServices {
         return { message: 'password actualizado'}
       } catch(error) {
         throw boom.unauthorized()
-        
-      }
+      }}
 
-    }
+      async refreshToken (data) {
+        const refreshToken = data.headers.refresh
+        if(!refreshToken) {
+          return boom.badData('falta refreshToken')
+        }
+        try {
+          const vericarToken = jwt.verify(refreshToken, config.jwtRefresh)
+          const {sub} = vericarToken
+          const usuario = await Usuario.findByPk(sub)
+          const payload = {
+            sub:usuario.dni,
+            role: usuario.rol,
+            }
+            const token = jwt.sign(payload, config.jwtSecret, {expiresIn: '1h'} );
+            await service.actualizar(usuario.dni, {refreshToken: token });
+            
+          return ({
+            message: 'procedimiento de refresh-token Ok',
+            token
+          })
+        } catch(error) {
+          return boom.badData(error.message)
+        }
+        
+  
+  
+      }
 }
 
 

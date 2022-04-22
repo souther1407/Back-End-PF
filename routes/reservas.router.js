@@ -8,7 +8,11 @@ const passport = require('passport');
 const {chequearRoles} = require('../middleware/auth.handler');
 const jwt = require('jsonwebtoken');
 
-router.get('/byFecha', validatorHandler(getReservaByFecha, 'query'), async (req, res)=>{
+router.get('/byFecha',
+    passport.authenticate('jwt', {session: false}),
+    chequearRoles("administrador", "recepcionista", "cliente"),
+    validatorHandler(getReservaByFecha, 'query'), 
+    async (req, res)=>{
     try {
         const {fecha_ingreso, fecha_egreso} = req.query
         const reservasFiltered = await services.mostrarReservasByFecha(fecha_ingreso, fecha_egreso)
@@ -18,7 +22,10 @@ router.get('/byFecha', validatorHandler(getReservaByFecha, 'query'), async (req,
     }
 });
 
-router.get('/', async (req, res)=>{
+router.get('/', 
+    passport.authenticate('jwt', {session: false}),
+    chequearRoles("administrador", "recepcionista", "cliente"),
+    async (req, res)=>{
     try {
         const reservas = await services.mostrar()
         res.status(200).json(reservas)
@@ -38,7 +45,6 @@ router.get('/disponibilidad', async (req, res)=>{
 });
 
 router.get('/disponibilidad/:id', async (req, res)=>{
-    
     try {
         const reservas = await services.mostrardisponibilidadById(req.params)
         res.status(200).json(reservas)
@@ -60,7 +66,9 @@ router.get('/disponibilidad/:id', async (req, res)=>{
 //     }
 // )
 
-router.delete('/:id', 
+router.delete('/:id',
+    passport.authenticate('jwt', {session: false}),
+    chequearRoles("administrador", "recepcionista", "cliente"),
     validatorHandler(getReservaId, 'params'),
     async (req,res) =>{
         try {
@@ -74,8 +82,8 @@ router.delete('/:id',
     })
 
 router.post('/',
-    //passport.authenticate('jwt', {session: false}),
-    //chequearRoles(['administrador', 'recepcionista, cliente']),
+    passport.authenticate('jwt', {session: false}),
+    chequearRoles('administrador', 'recepcionista, cliente'),
     validatorHandler(crearReservaSchema, 'body'),
     async (req, res)=>{
         try {

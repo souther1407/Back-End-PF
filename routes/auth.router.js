@@ -12,9 +12,9 @@ router.post('/login',
 passport.authenticate('local', {session: false}),
 async (req, res, next) => {
   try {
-    const usuraio = req.user.dataValues;
-    res.json(service.firmarToken(usuraio))
-  } catch (error) {
+    const usuario = req.user.dataValues;
+    res.json(await service.firmarToken(usuario))
+    } catch (error) {
     next(error);
   }
 });
@@ -41,5 +41,16 @@ async (req, res, next) => {
     next(error);
   }
 });
+
+router.post('/refresh-token', 
+async(req, res, next) =>{
+try {
+  const respuesta = await service.refreshToken(req)
+  res.json(respuesta)
+} catch(error) {
+next(error)
+}
+});
+
 
 module.exports = router;

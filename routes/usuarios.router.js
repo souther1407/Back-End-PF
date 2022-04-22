@@ -1,13 +1,15 @@
 const express = require('express');
 const UserService = require('../services/usuarios.services');
 const validatorHandler = require('../middleware/validator.handler');
-const {chequearRoles} = require('../middleware/auth.handler')
+const {chequearRoles, chequearAdminRole} = require('../middleware/auth.handler')
 const { updateUserSchema, createUserSchema, getUserSchema } = require('../schemas/usuario.schema');
 const passport = require('passport'); 
 const router = express.Router();
 const service = new UserService
 
 router.get('/',
+passport.authenticate('jwt', {session: false}),
+chequearRoles("administrador", "recepcionisa"),
 async (req, res, next) => {
   try {
     const users = await service.mostrarTodo();
@@ -19,13 +21,14 @@ async (req, res, next) => {
 
 router.get('/:dni',
 passport.authenticate('jwt', {session: false}),
-chequearRoles(['administrador', 'recepcionista']),
-  validatorHandler(getUserSchema, 'params'),
-  async (req, res, next) => {
-    try {
+chequearRoles("administrador", "recepcionisa"),
+validatorHandler(getUserSchema, 'params'),
+async (req, res, next) => {
+  console.log(req)
+  try {
       const { dni } = req.params;
-      const category = await service.mostrarByDni(dni);
-      res.json(category);
+      const usuarios = await service.mostrarByDni(dni);
+      res.json(usuarios);
     } catch (error) {
       next(error);
     }
@@ -33,8 +36,8 @@ chequearRoles(['administrador', 'recepcionista']),
 );
 
 router.post('/',
- /*passport.authenticate('jwt', {session: false}),*/
- /*chequearRoles(['administrador']),*/
+ passport.authenticate('jwt', {session: false}),
+ chequearRoles("administrador", "recepcionista", "cliente"),
   validatorHandler(createUserSchema, 'body'), 
   async (req, res, next) => {
     try {
@@ -50,6 +53,7 @@ router.post('/',
 
 router.patch('/:id',
   passport.authenticate('jwt', {session: false}),
+  chequearRoles("administrador", "recepcionista", "cliente"),
   validatorHandler(getUserSchema, 'params'),
   validatorHandler(updateUserSchema, 'body'),
   async (req, res, next) => {
@@ -66,7 +70,7 @@ router.patch('/:id',
 
 router.delete('/:id',
   passport.authenticate('jwt', {session: false}),
-  chequearRoles(['rececionista']),
+  chequearRoles("administrador", "recepcionista", "cliente"),
   validatorHandler(getUserSchema, 'params'),
   async (req, res, next) => {
     try {
