@@ -6,7 +6,8 @@ const { chequearRoles } = require('../middleware/auth.handler')
 const passport = require('passport'); 
 const { createArrayHuespedesSchema } = require('../schemas/huesped.schema')
 const router = express.Router()
-const services = new ReservaService
+const services = new ReservaService;
+const jwt = require('jsonwebtoken');
 
 router.get('/byFecha', validatorHandler(getReservaByFecha, 'query'), async (req, res)=>{
     try {
@@ -27,6 +28,26 @@ router.get('/',
         } catch (error) {
             res.status(error)
         }
+});
+
+router.get('/disponibilidad', async (req, res)=>{
+    
+    try {
+        const reservas = await services.mostrardisponibilidad(req.query)
+        res.status(200).json(reservas)
+    } catch (error) {
+        res.status(error)
+    }
+});
+
+router.get('/disponibilidad/:id', async (req, res)=>{
+    
+    try {
+        const reservas = await services.mostrardisponibilidadById(req.params)
+        res.status(200).json(reservas)
+    } catch (error) {
+        res.status(error)
+    }
 });
 
 router.patch('/:id',
@@ -59,18 +80,19 @@ router.delete('/:id',
     })
 
 router.post('/',
-    passport.authenticate('jwt', {session: false}),
-    // chequearRoles(['recepcionista']),
+    //passport.authenticate('jwt', {session: false}),
+    //chequearRoles(['administrador', 'recepcionista, cliente']),
     validatorHandler(crearReservaSchema, 'body'),
-  async (req, res)=>{
-    try {
-        const token = req.headers['authorization'];
-        const body = req.body
-        const newReserva = await services.crearReserva(body, token)
-        res.status(201).json(newReserva)
-    } catch(error) {
-        res.status(error)
-    }
+    async (req, res)=>{
+        try {
+            
+            const token = req.headers['authorization'];
+            const body = req.body
+            const newReserva = await services.crearReserva(body, token)
+            res.status(201).json(newReserva)
+        } catch(error) {
+            res.status(error)
+        }
 });
 
 module.exports = router

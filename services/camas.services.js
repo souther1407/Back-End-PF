@@ -92,7 +92,9 @@ class camasServices {
                 let habitacioModificada = await services.buscaruno(camaAEliminar.HabitacionId)
                 await Cama.destroy({where: { id }})
                 await habitacioModificada.update(
-                    { cantCamas: habitacioModificada.cantCamas  - 1},
+                    { cantCamas: habitacioModificada.cantCamas  - 1,
+                        precio: habitacioModificada.precio - camaAEliminar.precio
+                    },
                     { where : { id: habitacioModificada.id } }
                 )
                 return `Se elimino la cama id: ${id}`
