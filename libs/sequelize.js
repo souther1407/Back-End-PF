@@ -4,10 +4,16 @@ const setupModels = require('../db/models/index')
 const {Model, DataTypes} = require('sequelize')
 const USER = encodeURIComponent(config.dbUser);
 const PASSWORD = encodeURIComponent(config.dbPassword);
+<<<<<<< HEAD
 const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}` /* local */
 //  const URI = `postgres://aooxfnqy:hivKnFb8AHd99C3CaeCb4AVbqRc1OTCG@kesavan.db.elephantsql.com/aooxfnqy` /* db dev */
 // const URI = 'postgres://ebzvjeht:2vQxks0hV0POuEpWoQKyyFo-_Uoi66QW@heffalump.db.elephantsql.com/ebzvjeht' /* db produccion */
 // const URI = 'postgres://dbmaljaxgxxrba:c5b9e2743cf628b388e5d24ceb7d0cc87069dbaacd9ca113e4a3fb3582b4ebed@ec2-44-199-143-43.compute-1.amazonaws.com:5432/d2cvc1so8ve8q8' /* db en heroku, sin uso */
+=======
+const URI = "postgres://aooxfnqy:hivKnFb8AHd99C3CaeCb4AVbqRc1OTCG@kesavan.db.elephantsql.com/aooxfnqy"
+// const URI = 'postgres://ebzvjeht:2vQxks0hV0POuEpWoQKyyFo-_Uoi66QW@heffalump.db.elephantsql.com/ebzvjeht'
+// const URI = 'postgres://dbmaljaxgxxrba:c5b9e2743cf628b388e5d24ceb7d0cc87069dbaacd9ca113e4a3fb3582b4ebed@ec2-44-199-143-43.compute-1.amazonaws.com:5432/d2cvc1so8ve8q8'
+>>>>>>> Eric
 const sequelize = new Sequelize(URI, {
   dialect: 'postgres',
   logging: false
@@ -111,6 +117,25 @@ Imagen.belongsTo(Habitacion)
 sequelize.sync({ force: true })
   .then(() => {
     console.log(`base de datos creada/actualizada `);
+    //TEST: paises mockeados
+    /* Nacionalidades.create({ nombre: "Argentina"})
+    Nacionalidades.create({ nombre: "Brasil"})
+    Nacionalidades.create({ nombre: "Kazajistán"})
+    Nacionalidades.create({ nombre: "Venezuela"})
+    Nacionalidades.create({ nombre: "Burkina Faso"})
+    Nacionalidades.create({ nombre: "Luxemburgo"})
+    Nacionalidades.create({ nombre: "Uruguay"})
+    Nacionalidades.create({ nombre: "China"})
+    Nacionalidades.create({ nombre: "Grecia"})
+    Nacionalidades.create({ nombre: "Finlandia"})
+    Nacionalidades.create({ nombre: "Senegal"})
+    Nacionalidades.create({ nombre: "Qatar"})
+    Nacionalidades.create({ nombre: "España"})
+    Nacionalidades.create({ nombre: "Portugal"})
+    Nacionalidades.create({ nombre: "Bolivia"})
+    Nacionalidades.create({ nombre: "Chile"})
+    Nacionalidades.create({ nombre: "Paraguay"})
+    Nacionalidades.create({ nombre: "Papua Nueva Guinea"}) */
 
     
   })

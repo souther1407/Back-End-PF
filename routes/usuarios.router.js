@@ -33,11 +33,17 @@ chequearRoles(['administrador', 'recepcionista']),
 );
 
 router.post('/',
+<<<<<<< HEAD
  /*passport.authenticate('jwt', {session: false}),*/
  /*chequearRoles(['administrador']),*/
+=======
+ /* passport.authenticate('jwt', {session: false}),
+ chequearRoles(['administrador']), */
+>>>>>>> Eric
   validatorHandler(createUserSchema, 'body'), 
   async (req, res, next) => {
     try {
+      console.log("asdad")
       const body = req.body;
       console.log(body)
       const newUsuario = await service.crear(body);
