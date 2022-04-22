@@ -18,7 +18,7 @@ function routerApi (app) {
   app.use('/reservas', reservaRouter );
   app.use('/fechas', fechasRouter);
   app.use('/auth', authRouter);
-
+  app.use('/huespedes', huespedRouter)
 }
 
 module.exports = routerApi;

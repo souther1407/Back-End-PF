@@ -2,6 +2,9 @@ const express = require('express')
 const ReservaService = require('./../services/reservas.services')
 const validatorHandler = require('../middleware/validator.handler')
 const { crearReservaSchema, getReservaByFecha, getReservaId } = require('../schemas/reservas.schema')
+const { chequearRoles } = require('../middleware/auth.handler')
+const passport = require('passport'); 
+const { createArrayHuespedesSchema } = require('../schemas/huesped.schema')
 const router = express.Router()
 const services = new ReservaService
 const passport = require('passport');
@@ -18,13 +21,15 @@ router.get('/byFecha', validatorHandler(getReservaByFecha, 'query'), async (req,
     }
 });
 
-router.get('/', async (req, res)=>{
-    try {
-        const reservas = await services.mostrar()
-        res.status(200).json(reservas)
-    } catch (error) {
-        res.status(error)
-    }
+router.get('/', 
+    passport.authenticate('jwt', {session: false}),
+    async (req, res)=>{
+        try {
+            const reservas = await services.mostrar()
+            res.status(200).json(reservas)
+        } catch (error) {
+            res.status(error)
+        }
 });
 
 router.get('/disponibilidad', async (req, res)=>{

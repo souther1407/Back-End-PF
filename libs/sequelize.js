@@ -28,7 +28,6 @@ checkOut:{
 }
 })
 
-
 // relacion habitacion-camas 1 a muchos muchos a 1
 //  una habitacion tiene muchas camas
 // una cama pertenece a una habitacion
@@ -48,7 +47,7 @@ Reserva.belongsTo(Usuario);
 // una cama es ocupada por un huesped
 // un huesped puede ocupar una cama
 
-Huesped.hasOne(Cama)
+Huesped.hasOne(Cama, {foreignKey: 'HuespedDni'})
 Cama.belongsTo(Huesped)
 
 // relacion cama reserva  
@@ -96,9 +95,14 @@ Huesped.belongsTo(TipoDocumento)
 Huesped.belongsToMany( Cama,{through: Historial})
 Cama.belongsToMany( Huesped,{through: Historial})
 
+//relacion huespedes habitacion
+//una habitacion es ocupada por muchos huespedes
+//muchos huespedes pueden ocupar una cama
+
+Huesped.belongsToMany(Habitacion, {through: 'Huesped_Habitacion'})
+Habitacion.belongsToMany(Huesped, {through: 'Huesped_Habitacion'})
 
 // relacion imágenes con habitaciones
-
 
 Habitacion.hasMany(Imagen, {onDelete: 'cascade'});
 Imagen.belongsTo(Habitacion)
