@@ -18,11 +18,7 @@ const HabitacionSchema = {
     type: DataTypes.TEXT,
   },
   descripcion:{
-<<<<<<< HEAD
-    type: DataTypes.TEXT
-=======
     type: DataTypes.TEXT,
->>>>>>> rodrigo
   },
   cantCamas: {
     type: DataTypes.INTEGER,
