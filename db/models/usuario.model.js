@@ -4,7 +4,7 @@ const USUARIO_TABLE = 'usuarios';
 
 const UsuarioSchema = {
   dni: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     /*defaultValue: Sequelize.UUIDV4,*/
     allowNull: false,
     primaryKey: true,
@@ -17,16 +17,16 @@ const UsuarioSchema = {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  rol: {
+    type: DataTypes.ENUM('administrador', 'recepcionista',
+    'cliente'),
+    allowNull: false,
+  },
   telefono:{
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
   },
   direccion:{
     type: DataTypes.STRING,
-  },
-  nombreUser:{
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
   },
   email: {
     type: DataTypes.STRING,
@@ -39,9 +39,20 @@ const UsuarioSchema = {
     allowNull: false,
     type: DataTypes.STRING
   },
-  numeroDocumento:{
-    type:DataTypes.INTEGER,
-    allowNull:false
+  genero: {
+    allowNull: false,
+    type: DataTypes.ENUM('masculino', 'femenino',
+    'otro')
+  },
+  tokenRecuperacion: {
+    field: 'recovery_token',
+    allowNull: true,
+    type: DataTypes.STRING
+  },
+  refreshToken: {
+    field: 'refresh_token',
+    allowNull: true,
+    type: DataTypes.STRING
   },
   createdAt: {
     allowNull: false,

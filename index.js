@@ -1,7 +1,7 @@
 const express = require('express');
 const routerApi = require('./routes')
 const cors = require('cors')
-const { logErrors, errorHandler, boomErrorHandler } = require('./middleware/error.handler')
+const { logErrors, errorHandler, boomErrorHandler, error404Handler } = require('./middleware/error.handler')
 
 const app = express();
 const port = process.env.PORT || 3005;
@@ -18,7 +18,7 @@ const option = {
   }
 }
 app.use(cors()); /* en este momento esta dejando pasar todo*/
-//require('./utils/auth');
+require('./utils/auth');
 
 
 
@@ -27,6 +27,7 @@ routerApi(app);
 app.use(logErrors);
 app.use(boomErrorHandler);
 app.use(errorHandler);
+app.use(error404Handler)
 
 
 app.listen(port, ()=>{

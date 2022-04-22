@@ -1,34 +1,33 @@
 const express = require('express');
-const UserService = require('../services/usuarios.services');
+const ImagenService = require('../services/imagenes.services');
 const validatorHandler = require('../middleware/validator.handler');
-const {chequearRoles, chequearAdminRole} = require('../middleware/auth.handler')
+const {chequearRoles, } = require('../middleware/auth.handler')
 const { updateUserSchema, createUserSchema, getUserSchema } = require('../schemas/usuario.schema');
 const passport = require('passport'); 
 const router = express.Router();
-const service = new UserService
+const service = new ImagenService
 
 router.get('/',
 passport.authenticate('jwt', {session: false}),
 chequearRoles("administrador", "recepcionisa"),
 async (req, res, next) => {
   try {
-    const users = await service.mostrarTodo();
-    res.json(users);
+    const imagenes = service.mostrarTodo()
+    res.status(200).json(imagenes)  
   } catch (error) {
     next(error);
   }
 });
 
-router.get('/:dni',
+router.get('/:id',
 passport.authenticate('jwt', {session: false}),
 chequearRoles("administrador", "recepcionisa"),
-validatorHandler(getUserSchema, 'params'),
+//validatorHandler(getUserSchema, 'params'),
 async (req, res, next) => {
-  console.log(req)
   try {
-      const { dni } = req.params;
-      const usuarios = await service.mostrarByDni(dni);
-      res.json(usuarios);
+    const { id } = req.query 
+    const imagen = service.buscarPorId(id)
+    res.status(200).json(imagen)  
     } catch (error) {
       next(error);
     }
@@ -38,15 +37,14 @@ async (req, res, next) => {
 router.post('/',
  passport.authenticate('jwt', {session: false}),
  chequearRoles("administrador", "recepcionista", "cliente"),
-  validatorHandler(createUserSchema, 'body'), 
+ //validatorHandler(createUserSchema, 'body'), 
   async (req, res, next) => {
     try {
-      const body = req.body;
-      console.log(body)
-      const newUsuario = await service.crear(body);
-      res.status(201).json(newUsuario);
+      const {id, imagen} = req.body
+      const nuevaImagen = service.crear(id, imagen)
+      res.status(201).json(nuevaImagen);
     } catch (error) {
-      next(error);
+      next(error)
     }
   }
 );
@@ -54,14 +52,11 @@ router.post('/',
 router.patch('/:id',
   passport.authenticate('jwt', {session: false}),
   chequearRoles("administrador", "recepcionista", "cliente"),
-  validatorHandler(getUserSchema, 'params'),
-  validatorHandler(updateUserSchema, 'body'),
+ // validatorHandler(getUserSchema, 'params'),
+ // validatorHandler(updateUserSchema, 'body'),
   async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const body = req.body;
-      const category = await service.actualizar(id, body);
-      res.json(category);
+      
     } catch (error) {
       next(error);
     }
@@ -71,12 +66,10 @@ router.patch('/:id',
 router.delete('/:id',
   passport.authenticate('jwt', {session: false}),
   chequearRoles("administrador", "recepcionista", "cliente"),
-  validatorHandler(getUserSchema, 'params'),
+  //validatorHandler(getUserSchema, 'params'),
   async (req, res, next) => {
     try {
-      const { id } = req.params;
-      await service.delete(id);
-      res.status(201).json({id});
+      
     } catch (error) {
       next(error);
     }
