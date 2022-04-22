@@ -4,12 +4,13 @@ const setupModels = require('../db/models/index')
 const {Model, DataTypes} = require('sequelize')
 const USER = encodeURIComponent(config.dbUser);
 const PASSWORD = encodeURIComponent(config.dbPassword);
-const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`
-// const URI = 'postgres://ebzvjeht:2vQxks0hV0POuEpWoQKyyFo-_Uoi66QW@heffalump.db.elephantsql.com/ebzvjeht'
-// const URI = 'postgres://dbmaljaxgxxrba:c5b9e2743cf628b388e5d24ceb7d0cc87069dbaacd9ca113e4a3fb3582b4ebed@ec2-44-199-143-43.compute-1.amazonaws.com:5432/d2cvc1so8ve8q8'
+const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}` /* local */
+//  const URI = `postgres://aooxfnqy:hivKnFb8AHd99C3CaeCb4AVbqRc1OTCG@kesavan.db.elephantsql.com/aooxfnqy` /* db dev */
+// const URI = 'postgres://ebzvjeht:2vQxks0hV0POuEpWoQKyyFo-_Uoi66QW@heffalump.db.elephantsql.com/ebzvjeht' /* db produccion */
+// const URI = 'postgres://dbmaljaxgxxrba:c5b9e2743cf628b388e5d24ceb7d0cc87069dbaacd9ca113e4a3fb3582b4ebed@ec2-44-199-143-43.compute-1.amazonaws.com:5432/d2cvc1so8ve8q8' /* db en heroku, sin uso */
 const sequelize = new Sequelize(URI, {
   dialect: 'postgres',
-  logging: false,
+  logging: false
 });
 
 setupModels(sequelize);
@@ -26,7 +27,6 @@ checkOut:{
     allowed: false
 }
 })
-
 
 // relacion habitacion-camas 1 a muchos muchos a 1
 //  una habitacion tiene muchas camas
@@ -47,7 +47,7 @@ Reserva.belongsTo(Usuario);
 // una cama es ocupada por un huesped
 // un huesped puede ocupar una cama
 
-Huesped.hasOne(Cama)
+Huesped.hasOne(Cama, {foreignKey: 'HuespedDni'})
 Cama.belongsTo(Huesped)
 
 // relacion cama reserva  
@@ -95,9 +95,14 @@ Huesped.belongsTo(TipoDocumento)
 Huesped.belongsToMany( Cama,{through: Historial})
 Cama.belongsToMany( Huesped,{through: Historial})
 
+//relacion huespedes habitacion
+//una habitacion es ocupada por muchos huespedes
+//muchos huespedes pueden ocupar una cama
+
+Huesped.belongsToMany(Habitacion, {through: 'Huesped_Habitacion'})
+Habitacion.belongsToMany(Huesped, {through: 'Huesped_Habitacion'})
 
 // relacion imágenes con habitaciones
-
 
 Habitacion.hasMany(Imagen, {onDelete: 'cascade'});
 Imagen.belongsTo(Habitacion)

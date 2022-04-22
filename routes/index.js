@@ -4,7 +4,7 @@ const usuariosRouter = require('./usuarios.router')
 const reservaRouter =  require('./reservas.router')
 const habitaciontipoRouter = require('./habitaciontipo.router')
 const fechasRouter = require('./fechas.router')
-
+const huespedRouter = require('./huesped.router')
 const authRouter = require('./auth.router')
 
 
@@ -16,7 +16,7 @@ function routerApi (app) {
   app.use('/reservas', reservaRouter );
   app.use('/fechas', fechasRouter);
   app.use('/auth', authRouter);
-
+  app.use('/huespedes', huespedRouter)
 }
 
 module.exports = routerApi;

@@ -49,7 +49,7 @@ class FechaServices {
 
       async constultadisponibe(data) {
         const ingreso = Date.parse(data.ingreso)
-        const egreso = Date.parse(data.egreso)
+        //const egreso = Date.parse(data.egreso)
         const habitacion = await Habitacion.findByPk(data.idHabitacion)
         console.log(habitacion)
         const fechas =  await Fecha.findAll()

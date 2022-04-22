@@ -3,7 +3,7 @@ const router = express.Router();
 
 const camasServices = require('../services/camas.services');
 const validatorHandler = require('../middleware/validator.handler');
-const {crearCamaSchema, actualizarCamaSchema, getCamaSchema} = require('../schemas/camas.schema');
+const {crearCamaSchema, actualizarCamaSchema, getCamaSchema, borrarCama} = require('../schemas/camas.schema');
 
 
 
@@ -61,8 +61,9 @@ router.delete('/', async (req, res)=>{
     const { habitacionid, camaId } = req.query
     let cama;
 
-    habitacionid ? cama = await services.borrar(habitacionid, 'Habitacion') : 
-    camaId ? cama = await services.borrar(camaId, 'Cama') : null
+  // eslint-disable-next-line no-unused-expressions
+  habitacionid ? cama = await services.borrar(habitacionid, 'Habitacion') : 
+   camaId ? cama = await services.borrar(camaId, 'Cama') : null
     
     res.json(cama)
   } catch(error) {

@@ -2,6 +2,9 @@ const express = require('express')
 const ReservaService = require('./../services/reservas.services')
 const validatorHandler = require('../middleware/validator.handler')
 const { crearReservaSchema, getReservaByFecha, getReservaId } = require('../schemas/reservas.schema')
+const { chequearRoles } = require('../middleware/auth.handler')
+const passport = require('passport'); 
+const { createArrayHuespedesSchema } = require('../schemas/huesped.schema')
 const router = express.Router()
 const services = new ReservaService
 
@@ -15,36 +18,55 @@ router.get('/byFecha', validatorHandler(getReservaByFecha, 'query'), async (req,
     }
 });
 
-router.get('/', async (req, res)=>{
-    try {
-        const reservas = await services.mostrar()
-        res.status(200).json(reservas)
-    } catch (error) {
-        res.status(error)
-    }
+router.get('/', 
+    passport.authenticate('jwt', {session: false}),
+    async (req, res)=>{
+        try {
+            const reservas = await services.mostrar()
+            res.status(200).json(reservas)
+        } catch (error) {
+            res.status(error)
+        }
 });
 
-// router.patch('/:id',
-//     async (req, res) => {
-//         try {
-//             const {id} = req.params
-//             const body = req.body
-//             const updateHuesped = await services.cargarHuespedes(body, id) 
-//             res.status(200).json(updateHuesped)
-//         } catch (error) {
-//             res.status(error)
-//         }
-//     }
-// )
-
-router.post('/:id',
+router.patch('/:id',
+    passport.authenticate('jwt', {session: false}),
     validatorHandler(getReservaId, 'params'),
+    validatorHandler(createArrayHuespedesSchema, 'body'),
+    async (req, res) => {
+        try {
+            const {id} = req.params
+            const body = req.body
+            const updateHuesped = await services.cargarHuespedes(body, id) 
+            res.status(200).json(updateHuesped)
+        } catch (error) {
+            res.status(error)
+        }
+    }
+)
+
+router.delete('/:id', 
+    validatorHandler(getReservaId, 'params'),
+    async (req,res) =>{
+        try {
+            const {id} = req.params
+            const deleteReserva = await services.eliminarReserva(id)
+            res.status(200).json(deleteReserva)
+        } catch (error) {
+            res.status(error)
+        }
+
+    })
+
+router.post('/',
+    passport.authenticate('jwt', {session: false}),
+    // chequearRoles(['recepcionista']),
     validatorHandler(crearReservaSchema, 'body'),
   async (req, res)=>{
     try {
-        const {id} = req.params
+        const token = req.headers['authorization'];
         const body = req.body
-        const newReserva = await services.crearReserva(id, body)
+        const newReserva = await services.crearReserva(body, token)
         res.status(201).json(newReserva)
     } catch(error) {
         res.status(error)

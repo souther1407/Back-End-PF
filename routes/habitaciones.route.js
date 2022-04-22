@@ -25,7 +25,7 @@ async (req, res)=>{
 
 router.post('/',
 passport.authenticate('jwt', {session: false}),
-chequearRoles(['administrador']),
+/*chequearRoles(['administrador']),*/
 validatorHandler(crearHabitacionSchema, 'body'), // validation
 async (req, res)=>{
       try {
