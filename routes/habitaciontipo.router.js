@@ -5,11 +5,13 @@ const HabitacionestipoService = require('../services/Habitacionestipo.services')
 const validatorHandler = require('../middleware/validator.handler')
 const { getHabitacionTipoSchema} = require('../schemas/habitaciones.schema')
 const { Habitacion } = require('../db/models/habitacion.model.js')
+const {checkApiKey} =require('../middleware/auth.handler');
 
 
 const services = new HabitacionestipoService
 
 router.get('/',
+checkApiKey,
 validatorHandler(getHabitacionTipoSchema, 'query'),
   async (req, res)=>{
 

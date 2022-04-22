@@ -17,7 +17,6 @@ const CamaSchema = {
   }, */
   nombre: {
     type:DataTypes.STRING,
-    
   },
   precio: {
     type: DataTypes.INTEGER,

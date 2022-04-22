@@ -13,7 +13,7 @@ function checkApiKey(req, res, next){
 
 function chequearAdminRole(req, res, next) {
 const user = req.user;
-if(user.role === 'administrador'){
+if(user.rol === 'administrador'){
     next()
 } else {
     next(boom.unauthorized('necesitas permiso de administrador'))
@@ -23,10 +23,12 @@ if(user.role === 'administrador'){
 function chequearRoles(...roles) {
     return (req, res, next) => {
     const user = req.user;
+    console.log(user.role)
+    console.log(roles[0])
     if (roles.includes(user.role)){
         next()
     }else {
-        next(boom.unauthorized())
+        next(boom.unauthorized(`aaaaay cholita!, aca no!`))
     }
     }
 }

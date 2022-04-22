@@ -118,16 +118,6 @@ class habitacionesService {
       if (habitacion[i].privada === true) {delete habitacion[i].dataValues.Camas}
       if (habitacion[i].Imagens.length<0) {habitacion[i].dataValues.Imagens.push("https://w7.pngwing.com/pngs/331/812/png-transparent-bedroom-computer-icons-bed.png")}
       }
-
-      // for (let i = 0; i < habitacion.length; i++) {
-      //   if(habitacion[i].privada === false){
-      //     habitacion[i] = await Habitacion.findByPk(
-      //       habitacion[i].id,{
-      //         include: [Cama, Imagen]},
-      //        )
-      //   }
-
-      // }
       return habitacion;
     } catch (error) {
       return boom.badData(error);
@@ -137,8 +127,9 @@ class habitacionesService {
   
   // eslint-disable-next-line class-methods-use-this
   async buscaruno(id) {
-    if (isNaN(Number(id))) throw new Error('no papa');
+    
     let habitacion = Habitacion.findByPk(id);
+    if (!habitacion.id) {return boom.notFound('no exite la habitacion')}
     if (!habitacion.privada) {
       habitacion = Habitacion.findByPk(id, {
         include: [Cama, Imagen, ReservaCama],

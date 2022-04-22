@@ -2,7 +2,9 @@ const express = require('express');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const { Usuario } = require('../db/models/usuario.model');
-const { checkGoogleToken } = require('../middleware/auth.handler.js');
+const {config} = require('../config/config.js')
+const {checkApiKey} =require('../middleware/auth.handler');
+
 const AuthService = require('../services/auth.services');
 const service = new AuthService;
 
@@ -13,19 +15,20 @@ const bcrypt = require('bcrypt');
 
 const router = express.Router();
 
-
-router.post('/login', 
+router.post('/login',
+checkApiKey, 
 passport.authenticate('local', {session: false}),
 async (req, res, next) => {
   try {
-    const usuraio = req.user.dataValues;
-    res.json(service.firmarToken(usuraio))
-  } catch (error) {
+    const usuario = req.user.dataValues;
+    res.json(await service.firmarToken(usuario))
+    } catch (error) {
     next(error);
   }
 });
 
-router.post('/recuperacion', 
+router.post('/recuperacion',
+checkApiKey, 
 async (req, res, next) => {
   try { 
     const { email } = req.body
@@ -37,6 +40,7 @@ async (req, res, next) => {
 });
 
 router.post('/cambiar-password', 
+checkApiKey,
 async (req, res, next) => {
   try { 
     const { token, newPassword } = req.body;
@@ -46,7 +50,6 @@ async (req, res, next) => {
     next(error);
   }
 });
-
 
 
 router.post("/auth/google", async (req, res) => {

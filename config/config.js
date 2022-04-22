@@ -13,7 +13,8 @@ apiKey: process.env.API_KEY,
 jwtSecret: process.env.JWT_SECRET,
 email: process.env.EMAIL,
 emailPassword: process.env.EMAIL_PASSWORD,
-jwtRecuperacion: process.env.JWT_SECRET_RECOVERY
+jwtRecuperacion: process.env.JWT_SECRET_RECOVERY,
+jwtRefresh: process.env.JWT_SECRET_REFRESH
 
 }
 
