@@ -6,9 +6,7 @@ const { chequearRoles } = require('../middleware/auth.handler')
 const passport = require('passport'); 
 const { createArrayHuespedesSchema } = require('../schemas/huesped.schema')
 const router = express.Router()
-const services = new ReservaService
-const passport = require('passport');
-const {chequearRoles} = require('../middleware/auth.handler');
+const services = new ReservaService;
 const jwt = require('jsonwebtoken');
 
 router.get('/byFecha', validatorHandler(getReservaByFecha, 'query'), async (req, res)=>{

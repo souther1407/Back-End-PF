@@ -14,10 +14,6 @@ const { isNumber } = require('util');
 const huespedServices = require('./huesped.sevices')
 const serviceHuesped = new huespedServices
 
-//servicios
-const huespedServices = require('./huesped.sevices')
-const serviceHuesped = new huespedServices
-
 class ReservaService {
 
     async mostrarReservasByFecha(ingreso, egreso) {
