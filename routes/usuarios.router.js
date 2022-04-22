@@ -36,8 +36,8 @@ async (req, res, next) => {
 );
 
 router.post('/',
- passport.authenticate('jwt', {session: false}),
- chequearRoles("administrador", "recepcionista", "cliente"),
+//  passport.authenticate('jwt', {session: false}),
+//  chequearRoles("administrador", "recepcionista", "cliente"),
   validatorHandler(createUserSchema, 'body'), 
   async (req, res, next) => {
     try {
