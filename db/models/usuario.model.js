@@ -80,6 +80,7 @@ const UsuarioSchema = {
   genero:{
     type: DataTypes.ENUM("femenino","masculino","no-binario"),
     allowNull: false,
+
   },
   createdAt: {
     allowNull: false,

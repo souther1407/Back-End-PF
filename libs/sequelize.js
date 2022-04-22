@@ -5,6 +5,7 @@ const {Model, DataTypes} = require('sequelize')
 const USER = encodeURIComponent(config.dbUser);
 const PASSWORD = encodeURIComponent(config.dbPassword);
 
+
 // const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}` /* local */
  const URI = `postgres://aooxfnqy:hivKnFb8AHd99C3CaeCb4AVbqRc1OTCG@kesavan.db.elephantsql.com/aooxfnqy` /* db dev */
 
