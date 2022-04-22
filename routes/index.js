@@ -15,7 +15,7 @@ function routerApi (app) {
   app.use('/camas', camasRouter );
   app.use('/usuarios', usuariosRouter );
   app.use('/reservas', reservaRouter );
-  app.use('/imagenes', imgenRouter );
+  //app.use('/imagenes', imgenRouter );
   app.use('/auth', authRouter);
 
 }
