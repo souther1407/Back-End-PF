@@ -12,7 +12,9 @@ const UsuarioSchema = {
   },
   //TODO:cambiar luego prueba
   tipoDocumento:{
-    type: DataTypes.STRING
+    type: DataTypes.ENUM("DNI","PASAPORTE")
+    allowNull: false,
+    primaryKey:true,
   },
   //TODO:cambiar luego prueba
   nacionalidad: {

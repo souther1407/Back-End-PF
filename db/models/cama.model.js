@@ -16,6 +16,10 @@ const CamaSchema = {
     primaryKey:true,
     autoIncrement:true,
   }, */
+  nombre: {
+    type:DataTypes.STRING,
+    
+  },
   precio: {
     type: DataTypes.INTEGER,
     allowNull: false,

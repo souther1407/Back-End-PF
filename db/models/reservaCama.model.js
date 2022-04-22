@@ -13,6 +13,11 @@ const ReservaCamaSchema = {
     type: DataTypes.DATEONLY,
     allowNull: false,
   },
+  cancelada:{
+    type:DataTypes.BOOLEAN,
+    allowNull:false,
+    defaultValue:false,
+  },
   fecha_egreso:{
     type: DataTypes.DATEONLY,
     allowNull: false,
