@@ -18,7 +18,7 @@ const HabitacionSchema = {
     type: DataTypes.TEXT,
   },
   descripcion:{
-    type: DataTypes.TEXT
+    type: DataTypes.TEXT,
   },
   cantCamas: {
     type: DataTypes.INTEGER,

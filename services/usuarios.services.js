@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt')
 
 const { sequelize } = require('../libs/sequelize')
 const { Usuario } =  require('../db/models/usuario.model')
+const {Tipo_Documento} = require('../db/models/tipoDocumento.model')
+const {Nacionalidades} = require('../db/models/tipoDocumento.model')
 
 class UserService {
 
@@ -11,7 +13,9 @@ class UserService {
     const nuevoUsuario = await Usuario.create({
       ...data,
       password: hash
+     
     })
+    
     delete nuevoUsuario.dataValues.password;
     return nuevoUsuario; 
   }
@@ -21,10 +25,10 @@ class UserService {
     return usuarios;
   }
 
-  async mostrarPorNombreUsuario(username) {
+  async buscarPorEmail(email) {
     const usuarios =  await Usuario.findOne({
       where: {
-        nombreUser:username
+        email
       }
     })
     return usuarios;
@@ -38,15 +42,15 @@ class UserService {
     return usuario;
   }
 
-  async update(id, changes) {
-    const usuario = await Usuario.findOne(id)
+  async actualizar(dni, changes) {
+    const usuario = await Usuario.findByPk(dni)
     const respuesta = await usuario.update(changes);
     return {
       respuesta
     };
   }
 
-  async delete(id) {
+  async delete(dni) {
     const usuario = await Usuario.findOne(id)
     await usuario.destroy();
     return { id };

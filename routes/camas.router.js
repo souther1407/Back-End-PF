@@ -3,7 +3,7 @@ const router = express.Router();
 
 const camasServices = require('../services/camas.services');
 const validatorHandler = require('../middleware/validator.handler');
-const {crearCamaSchema, actualizarCamaSchema, getCamaSchema} = require('../schemas/camas.schema');
+const {crearCamaSchema, actualizarCamaSchema, getCamaSchema, borrarCama} = require('../schemas/camas.schema');
 
 
 
@@ -24,6 +24,7 @@ validatorHandler(getCamaSchema, 'params'),
 async (req, res) =>{
   try {
     const {id} = req.params
+    console.log(id)
     const camas = await services.traeruna(id);
     res.status(200).json(camas)
   } catch (error) {
@@ -54,5 +55,22 @@ router.patch('/:id', async (req, res)=> {
   }
 })
 
+router.delete('/', async (req, res)=>{
+  try {
+
+    const { habitacionid, camaId } = req.query
+    let cama;
+
+  // eslint-disable-next-line no-unused-expressions
+  habitacionid ? cama = await services.borrar(habitacionid, 'Habitacion') : 
+   camaId ? cama = await services.borrar(camaId, 'Cama') : null
+    
+    res.json(cama)
+  } catch(error) {
+    res.status(404).json({
+      message: error
+    })
+  }
+});
 
 module.exports = router

@@ -1,12 +1,14 @@
 const express = require('express');
 const UserService = require('../services/usuarios.services');
 const validatorHandler = require('../middleware/validator.handler');
+const {chequearRoles} = require('../middleware/auth.handler')
 const { updateUserSchema, createUserSchema, getUserSchema } = require('../schemas/usuario.schema');
-
+const passport = require('passport'); 
 const router = express.Router();
 const service = new UserService
 
-router.get('/', async (req, res, next) => {
+router.get('/',
+async (req, res, next) => {
   try {
     const users = await service.mostrarTodo();
     res.json(users);
@@ -16,6 +18,8 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:dni',
+passport.authenticate('jwt', {session: false}),
+chequearRoles(['administrador', 'recepcionista']),
   validatorHandler(getUserSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -29,9 +33,17 @@ router.get('/:dni',
 );
 
 router.post('/',
+<<<<<<< HEAD
+ /*passport.authenticate('jwt', {session: false}),*/
+ /*chequearRoles(['administrador']),*/
+=======
+ /* passport.authenticate('jwt', {session: false}),
+ chequearRoles(['administrador']), */
+>>>>>>> Eric
   validatorHandler(createUserSchema, 'body'), 
   async (req, res, next) => {
     try {
+      console.log("asdad")
       const body = req.body;
       console.log(body)
       const newUsuario = await service.crear(body);
@@ -43,13 +55,14 @@ router.post('/',
 );
 
 router.patch('/:id',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(getUserSchema, 'params'),
   validatorHandler(updateUserSchema, 'body'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
       const body = req.body;
-      const category = await service.update(id, body);
+      const category = await service.actualizar(id, body);
       res.json(category);
     } catch (error) {
       next(error);
@@ -58,6 +71,8 @@ router.patch('/:id',
 );
 
 router.delete('/:id',
+  passport.authenticate('jwt', {session: false}),
+  chequearRoles(['rececionista']),
   validatorHandler(getUserSchema, 'params'),
   async (req, res, next) => {
     try {

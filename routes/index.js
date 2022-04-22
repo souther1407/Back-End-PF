@@ -3,16 +3,27 @@ const camasRouter = require('./camas.router')
 const usuariosRouter = require('./usuarios.router')
 const reservaRouter =  require('./reservas.router')
 const habitaciontipoRouter = require('./habitaciontipo.router')
-//const authRouter = require('./auth.router')
+<<<<<<< HEAD
+const fechasRouter = require('./fechas.router')
+// const habitacionesDisponiblesRouter = require('./habitacionesDisponibles.router')
+
+=======
+const nacionalidadesRouter = require("./nacionalidades.router")
+>>>>>>> Eric
+
+const authRouter = require('./auth.router')
+
 
 function routerApi (app) {
   app.use('/habitaciones', habitacionesRouter );
   app.use('/habitacionestipo', habitaciontipoRouter)
+  // app.use('/hab', habitacionesDisponiblesRouter)
   app.use('/camas', camasRouter );
   app.use('/usuarios', usuariosRouter );
   app.use('/reservas', reservaRouter );
-  //app.use('/auth', authRouter);
-
+  app.use("/nacionalidades", nacionalidadesRouter);
+  app.use('/auth', authRouter);
+  // app.use('/huespedes', huespedRouter)
 }
 
 module.exports = routerApi;

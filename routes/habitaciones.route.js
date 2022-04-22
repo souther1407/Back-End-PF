@@ -1,26 +1,31 @@
-const express = require('express')
-const habitacionesService = require('./../services/habitaciones.services')
-const validatorHandler = require('../middleware/validator.handler')
-const {checkApiKey} =require('../middleware/auth.handler')
-const { crearHabitacionSchema, actualizarHabitacionSchema, getHabitacionSchema} = require('../schemas/habitaciones.schema')
-const router = express.Router()
-const services = new habitacionesService
+
+const express = require('express');
+const habitacionesService = require('./../services/habitaciones.services');
+const validatorHandler = require('../middleware/validator.handler');
+const {checkApiKey} =require('../middleware/auth.handler');
+const { crearHabitacionSchema, actualizarHabitacionSchema, getHabitacionSchema} = require('../schemas/habitaciones.schema');
+const router = express.Router();
+const services = new habitacionesService;
+const {chequearRoles} = require('../middleware/auth.handler');
+const passport = require('passport'); 
+
+
 
 
 router.get('/',
-checkApiKey,
+/*checkApiKey,*/
 async (req, res)=>{
-  const habitaciones = await services.buscar();
-  res.json(habitaciones)
+  try{
+    const habitaciones = await services.buscar();
+    res.json(habitaciones)
+  }catch(e){
+    console.log(e)
+  }
 });
 
-// router.get('/filter', (req, res)=>{
-//   res.json('soy el filtro')
-// });
-
-
-
 router.post('/',
+passport.authenticate('jwt', {session: false}),
+/*chequearRoles(['administrador']),*/
 validatorHandler(crearHabitacionSchema, 'body'), // validation
 async (req, res)=>{
       try {
@@ -46,20 +51,10 @@ router.get('/:id',
     }
 });
 
-router.post('/',
- validatorHandler(crearHabitacionSchema, 'body'), // validation
-  async (req, res)=>{
-    console.log(req.body)
-    try {
-      const body = req.body
-      const nuevaHabitacion = await services.crear(body)
-      res.status(201).json(nuevaHabitacion)
-    } catch(error) {
-      res.status(error)
-    }
-});
 
 router.patch('/:id',
+passport.authenticate('jwt', {session: false}),
+chequearRoles(['administrador']),
 validatorHandler(getHabitacionSchema, 'params'),
 validatorHandler(actualizarHabitacionSchema, 'body'),
   async (req, res)=>{
@@ -77,7 +72,10 @@ validatorHandler(actualizarHabitacionSchema, 'body'),
   }
 });
 
-router.delete('/:id', async (req, res)=>{
+router.delete('/:id', 
+// passport.authenticate('jwt', {session: false}),
+// chequearRoles(['administrador']),
+async (req, res)=>{
   try {
     const { id } = req.params
     const habitacion = await services.borrar(id)
