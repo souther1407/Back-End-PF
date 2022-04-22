@@ -8,7 +8,15 @@ const CamaSchema = {
     defaultValue: Sequelize.UUIDV4,
     allowNull: false,
     primaryKey: true,
-    
+  },
+  /* id:{
+    type:DataTypes.INTEGER,
+    allowNull:false,
+    primaryKey:true,
+    autoIncrement:true,
+  }, */
+  nombre: {
+    type:DataTypes.STRING,
   },
   precio: {
     type: DataTypes.INTEGER,
@@ -19,6 +27,10 @@ const CamaSchema = {
     type: DataTypes.ENUM('reservada', 'ocupada', 'libre', 'mantenimiento'),
     allowNull: false,
     defaultValue: 'libre',
+  },
+  nombre:{
+    type: DataTypes.STRING,
+    // allowNull: false,
   }
 }
 

@@ -19,6 +19,11 @@ const ReservaCamaSchema = {
     //   this.setDataValue('fecha_ingreso', fecha_ingreso.toISOString().splice('T')[0]);
     // }
   },
+  cancelada:{
+    type:DataTypes.BOOLEAN,
+    allowNull:false,
+    defaultValue:false,
+  },
   fecha_egreso:{
     type: DataTypes.DATEONLY,
     allowNull: false,

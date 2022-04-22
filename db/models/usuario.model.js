@@ -1,3 +1,4 @@
+const { allow } = require('joi');
 const {Model, DataTypes, Sequelize} = require('sequelize')
 
 const USUARIO_TABLE = 'usuarios';
@@ -8,6 +9,20 @@ const UsuarioSchema = {
     /*defaultValue: Sequelize.UUIDV4,*/
     allowNull: false,
     primaryKey: true,
+  },
+  //TODO:cambiar luego prueba
+  tipoDocumento:{
+    type: DataTypes.ENUM("DNI","Passport","Driver License"),
+    allowNull: false,
+    primaryKey:true,
+  },
+  //TODO:cambiar luego prueba
+  nacionalidad: {
+    type: DataTypes.STRING
+  },
+  googleId:{
+    type: DataTypes.STRING,
+    allowNull:true
   },
   nombre: {
     type: DataTypes.STRING,
@@ -25,8 +40,20 @@ const UsuarioSchema = {
   telefono:{
     type: DataTypes.STRING,
   },
+  fechaNacimiento: {
+    type:DataTypes.DATEONLY,
+    allowNull:true
+  },
   direccion:{
     type: DataTypes.STRING,
+  },
+  avatar: {
+    type: DataTypes.STRING,
+    allowNull:false,
+    defaultValue: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCzX-3KiQKCFelbSyqinJZBVDi2zS1Mefd8Q&usqp=CAU",
+    validate: {
+      isUrl: true
+    }
   },
   email: {
     type: DataTypes.STRING,
@@ -35,6 +62,7 @@ const UsuarioSchema = {
       isEmail: true,
     }
   },
+
   password: {
     allowNull: false,
     type: DataTypes.STRING
@@ -49,10 +77,10 @@ const UsuarioSchema = {
     allowNull: true,
     type: DataTypes.STRING
   },
-  refreshToken: {
-    field: 'refresh_token',
-    allowNull: true,
-    type: DataTypes.STRING
+  genero:{
+    type: DataTypes.ENUM("femenino","masculino","no-binario"),
+    allowNull: false,
+
   },
   createdAt: {
     allowNull: false,
