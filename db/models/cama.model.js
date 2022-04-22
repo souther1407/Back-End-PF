@@ -10,12 +10,6 @@ const CamaSchema = {
     primaryKey: true,
     
   },
-  /* id:{
-    type:DataTypes.INTEGER,
-    allowNull:false,
-    primaryKey:true,
-    autoIncrement:true,
-  }, */
   precio: {
     type: DataTypes.INTEGER,
     allowNull: false,

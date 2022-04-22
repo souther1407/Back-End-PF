@@ -28,15 +28,15 @@ class AuthServices {
         sub:usuario.dni,
         role: usuario.rol,
         }
-        const token = jwt.sign(payload, config.jwtSecret, {expiresIn: '1h'} );
-        const refreshToken = jwt.sign(payload, config.jwtRefresh, {expiresIn: '10d'} );
-        await service.actualizar(usuario.dni, {refreshToken: refreshToken });
+        const token = jwt.sign(payload, config.jwtSecret);
+        // const refreshToken = jwt.sign(payload, config.jwtRefresh, {expiresIn: '10d'} ); (en desuso por ahora)
+        // await service.actualizar(usuario.dni, {refreshToken: refreshToken });
         return ({
         usuario :usuario.email,
         rol: usuario.rol,
         
         token,
-        refreshToken
+        // refreshToken
     });
     }
 

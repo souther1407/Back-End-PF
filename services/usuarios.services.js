@@ -3,8 +3,8 @@ const bcrypt = require('bcrypt')
 
 const { sequelize } = require('../libs/sequelize')
 const { Usuario } =  require('../db/models/usuario.model')
-const {Tipo_Documento} = require('../db/models/tipoDocumento.model')
-const {Nacionalidades} = require('../db/models/tipoDocumento.model')
+// const {Tipo_Documento} = require('../db/models/tipoDocumento.model')
+// const {Nacionalidades} = require('../db/models/tipoDocumento.model')
 
 const usuarioAdmin = {
   dni: "00000001",
@@ -37,7 +37,6 @@ class UserService {
   async mostrarTodo() {
   const usuariosexistentes = await Usuario.findAll();
     if (!usuariosexistentes.length) {
-      console.log('no hay nadie--------> creo al super admin')
       try {
         await this.crear(usuarioAdmin)
         const usuario = await Usuario.findAll()
@@ -58,7 +57,6 @@ class UserService {
       }
     }else{
       try {
-        console.log('ya hay alguien adentro------> no me animo a entrar')
         const usuario = await Usuario.findAll()
         return usuario
       } catch(error) {
@@ -100,9 +98,9 @@ class UserService {
   }
 
   async delete(dni) {
-    const usuario = await Usuario.findOne(id)
+    const usuario = await Usuario.findOne(dni)
     await usuario.destroy();
-    return { id };
+    return { dni };
   }
 }
 

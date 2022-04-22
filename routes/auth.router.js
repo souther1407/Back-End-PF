@@ -3,12 +3,13 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const { Usuario } = require('../db/models/usuario.model');
 const {config} = require('../config/config.js')
-
+const {checkApiKey} =require('../middleware/auth.handler');
 const AuthService = require('../services/auth.services');
 const service = new AuthService
 const router = express.Router();
 
-router.post('/login', 
+router.post('/login',
+checkApiKey, 
 passport.authenticate('local', {session: false}),
 async (req, res, next) => {
   try {
@@ -19,7 +20,8 @@ async (req, res, next) => {
   }
 });
 
-router.post('/recuperacion', 
+router.post('/recuperacion',
+checkApiKey, 
 async (req, res, next) => {
   try { 
     const { email } = req.body.email
@@ -31,7 +33,7 @@ async (req, res, next) => {
 });
 
 router.post('/cambiar-password', 
-
+checkApiKey,
 async (req, res, next) => {
   try { 
     const { token, newPassword } = req.body;
@@ -42,7 +44,8 @@ async (req, res, next) => {
   }
 });
 
-router.post('/refresh-token', 
+router.post('/refresh-token',
+checkApiKey, 
 async(req, res, next) =>{
 try {
   const respuesta = await service.refreshToken(req)

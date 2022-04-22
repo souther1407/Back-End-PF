@@ -2,19 +2,19 @@
 const express = require('express');
 const habitacionesService = require('./../services/habitaciones.services');
 const validatorHandler = require('../middleware/validator.handler');
-const {checkApiKey} =require('../middleware/auth.handler');
 const { crearHabitacionSchema, actualizarHabitacionSchema, getHabitacionSchema} = require('../schemas/habitaciones.schema');
 const router = express.Router();
 const services = new habitacionesService;
 const {chequearRoles} = require('../middleware/auth.handler');
 const passport = require('passport'); 
 const boom = require('@hapi/boom');
+const {checkApiKey} =require('../middleware/auth.handler');
 
 
 
 
 router.get('/',
-/*checkApiKey,*/
+checkApiKey,
 async (req, res)=>{
   try{
     const habitaciones = await services.buscar();

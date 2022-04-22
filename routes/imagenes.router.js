@@ -3,11 +3,13 @@ const ImagenService = require('../services/imagenes.services');
 const validatorHandler = require('../middleware/validator.handler');
 const {chequearRoles, } = require('../middleware/auth.handler')
 const { updateUserSchema, createUserSchema, getUserSchema } = require('../schemas/usuario.schema');
+const {checkApiKey} =require('../middleware/auth.handler');
 const passport = require('passport'); 
 const router = express.Router();
 const service = new ImagenService
 
 router.get('/',
+checkApiKey,
 passport.authenticate('jwt', {session: false}),
 chequearRoles("administrador", "recepcionisa"),
 async (req, res, next) => {
@@ -20,6 +22,7 @@ async (req, res, next) => {
 });
 
 router.get('/:id',
+checkApiKey,
 passport.authenticate('jwt', {session: false}),
 chequearRoles("administrador", "recepcionisa"),
 //validatorHandler(getUserSchema, 'params'),
@@ -35,8 +38,9 @@ async (req, res, next) => {
 );
 
 router.post('/',
- passport.authenticate('jwt', {session: false}),
- chequearRoles("administrador", "recepcionista", "cliente"),
+checkApiKey,
+passport.authenticate('jwt', {session: false}),
+chequearRoles("administrador", "recepcionista", "cliente"),
  //validatorHandler(createUserSchema, 'body'), 
   async (req, res, next) => {
     try {
@@ -50,8 +54,9 @@ router.post('/',
 );
 
 router.patch('/:id',
-  passport.authenticate('jwt', {session: false}),
-  chequearRoles("administrador", "recepcionista", "cliente"),
+checkApiKey,
+passport.authenticate('jwt', {session: false}),
+chequearRoles("administrador", "recepcionista", "cliente"),
  // validatorHandler(getUserSchema, 'params'),
  // validatorHandler(updateUserSchema, 'body'),
   async (req, res, next) => {
@@ -64,6 +69,7 @@ router.patch('/:id',
 );
 
 router.delete('/:id',
+  checkApiKey,
   passport.authenticate('jwt', {session: false}),
   chequearRoles("administrador", "recepcionista", "cliente"),
   //validatorHandler(getUserSchema, 'params'),

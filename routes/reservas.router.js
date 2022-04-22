@@ -3,12 +3,14 @@ const ReservaService = require('./../services/reservas.services')
 const validatorHandler = require('../middleware/validator.handler')
 const { crearReservaSchema, getReservaByFecha, getReservaId } = require('../schemas/reservas.schema')
 const router = express.Router()
+const {checkApiKey} =require('../middleware/auth.handler');
 const services = new ReservaService
 const passport = require('passport');
 const {chequearRoles} = require('../middleware/auth.handler');
 const jwt = require('jsonwebtoken');
 
 router.get('/byFecha',
+    checkApiKey,
     passport.authenticate('jwt', {session: false}),
     chequearRoles("administrador", "recepcionista", "cliente"),
     validatorHandler(getReservaByFecha, 'query'), 
@@ -22,7 +24,8 @@ router.get('/byFecha',
     }
 });
 
-router.get('/', 
+router.get('/',
+    checkApiKey,
     passport.authenticate('jwt', {session: false}),
     chequearRoles("administrador", "recepcionista", "cliente"),
     async (req, res)=>{
@@ -44,7 +47,9 @@ router.get('/disponibilidad', async (req, res)=>{
     }
 });
 
-router.get('/disponibilidad/:id', async (req, res)=>{
+router.get('/disponibilidad/:id', 
+checkApiKey,
+async (req, res)=>{
     try {
         const reservas = await services.mostrardisponibilidadById(req.params)
         res.status(200).json(reservas)
@@ -67,6 +72,7 @@ router.get('/disponibilidad/:id', async (req, res)=>{
 // )
 
 router.delete('/:id',
+    checkApiKey,
     passport.authenticate('jwt', {session: false}),
     chequearRoles("administrador", "recepcionista", "cliente"),
     validatorHandler(getReservaId, 'params'),
@@ -82,6 +88,7 @@ router.delete('/:id',
     })
 
 router.post('/',
+    checkApiKey,
     passport.authenticate('jwt', {session: false}),
     chequearRoles('administrador', 'recepcionista, cliente'),
     validatorHandler(crearReservaSchema, 'body'),
