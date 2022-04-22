@@ -3,9 +3,8 @@ const {Model, DataTypes, Sequelize} = require('sequelize')
 const HUESPED_TABLE = 'huesped';
 
 const HuespedSchema = {
-  id:{
-    type:DataTypes.UUID,
-    defaultValue: Sequelize.UUIDV4,
+  dni:{
+    type:DataTypes.STRING,
     allowNull: false,
     primaryKey: true,
   },
@@ -17,9 +16,21 @@ const HuespedSchema = {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  numeroDocumento:{
+  direccion:{
     type: DataTypes.STRING,
-    allowNull:false
+  },
+  telefono: {
+    type: DataTypes.INTEGER
+  },
+  genero: {
+    type: DataTypes.ENUM('masculino', 'femenino', 'otro'),
+    allowNull: false
+  },
+  email: {
+    type: DataTypes.STRING,
+    validate: {
+      isEmail: true
+    }
   }
 }
 
