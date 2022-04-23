@@ -48,10 +48,10 @@ class habitacionesService {
       }
     } else {
       try {
-
         let precioHabitacion = 0;
         if(data.preciosCamas.length > 1 && data.preciosCamas.length !== data.cantCamas ){
-          return boom.badData('falta precio de una cama')}
+          return boom.badData('falta precio de una cama')
+        }
 
         for (let i = 0; i < data.cantCamas; i++) {
          // eslint-disable-next-line no-unused-expressions
@@ -89,15 +89,15 @@ class habitacionesService {
 
         for (let i = 0; i < data.cantCamas; i++) {
           Cama.create({
-            precio:
-              data.preciosCamas.length > 1
-                ? data.preciosCamas[i]
-                : data.preciosCamas[0],
+            precio: data.preciosCamas[0]
+              // data.preciosCamas.length > 1
+              //   ? data.preciosCamas[i]
+              //   : data.preciosCamas[0]
           })
-            .then((cama) => {
-              habitacion.setCamas(cama);
-            })
-            .catch((error) => boom.badData(error.message));
+          .then((cama) => {
+            habitacion.setCamas(cama);
+          })
+          .catch((error) => boom.badData(error.message));
         }
         return habitacion;
       } catch (error) {

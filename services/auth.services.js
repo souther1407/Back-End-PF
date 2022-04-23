@@ -7,7 +7,9 @@ const {config} = require('../config/config');
 const UserService = require("./usuarios.services");
 const service = new UserService();
 
-
+//prueba token
+const SECRET= "nsz6ti0v8bXql5yjaR9ZADkYLeHWEcfF"
+/* const SECRET_RECUPERACION = "DtQARYqUCcIHXrlvdo5pKEnJaZ4L2STg" */
 class AuthServices {
 
     async traerUsuario(email, password){
@@ -23,14 +25,15 @@ class AuthServices {
       return usuario
     }
 
+
     async firmarToken(usuario){
+
         const payload = {
         sub:usuario.dni,
         role: usuario.rol,
         }
-        const token = jwt.sign(payload, config.jwtSecret);
-        // const refreshToken = jwt.sign(payload, config.jwtRefresh, {expiresIn: '10d'} ); (en desuso por ahora)
-        // await service.actualizar(usuario.dni, {refreshToken: refreshToken });
+        const token = jwt.sign(payload, SECRET );
+        
         return ({
         usuario :usuario.email,
         rol: usuario.rol,
@@ -40,15 +43,17 @@ class AuthServices {
     });
     }
 
-
+  
     async enviarEmail(infomail) {
+    const MAIL = "rodrigo.m.quintero@gmail.com"
+    const PASSWORD = "icrpozbjzczgvwpz"
     const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     secure: true,
     port: 465,
     auth: {
-    user: config.email,
-    pass: config.emailPassword
+    user: MAIL,
+    pass: PASSWORD
             }
         });
     await transporter.sendMail(infomail);
@@ -57,13 +62,16 @@ class AuthServices {
 
     async enviarRecuperacion(email){
     const usuario = await service.buscarPorEmail(email);
+    console.log(usuario)
     if (!usuario) {
     throw boom.unauthorized();
     }
     const payload = {sub: usuario.dni };
-    const token = jwt.sign(payload, config.jwtRecuperacion, {expiresIn: '10min'} );
-    const link = `http://rodrigoquintero.tamarindorivas.com?token=${token}`
-    await service.actualizar(usuario.dni, {tokenRecuperacion: token })
+    const token = jwt.sign(payload, SECRET, {expiresIn: '10min'} );
+    //TODO: cambiar luego
+    /* const link = `http://rodrigoquintero.tamarindorivas.com?token=${token}` */
+    const link = `http://localhost:3000/changepassword?token=${token}`;
+    await service.actualizar(usuario.dni, {tokenRecuperacion: token });
     const mail = {
     from: 'WebMaster',
     to: `${usuario.email}`, 
@@ -75,8 +83,10 @@ class AuthServices {
     }
 
     async cambiarPaswword(token, newPassword){
-       try {
-        const payload = jwt.verify(token, config.jwtRecuperacion);
+
+      try {
+        const payload = jwt.verify(token, SECRET);
+
         const usuario = await service.mostrarByDni(payload.sub);
         if (usuario.tokenRecuperacion !== token){
           throw boom.unauthorized();

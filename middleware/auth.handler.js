@@ -1,5 +1,6 @@
 const boom = require('@hapi/boom');
 const { config } = require('../config/config')
+const jwt = require("jsonwebtoken")
 
 function checkApiKey(req, res, next){
     const apiKey = req.headers['api'];
@@ -32,4 +33,16 @@ function chequearRoles(...roles) {
     }
 }
 
-module.exports = {checkApiKey, chequearAdminRole, chequearRoles}
+function checkGoogleToken(req, res, next){
+    const { token } = req.body
+    try {
+        const payload = jwt.verify(token,"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")
+        req.googleUser = payload 
+        next()
+    } catch (error) {
+        res.json({err:"no autorizado"})
+    }
+
+}
+
+module.exports = {checkApiKey, chequearAdminRole, chequearRoles,checkGoogleToken}
