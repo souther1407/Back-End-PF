@@ -129,14 +129,14 @@ class habitacionesService {
   async buscaruno(id) {
     
     let habitacion = await Habitacion.findByPk(id);
-    if (!habitacion) {return boom.notFound('no exite la habitacion')}
+    if (!habitacion) {return boom.notFound('no exite la habitacion solicitada')}
     if (!habitacion.privada) {
       habitacion = Habitacion.findByPk(id, {
         include: [Cama, Imagen, ReservaCama],
       });
     }
     if (!habitacion) {
-      throw boom.notFound('no se encontro la habitacion');
+      throw boom.notFound('no se encontro la habitacion solicitada');
     }
     return habitacion;
   }
