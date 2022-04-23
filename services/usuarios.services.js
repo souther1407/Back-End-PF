@@ -23,15 +23,19 @@ const usuarioAdmin = {
 class UserService {
 
   async crear(data) {
-    const hash = await bcrypt.hash(data.password, 12)
-    const nuevoUsuario = await Usuario.create({
-      ...data,
-      password: hash
-     
-    })
-    
-    delete nuevoUsuario.dataValues.password;
-    return nuevoUsuario; 
+
+    try {
+      const hash = await bcrypt.hash(data.password, 12)
+      const nuevoUsuario = await Usuario.create({
+        ...data,
+        password: hash
+      }); 
+      delete nuevoUsuario.dataValues.password;
+      return nuevoUsuario; 
+    } catch(error) {  
+      return boom.badData('no se creo el usuario')
+    }
+
   }
 
   async mostrarTodo() {
