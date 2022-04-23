@@ -7,9 +7,6 @@ const {config} = require('../config/config');
 const UserService = require("./usuarios.services");
 const service = new UserService();
 
-//prueba token
-const SECRET= "nsz6ti0v8bXql5yjaR9ZADkYLeHWEcfF"
-/* const SECRET_RECUPERACION = "DtQARYqUCcIHXrlvdo5pKEnJaZ4L2STg" */
 class AuthServices {
 
     async traerUsuario(email, password){
@@ -32,7 +29,7 @@ class AuthServices {
         sub:usuario.dni,
         role: usuario.rol,
         }
-        const token = jwt.sign(payload, SECRET );
+        const token = jwt.sign(payload, config.jwtSecret );
         return ({
         usuario :usuario.email,
         rol: usuario.rol,
@@ -65,7 +62,7 @@ class AuthServices {
     throw boom.unauthorized();
     }
     const payload = {sub: usuario.dni };
-    const token = jwt.sign(payload, SECRET, {expiresIn: '10min'} );
+    const token = jwt.sign(payload, config.jwtSecret, {expiresIn: '10min'} );
     //TODO: cambiar luego
     /* const link = `http://rodrigoquintero.tamarindorivas.com?token=${token}` */
     const link = `http://localhost:3000/changepassword?token=${token}`;
@@ -83,7 +80,7 @@ class AuthServices {
     async cambiarPaswword(token, newPassword){
 
       try {
-        const payload = jwt.verify(token, SECRET);
+        const payload = jwt.verify(token, config.jwtSecret);
 
         const usuario = await service.mostrarByDni(payload.sub);
         console.log('soy el token---->',usuario._previousDataValues.tokenRecuperacion)

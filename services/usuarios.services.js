@@ -9,7 +9,7 @@ const { Usuario } =  require('../db/models/usuario.model')
 const usuarioAdmin = {
   dni: "00000001",
   tipoDocumento:"DNI",
-  password: "admin 123",
+  password: "admin123",
   nombre: "SuperAdmin",
   apellido: "admin",
   email: "admin@admin.com",
@@ -53,7 +53,7 @@ class UserService {
         delete usuario[0].dataValues.direccion;
         
         return {
-          mensaje: `se creo el usuario Super admin (password: admin 123), uselo para generar un usuario administrador y elimine a SuperAdmin inmediatamente, hasta tanto lo haga las medidas de seguridad estan desactivadas` ,
+          mensaje: `se creo el usuario Super admin (password: admin123), uselo para generar un usuario administrador y elimine a SuperAdmin inmediatamente, hasta tanto lo haga las medidas de seguridad estan desactivadas` ,
           usuario
         }
       } catch(error) {
