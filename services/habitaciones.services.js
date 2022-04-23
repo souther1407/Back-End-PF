@@ -89,6 +89,7 @@ class habitacionesService {
 
         for (let i = 0; i < data.cantCamas; i++) {
           Cama.create({
+            nombre: `cama ${i} de ${data.nombre},`
             precio: data.preciosCamas[0]
               // data.preciosCamas.length > 1
               //   ? data.preciosCamas[i]
@@ -181,7 +182,7 @@ class habitacionesService {
     const habitacionDelete = await  Habitacion.destroy({where: { id: id}})
     await Cama.destroy({where: { HabitacionId: id}})
     if(!habitacionDelete) {
-      throw boom.notFound('habitacion no encontrada');
+      return boom.notFound('habitacion no encontrada');
     }
     return `Habitacion con id: ${id} fue borrada con exito`;
   }
