@@ -43,8 +43,8 @@ class AuthServices {
 
   
     async enviarEmail(infomail) {
-    const MAIL = "rodrigo.m.quintero@gmail.com"
-    const PASSWORD = "icrpozbjzczgvwpz"
+    const MAIL = config.email
+    const PASSWORD = config.emailPassword
     const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     secure: true,
