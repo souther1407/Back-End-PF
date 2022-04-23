@@ -5,6 +5,7 @@ const {chequearRoles, chequearAdminRole} = require('../middleware/auth.handler')
 const {checkApiKey} =require('../middleware/auth.handler');
 const { updateUserSchema, createUserSchema, getUserSchema } = require('../schemas/usuario.schema');
 const passport = require('passport'); 
+const boom = require('@hapi/boom');
 const router = express.Router();
 const service = new UserService
 
@@ -44,15 +45,13 @@ router.post('/',
   validatorHandler(createUserSchema, 'body'), 
   async (req, res, next) => {
     try {
-      console.log("asdad")
       const body = req.body;
-      console.log(body)
       const newUsuario = await service.crear(body);
       res.status(201).json(newUsuario);
     } catch (error) {
-      next(error);
+      return boom.badData()
+      };
     }
-  }
 );
 
 router.patch('/:id',

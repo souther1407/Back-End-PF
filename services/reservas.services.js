@@ -29,6 +29,10 @@ class ReservaService {
                     }
                 ]
             })
+            
+        if(!reservas.length) {
+            return boom.badData('no hay reservas registradas')
+        }
         const reservasFiltradas = reservas.filter(r =>
             (r.fecha_ingreso >= ingreso && r.fecha_ingreso <= egreso)
             ||
@@ -55,7 +59,12 @@ class ReservaService {
             },
             ]
         })
-        return reservas
+        if(!reservas.length) {
+            return boom.badData('no hay reservas registradas')
+        }else {
+
+            return reservas
+        }
     }
     
     async crearReserva(data, token){

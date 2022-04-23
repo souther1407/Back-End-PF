@@ -7,19 +7,17 @@ const {config} = require('../config/config');
 const UserService = require("./usuarios.services");
 const service = new UserService();
 
-//prueba token
-const SECRET= "nsz6ti0v8bXql5yjaR9ZADkYLeHWEcfF"
-/* const SECRET_RECUPERACION = "DtQARYqUCcIHXrlvdo5pKEnJaZ4L2STg" */
 class AuthServices {
 
     async traerUsuario(email, password){
         const usuario = await service.buscarPorEmail(email);
       if (!usuario) {
-        throw boom.unauthorized();
+        console.log('estoy aca')
+        return boom.unauthorized();
       }
       const isMatch = await bcrypt.compare(password, usuario.password);
       if (!isMatch) {
-        throw boom.unauthorized();
+        return boom.unauthorized();
       }
       delete usuario.dataValues.password;
       return usuario
@@ -27,17 +25,14 @@ class AuthServices {
 
 
     async firmarToken(usuario){
-
         const payload = {
         sub:usuario.dni,
         role: usuario.rol,
         }
-        const token = jwt.sign(payload, SECRET );
-        
+        const token = jwt.sign(payload, config.jwtSecret );
         return ({
         usuario :usuario.email,
         rol: usuario.rol,
-        
         token,
         // refreshToken
     });
@@ -45,8 +40,8 @@ class AuthServices {
 
   
     async enviarEmail(infomail) {
-    const MAIL = "rodrigo.m.quintero@gmail.com"
-    const PASSWORD = "icrpozbjzczgvwpz"
+    const MAIL = config.email;
+    const PASSWORD = config.emailPassword
     const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     secure: true,
@@ -62,12 +57,11 @@ class AuthServices {
 
     async enviarRecuperacion(email){
     const usuario = await service.buscarPorEmail(email);
-    console.log(usuario)
     if (!usuario) {
     throw boom.unauthorized();
     }
     const payload = {sub: usuario.dni };
-    const token = jwt.sign(payload, SECRET, {expiresIn: '10min'} );
+    const token = jwt.sign(payload, config.jwtSecret, {expiresIn: '10min'} );
     //TODO: cambiar luego
     /* const link = `http://rodrigoquintero.tamarindorivas.com?token=${token}` */
     const link = `http://localhost:3000/changepassword?token=${token}`;
@@ -85,10 +79,11 @@ class AuthServices {
     async cambiarPaswword(token, newPassword){
 
       try {
-        const payload = jwt.verify(token, SECRET);
+        const payload = jwt.verify(token, config.jwtSecret);
 
         const usuario = await service.mostrarByDni(payload.sub);
-        if (usuario.tokenRecuperacion !== token){
+        console.log('soy el token---->',usuario._previousDataValues.tokenRecuperacion)
+        if (usuario._previousDataValues.tokenRecuperacion !== token){
           throw boom.unauthorized();
         }
         const hash = await bcrypt.hash(newPassword, 12)
