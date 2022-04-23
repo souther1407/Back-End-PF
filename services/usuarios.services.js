@@ -8,12 +8,12 @@ const { Usuario } =  require('../db/models/usuario.model')
 
 const usuarioAdmin = {
   dni: "00000001",
-  TipoDocumento:"dni",
+  tipoDocumento:"DNI",
   password: "admin 123",
   nombre: "SuperAdmin",
   apellido: "admin",
   email: "admin@admin.com",
-  fechaNacimiento:"01-01-1971",
+  fechaNacimiento:"1971-01-01",
   telefono:"0000000",
   direccion:"desconocido 100",
   Nacionalidad:"LotLoriem",

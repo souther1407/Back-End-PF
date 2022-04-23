@@ -10,7 +10,7 @@ const tipoUsuario = Joi.string();
 const fechaNacimiento = Joi.date()
 const telefono= Joi.string().length(10).pattern(/^[0-9]+$/);
 const Nacionalidad = Joi.string()
-const TipoDocumento = Joi.string()
+const tipoDocumento = Joi.string()
 const genero = Joi.string().valid("masculino", "femenino", "otro")
 const rol = Joi.string().valid("cliente", "administrador", "recepcionista")
 const direccion = Joi.string()
@@ -25,7 +25,7 @@ const createUserSchema = Joi.object({
   Nacionalidad,
   telefono,
   direccion,
-  TipoDocumento: TipoDocumento.required(),
+  tipoDocumento: tipoDocumento.required(),
   genero: genero.required(),
   rol: rol.required().valid('administrador', 'recepcionista',
   'cliente')
