@@ -1,5 +1,4 @@
 const boom = require('@hapi/boom');
-
 const { Cama } = require('../db/models/cama.model');
 const { Habitacion } = require('../db/models/habitacion.model');
 const { Imagen } = require('../db/models/imagen.model');
@@ -89,6 +88,7 @@ class habitacionesService {
 
         for (let i = 0; i < data.cantCamas; i++) {
           Cama.create({
+            nombre: `cama ${i+1} de ${data.nombre}`,
             precio: data.preciosCamas[0]
               // data.preciosCamas.length > 1
               //   ? data.preciosCamas[i]
@@ -112,7 +112,7 @@ class habitacionesService {
     try {
 
     const habitacion = await Habitacion.findAll({
-      include: [{model:Imagen, attributes: [ 'imagen' ] },{model:Cama, attributes: [ 'id', 'precio', 'estado' ] }]
+      include: [{model:Imagen, attributes: [ 'imagen' ] },{model:Cama, attributes: [ 'id', 'nombre', 'precio', 'estado' ] }]
     });
     for (let i = 0; i < habitacion.length; i++) {
       if (habitacion[i].privada === true) {delete habitacion[i].dataValues.Camas}
@@ -128,8 +128,8 @@ class habitacionesService {
   // eslint-disable-next-line class-methods-use-this
   async buscaruno(id) {
     
-    let habitacion = Habitacion.findByPk(id);
-    if (!habitacion.id) {return boom.notFound('no exite la habitacion')}
+    let habitacion = await Habitacion.findByPk(id);
+    if (!habitacion) {return boom.notFound('no exite la habitacion')}
     if (!habitacion.privada) {
       habitacion = Habitacion.findByPk(id, {
         include: [Cama, Imagen, ReservaCama],
@@ -178,10 +178,11 @@ class habitacionesService {
 
   // eslint-disable-next-line class-methods-use-this
   async borrar(id) {
+   
     const habitacionDelete = await  Habitacion.destroy({where: { id: id}})
     await Cama.destroy({where: { HabitacionId: id}})
     if(!habitacionDelete) {
-      throw boom.notFound('habitacion no encontrada');
+      return boom.notFound('habitacion no encontrada');
     }
     return `Habitacion con id: ${id} fue borrada con exito`;
   }
