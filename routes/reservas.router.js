@@ -8,11 +8,7 @@ const { createArrayHuespedesSchema } = require('../schemas/huesped.schema')
 const router = express.Router()
 const {checkApiKey} =require('../middleware/auth.handler');
 const services = new ReservaService
-const passport = require('passport');
-const {chequearRoles} = require('../middleware/auth.handler');
-const services = new ReservaService;
 
-const jwt = require('jsonwebtoken');
 
 router.get('/byFecha',
     checkApiKey,
