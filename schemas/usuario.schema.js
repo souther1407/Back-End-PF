@@ -27,7 +27,7 @@ const createUserSchema = Joi.object({
   direccion,
   tipoDocumento: tipoDocumento.required(),
   genero: genero.required(),
-  rol: rol.required().valid('administrador', 'recepcionista',
+  rol: rol.valid('administrador', 'recepcionista',
   'cliente')
 });
 
