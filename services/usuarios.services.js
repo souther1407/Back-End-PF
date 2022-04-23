@@ -48,7 +48,7 @@ class UserService {
         delete usuario[0].dataValues.telefono;
         delete usuario[0].dataValues.direccion;
         
-          return {
+        return {
           mensaje: `se creo el usuario Super admin, uselo para generar un usuario administrador y elimine a SuperAdmin inmediatamente, hasta tanto lo haga las medidas de seguridad estan desactivadas` ,
           usuario
         }
