@@ -43,8 +43,8 @@ class AuthServices {
 
   
     async enviarEmail(infomail) {
-    const MAIL = config.email
-    const PASSWORD = config.emailPassword
+    const MAIL = "rodrigo.m.quintero@gmail.com"
+    const PASSWORD = "icrpozbjzczgvwpz"
     const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     secure: true,
@@ -86,7 +86,8 @@ class AuthServices {
         const payload = jwt.verify(token, SECRET);
 
         const usuario = await service.mostrarByDni(payload.sub);
-        if (usuario.tokenRecuperacion !== token){
+        console.log('soy el token---->',usuario._previousDataValues.tokenRecuperacion)
+        if (usuario._previousDataValues.tokenRecuperacion !== token){
           throw boom.unauthorized();
         }
         const hash = await bcrypt.hash(newPassword, 12)
