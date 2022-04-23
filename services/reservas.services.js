@@ -59,7 +59,12 @@ class ReservaService {
             },
             ]
         })
-        return reservas
+        if(!reservas.length) {
+            return boom.badData('no hay reservas registradas')
+        }else {
+
+            return reservas
+        }
     }
     
     async crearReserva(data, token){
