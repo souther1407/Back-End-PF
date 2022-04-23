@@ -15,11 +15,12 @@ class AuthServices {
     async traerUsuario(email, password){
         const usuario = await service.buscarPorEmail(email);
       if (!usuario) {
-        throw boom.unauthorized();
+        console.log('estoy aca')
+        return boom.unauthorized();
       }
       const isMatch = await bcrypt.compare(password, usuario.password);
       if (!isMatch) {
-        throw boom.unauthorized();
+        return boom.unauthorized();
       }
       delete usuario.dataValues.password;
       return usuario
@@ -27,17 +28,14 @@ class AuthServices {
 
 
     async firmarToken(usuario){
-
         const payload = {
         sub:usuario.dni,
         role: usuario.rol,
         }
         const token = jwt.sign(payload, SECRET );
-        
         return ({
         usuario :usuario.email,
         rol: usuario.rol,
-        
         token,
         // refreshToken
     });
