@@ -4,8 +4,6 @@ const usuariosRouter = require('./usuarios.router')
 const reservaRouter =  require('./reservas.router')
 const habitaciontipoRouter = require('./habitaciontipo.router')
 
-const fechasRouter = require('./fechas.router')
-
 // const habitacionesDisponiblesRouter = require('./habitacionesDisponibles.router')
 
 const nacionalidadesRouter = require("./nacionalidades.router")

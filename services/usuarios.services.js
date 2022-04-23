@@ -8,12 +8,12 @@ const { Usuario } =  require('../db/models/usuario.model')
 
 const usuarioAdmin = {
   dni: "00000001",
-  TipoDocumento:"dni",
-  password: "admin 123",
+  tipoDocumento:"DNI",
+  password: "admin123",
   nombre: "SuperAdmin",
   apellido: "admin",
   email: "admin@admin.com",
-  fechaNacimiento:"01-01-1971",
+  fechaNacimiento:"1971-01-01",
   telefono:"0000000",
   direccion:"desconocido 100",
   Nacionalidad:"LotLoriem",
@@ -23,15 +23,19 @@ const usuarioAdmin = {
 class UserService {
 
   async crear(data) {
-    const hash = await bcrypt.hash(data.password, 12)
-    const nuevoUsuario = await Usuario.create({
-      ...data,
-      password: hash
-     
-    })
-    
-    delete nuevoUsuario.dataValues.password;
-    return nuevoUsuario; 
+
+    try {
+      const hash = await bcrypt.hash(data.password, 12)
+      const nuevoUsuario = await Usuario.create({
+        ...data,
+        password: hash
+      }); 
+      delete nuevoUsuario.dataValues.password;
+      return nuevoUsuario; 
+    } catch(error) {  
+      return boom.badData('no se creo el usuario')
+    }
+
   }
 
   async mostrarTodo() {
@@ -48,8 +52,8 @@ class UserService {
         delete usuario[0].dataValues.telefono;
         delete usuario[0].dataValues.direccion;
         
-          return {
-          mensaje: `se creo el usuario Super admin, uselo para generar un usuario administrador y elimine a SuperAdmin inmediatamente, hasta tanto lo haga las medidas de seguridad estan desactivadas` ,
+        return {
+          mensaje: `se creo el usuario Super admin (password: admin123), uselo para generar un usuario administrador y elimine a SuperAdmin inmediatamente, hasta tanto lo haga las medidas de seguridad estan desactivadas` ,
           usuario
         }
       } catch(error) {

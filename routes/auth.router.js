@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const { Usuario } = require('../db/models/usuario.model');
 const {config} = require('../config/config.js')
 const {checkApiKey} =require('../middleware/auth.handler');
-
+const boom = require('@hapi/boom')
 const AuthService = require('../services/auth.services');
 const service = new AuthService;
 
@@ -12,7 +12,6 @@ const service = new AuthService;
 
 //TODO: usar lo de rodrigo
 const bcrypt = require('bcrypt');
-
 const router = express.Router();
 
 router.post('/login',
@@ -20,6 +19,9 @@ checkApiKey,
 passport.authenticate('local', {session: false}),
 async (req, res, next) => {
   try {
+    if(req.user.isBoom === true) {
+      res.json(boom.unauthorized('usuario o password inexistente'))
+    }
     const usuario = req.user.dataValues;
     res.json(await service.firmarToken(usuario))
     } catch (error) {

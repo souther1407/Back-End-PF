@@ -6,7 +6,7 @@ function logErrors (err, req, res, next) {
 }
 
 function errorHandler (err, req, res, next) {
-  next()
+  next(err)
   
 }
 

@@ -12,7 +12,6 @@ const LocalStrategy = new Strategy({
   async (email, password, done) => {
     try {
       const usuario = await service.traerUsuario(email, password)
-      console.log('de strategy',usuario.dataValues)
       done(null, usuario);
     } catch (error) {
       done(error, false);

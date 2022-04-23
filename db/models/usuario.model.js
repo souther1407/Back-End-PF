@@ -36,6 +36,7 @@ const UsuarioSchema = {
     type: DataTypes.ENUM('administrador', 'recepcionista',
     'cliente'),
     allowNull: false,
+    defaultValue: 'cliente'
   },
   telefono:{
     type: DataTypes.STRING,
@@ -67,11 +68,6 @@ const UsuarioSchema = {
     allowNull: false,
     type: DataTypes.STRING
   },
-  genero: {
-    allowNull: false,
-    type: DataTypes.ENUM('masculino', 'femenino',
-    'otro')
-  },
   tokenRecuperacion: {
     field: 'recovery_token',
     allowNull: true,
@@ -80,7 +76,6 @@ const UsuarioSchema = {
   genero:{
     type: DataTypes.ENUM("femenino","masculino","no-binario"),
     allowNull: false,
-
   },
   createdAt: {
     allowNull: false,
