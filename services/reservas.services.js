@@ -253,62 +253,62 @@ class ReservaService {
                 }
             })
 
-            let noDisponibles = [];
+            let habitacionesOcupadas = [];
+            let camasOcupadas = [];
             let disponibles = [];
 
             reservas.map(r =>{
                 if(r.Habitacions.length) r.Habitacions.map(h =>{
-                noDisponibles.push(h.id)
+                    habitacionesOcupadas.push(h.id)
                 }) 
                 if(r.Camas.length) r.Camas.map(c =>{
-                noDisponibles.push(c.id)
+                    camasOcupadas.push(c.id)
                 })
             })
-            
-            for (let i = 0; i < noDisponibles.length; i++) {
-                if( typeof(noDisponibles[i]) !== 'number'){
-                    const habitacionCama = await Cama.findByPk(noDisponibles[i]);
-                    let habitacion = await Habitacion.findByPk(habitacionCama.HabitacionId);
-                    if(!disponibles.length){
-                        disponibles.push({
-                            idHabitacion: habitacionCama.HabitacionId, 
-                            cantidadCamas: habitacion.cantCamas, 
-                            camasDisponible: habitacion.cantCamas,
-                            camasDisponiblesIds: [noDisponibles[i]]
-                        })
-                    }
-                    
-                    for (let j = 0; j < disponibles.length; j++) {
-                        if (disponibles[j].idHabitacion === habitacionCama.HabitacionId){
-                            disponibles[j].camasDisponible--;
-                            disponibles[j].camasDisponiblesIds.includes(noDisponibles[i]) ? null : disponibles[j].camasDisponiblesIds.push(noDisponibles[i]);
-                        }else{
-                            disponibles.push({
-                                idHabitacion: habitacionCama.HabitacionId, 
-                                cantidadCamas: habitacion.cantCamas, 
-                                camasDisponible: habitacion.cantCamas,
-                                camasDisponiblesIds: [...disponibles[i].camasDisponiblesIds, noDisponibles[i]]
-                            })
-                        }
-                    }
-                }
-            }
+            // console.log('habitaciones no dispobibles: ', habitacionesOcupadas)
+            // console.log('camas no dispobibles: ', camasOcupadas)
 
             let habitaciones = await Habitacion.findAll({where: {privada: true}, attributes: ['id']})
             
             for (let i = 0; i < habitaciones.length; i++) {
-                if(!noDisponibles.includes(habitaciones[i].id)) disponibles.push({idHabitacion: habitaciones[i].id})
+                if(!habitacionesOcupadas.includes(habitaciones[i].id)) disponibles.push({idHabitacion: habitaciones[i].id})
             }
 
+            for (let i = 0; i < camasOcupadas.length; i++) {
+                const datosCama = await Cama.findByPk(camasOcupadas[i]);
+                let habitacionCama = await Habitacion.findByPk(datosCama.HabitacionId, {include: [{model: Cama}]});
+                let camasHabitacion = []
+                for (const cama of habitacionCama.Camas) {
+                    camasHabitacion.push(cama.id)
+                }
+                for (let j = 0; j < camasOcupadas.length; j++) {
+                    for (let c = 0; c < camasHabitacion.length; c++) {
+                        if(camasOcupadas[j] === camasHabitacion[c]){
+                            camasOcupadas.splice(j, 1);
+                            camasHabitacion.splice(c, 1);
+                            break;
+                        }
+                    }
+                }
+                disponibles.push({
+                    idHabitacion: datosCama.HabitacionId, 
+                    cantidadCamas: habitacionCama.cantCamas, 
+                    camasDisponible: camasHabitacion.length,
+                    camasDisponiblesIds: [...camasHabitacion]
+                })
+            }
+            console.log('disponible: ', disponibles)
+
             let habitacionesCompartidas = await Habitacion.findAll({where: {privada: false}, attributes:['id','cantCamas'] ,include: [{model: Cama, attributes: ['id']}]})
-            
+
             for (let i = 0; i < habitacionesCompartidas.length; i++) {
-                let verificar = false;
+                let incluye = false;
                 for (let j = 0; j < disponibles.length; j++) {
+                    console.log('disponible posicion j: '+ j + ': '+disponibles[j])
                     if(disponibles[j].idHabitacion === habitacionesCompartidas[i].id) { 
-                        verificar = true
+                        incluye = true
                         continue;
-                    }else if(j === disponibles.length - 1 && verificar === false){
+                    }else if(j === disponibles.length - 1 && incluye === false){
                         disponibles.push({
                             idHabitacion: habitacionesCompartidas[i].id, 
                             cantidadCamas: habitacionesCompartidas[i].cantCamas, 
