@@ -43,7 +43,6 @@ router.get('/:id',
   async (req, res)=>{
     try {
       const {id} = req.params;
-      console.log(id)
       const habitacion = await services.buscaruno(id);
       res.json(habitacion)
     } catch(error) {
