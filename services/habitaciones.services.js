@@ -1,4 +1,5 @@
 const boom = require('@hapi/boom');
+
 const { Cama } = require('../db/models/cama.model');
 const { Habitacion } = require('../db/models/habitacion.model');
 const { Imagen } = require('../db/models/imagen.model');
@@ -88,7 +89,7 @@ class habitacionesService {
 
         for (let i = 0; i < data.cantCamas; i++) {
           Cama.create({
-            nombre: `cama ${i} de ${data.nombre}`,
+            nombre: `cama ${i+1} de ${data.nombre}`,
             precio: data.preciosCamas[0]
               // data.preciosCamas.length > 1
               //   ? data.preciosCamas[i]
@@ -112,7 +113,7 @@ class habitacionesService {
     try {
 
     const habitacion = await Habitacion.findAll({
-      include: [{model:Imagen, attributes: [ 'imagen' ] },{model:Cama, attributes: [ 'id', 'nombre', 'precio', 'estado' ] }]
+      include: [{model:Imagen, attributes: [ 'imagen' ] },{model:Cama, attributes: [ 'id', 'precio', 'estado' ] }]
     });
     for (let i = 0; i < habitacion.length; i++) {
       if (habitacion[i].privada === true) {delete habitacion[i].dataValues.Camas}
@@ -129,14 +130,15 @@ class habitacionesService {
   async buscaruno(id) {
     
     let habitacion = await Habitacion.findByPk(id);
-    if (!habitacion) {return boom.notFound('no exite la habitacion solicitada')}
+   
+    if (habitacion === null) {throw boom.notFound('no exite la habitacion')}
     if (!habitacion.privada) {
-      habitacion = Habitacion.findByPk(id, {
+      habitacion = await Habitacion.findByPk(id, {
         include: [Cama, Imagen, ReservaCama],
       });
     }
     if (!habitacion) {
-      throw boom.notFound('no se encontro la habitacion solicitada');
+      return boom.notFound('no se encontro la habitacion');
     }
     return habitacion;
   }
@@ -178,7 +180,6 @@ class habitacionesService {
 
   // eslint-disable-next-line class-methods-use-this
   async borrar(id) {
-   
     const habitacionDelete = await  Habitacion.destroy({where: { id: id}})
     await Cama.destroy({where: { HabitacionId: id}})
     if(!habitacionDelete) {
