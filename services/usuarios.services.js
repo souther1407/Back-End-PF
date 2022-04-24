@@ -102,7 +102,7 @@ class UserService {
   }
 
   async delete(dni) {
-    const usuario = await Usuario.findOne(dni)
+    const usuario = await Usuario.findByPk(dni)
     await usuario.destroy();
     return { dni };
   }

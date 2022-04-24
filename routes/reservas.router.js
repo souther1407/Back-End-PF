@@ -49,7 +49,7 @@ router.get('/disponibilidad', async (req, res)=>{
     }
 });
 
-router.get('/disponibilidad/:id', 
+router.get('/:id', 
 checkApiKey,
 async (req, res)=>{
     try {
