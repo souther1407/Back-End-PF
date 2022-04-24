@@ -29,6 +29,11 @@ async (req, res, next) => {
   }
 });
 
+
+router.get("/google", (req, res)=> 
+res.send('aca va a ir google')
+)
+
 router.post('/recuperacion',
 checkApiKey, 
 async (req, res, next) => {
