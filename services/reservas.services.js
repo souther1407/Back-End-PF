@@ -298,9 +298,17 @@ class ReservaService {
     async mostrardisponibilidad(data) {
         try {
             const { ingreso, egreso } = data
+<<<<<<< HEAD
             const ingresoFecha= ingreso
             const egresoFecha= egreso
             console.log(ingresoFecha, egresoFecha)
+=======
+            const ingresoFecha= new Date(ingreso)
+            const egresoFecha= new Date(egreso)
+            if(ingresoFecha > egresoFecha) boom.badData('La fecha de ingreso no puede ser mayor a la fecha de egreso')
+
+            // console.log(ingresoFecha, egresoFecha)
+>>>>>>> 38a0f3e52ab0bba98a2cd3523f11a29f5bc4b27b
             const reservas = await ReservaCama.findAll({
                 where: {
                     [Op.or]: [
@@ -363,7 +371,7 @@ class ReservaService {
             let habitacionesOcupadas = [];
             let camasOcupadas = [];
             let disponibles = [];
-            console.log('reservas: ',reservas)
+            // console.log('reservas: ',reservas)
             reservas.map(r =>{
                 if(r.Habitacions.length) r.Habitacions.map(h =>{
                     habitacionesOcupadas.push(h.id)
@@ -401,18 +409,18 @@ class ReservaService {
                         if(camasHabitacion[c].camaId === camasOcupadas[j]){
                             toggle = true
                         }
-                        console.log('c: ', c)
-                        console.log('cama en posicion ', c,  camasHabitacion[c].camaId)
-                        console.log('cama ocupada  enposicion j: ', j ,camasOcupadas[j])
+                        // console.log('c: ', c)
+                        // console.log('cama en posicion ', c,  camasHabitacion[c].camaId)
+                        // console.log('cama ocupada  enposicion j: ', j ,camasOcupadas[j])
                     }
-                    console.log('toggle: ', toggle)
+                    // console.log('toggle: ', toggle)
                     // console.log(camasdisponibles)
                     if(!toggle){
-                        console.log('haciendo push')
+                        // console.log('haciendo push')
                         camasdisponibles.push({camaNombre: camasHabitacion[c].camaNombre, camaId: camasHabitacion[c].camaId, })
                     }
                 }
-                console.log(camasdisponibles)
+                // console.log(camasdisponibles)
                 if(camasdisponibles.length !== 0){ 
                 disponibles.push({
                     idHabitacion: datosCama.HabitacionId, 
@@ -425,9 +433,13 @@ class ReservaService {
                 }
                 camasdisponibles = []
             }
+<<<<<<< HEAD
 
             let habitacionesCompartidas = await Habitacion.findAll({ where: { privada: false }, attributes: ['id', 'cantCamas'], include: [{ model: Cama, attributes: ['id', 'nombre'] }] })
 
+=======
+            let habitacionesCompartidas = await Habitacion.findAll({where: {privada: false}, attributes:['id','cantCamas'] ,include: [{model: Cama, attributes: ['id', 'nombre']}]})
+>>>>>>> 38a0f3e52ab0bba98a2cd3523f11a29f5bc4b27b
             for (let i = 0; i < habitacionesCompartidas.length; i++) {
                 let incluye = false;
                 for (let j = 0; j < disponibles.length; j++) {
