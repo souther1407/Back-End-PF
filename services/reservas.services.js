@@ -247,7 +247,7 @@ class ReservaService {
             const { ingreso, egreso } = data
             const ingresoFecha= new Date(ingreso)
             const egresoFecha= new Date(egreso)
-            if(ingresoFecha > egresoFecha) boom.badData('La fecha de ingreso no puede ser mayor a la fecha de egreso')
+            if(ingresoFecha > egresoFecha) return boom.badData('La fecha de ingreso no puede ser mayor a la fecha de egreso')
 
             // console.log(ingresoFecha, egresoFecha)
             const reservas = await ReservaCama.findAll({
