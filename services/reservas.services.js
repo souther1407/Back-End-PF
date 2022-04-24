@@ -11,7 +11,8 @@ const { Op } = require('sequelize');
 const { isNumber } = require('util');
 
 //servicios
-const huespedServices = require('./huesped.sevices')
+const huespedServices = require('./huesped.sevices');
+const { threadId } = require('worker_threads');
 const serviceHuesped = new huespedServices
 
 class ReservaService {
@@ -72,6 +73,21 @@ class ReservaService {
         const tokendec = jwt.decode(tokenInfo[1])
 
         try {
+            let cama;
+            let habitacion;
+
+            if(data.camas){
+                for (let i = 0; i < data.camas.length; i++) {
+                    cama = await Cama.findByPk(data.camas[i])
+                    if(!cama) { return(`no existe la cama con id ${data.camas[i]}`)}
+                }
+            }
+            if(data.habitaciones){
+                for (let i = 0; i < data.habitaciones.length; i++){
+                    habitacion = await Habitacion.findByPk(data.habitaciones[i])
+                    if(!habitacion) { return(`no existe la habitacion con id ${data.habitaciones[i]}`)}
+                }
+            }
             const newReserva = await ReservaCama.create({
                 fecha_ingreso: data.fecha_ingreso,
                 fecha_egreso: data.fecha_egreso,
@@ -79,8 +95,6 @@ class ReservaService {
             })
             if(data.camas){
                 for (let i = 0; i < data.camas.length; i++) {
-                    const cama = await Cama.findByPk(data.camas[i])
-                    if(!cama) { return `no existe la cama con id ${data.camas[i]}`}
                     Cama.findByPk(data.camas[i])
                     .then(cama => {
                         newReserva.addCama(cama)
@@ -90,15 +104,13 @@ class ReservaService {
             }
             if(data.habitaciones){
                 for (let i = 0; i < data.habitaciones.length; i++) {
-                    const habitacion = await Habitacion.findByPk(data.habitaciones[i])
-                    if(!habitacion) { return `no existe la habitacion con id ${data.habitaciones[i]}`}
                     if(habitacion.dataValues.privada){
                         Habitacion.findByPk(data.habitaciones[i])
                         .then(habitacion =>{
                             newReserva.addHabitacion(habitacion)
                         }).catch(error => {return boom.badData(error)})
                     }else{
-                        return 'Estas mandando un id de una habitación compartida'
+                        boom.badData('Estas mandando un id de una habitación compartida')
                     }
                 }
             }
@@ -233,7 +245,6 @@ class ReservaService {
     async mostrardisponibilidad(data){
         try{
             const { ingreso, egreso } = data
-            console.log(ingreso, egreso)
             const ingresoFecha= new Date(ingreso)
             const egresoFecha= new Date(egreso)
             // console.log(ingresoFecha, egresoFecha)
@@ -268,7 +279,6 @@ class ReservaService {
                     }
                 ],
             })
-            // console.log('reservas: ', reservas)
             let habitacionesOcupadas = [];
             let camasOcupadas = [];
             let disponibles = [];
@@ -281,39 +291,65 @@ class ReservaService {
                     camasOcupadas.push(c.id)
                 })
             })
-            // console.log('habitacionesOcupadas: ', habitacionesOcupadas)
             // console.log('camasOcupadas: ', camasOcupadas)
+            // console.log('disponibles: ', disponibles)
 
             let habitaciones = await Habitacion.findAll({where: {privada: true}, attributes: ['id', 'nombre']})
             
             for (let i = 0; i < habitaciones.length; i++) {
                 if(!habitacionesOcupadas.includes(habitaciones[i].id)) disponibles.push({idHabitacion: habitaciones[i].id, nombreHabitacion: habitaciones[i].nombre})
             }
+            let camasdisponibles = []
 
             for (let i = 0; i < camasOcupadas.length; i++) {
+                
                 const datosCama = await Cama.findByPk(camasOcupadas[i]);
                 let habitacionCama = await Habitacion.findByPk(datosCama.HabitacionId, {include: [{model: Cama}]});
                 let camasHabitacion = []
                 for (const cama of habitacionCama.Camas) {
                     camasHabitacion.push({camaNombre: cama.nombre, camaId: cama.id, })
                 }
-                for (let j = 0; j < camasOcupadas.length; j++) {
-                    for (let c = 0; c < camasHabitacion.length; c++) {
-                        if(camasOcupadas[j] === camasHabitacion[c].camaId){
-                            camasOcupadas.splice(j, 1);
-                            camasHabitacion.splice(c, 1);
-                            break;
+
+                for (let c = 0; c < camasHabitacion.length; c++) {
+                    let toggle = false
+                    for (let j = 0; j < camasOcupadas.length; j++) {
+                        if(camasHabitacion[c].camaId === camasOcupadas[j]){
+                            toggle = true
                         }
+                        // console.log('c: ', c)
+                        // console.log('cama en posicion ', c,  camasHabitacion[c].camaId)
+                        // console.log('cama ocupada  enposicion j: ', j ,camasOcupadas[j])
+                    }
+                    // console.log('toggle: ', toggle)
+                    if(!toggle){
+                        // console.log('realizando push')
+                        camasdisponibles.push({camaNombre: camasHabitacion[c].camaNombre, camaId: camasHabitacion[c].camaId, })
+                        // console.log('camas disponibles: ', camasdisponibles)
                     }
                 }
+                // for (let j = 0; j < camasOcupadas.length; j++) {
+                //     for (let c = 0; c < camasHabitacion.length; c++) {
+                //         if(camasOcupadas[j] === camasHabitacion[c].camaId){
+                //             camasOcupadas.splice(j, 1);
+                //             camasHabitacion.splice(c, 1);
+                //             console.log('camasHbaitacion: ',camasHabitacion)
+                //             console.log('camasOcupadas: ',camasOcupadas)
+                //             break;
+                //         }
+                //     }
+                // }
+                // console.log('camasOcupads: ',camasOcupadas)
+                // console.log('camasHbaitacion: ',camasHabitacion)
+                // console.log('disponibles: ',disponibles)
+
                 disponibles.push({
                     idHabitacion: datosCama.HabitacionId, 
                     cantidadCamas: habitacionCama.cantCamas, 
-                    camasDisponible: camasHabitacion.length,
-                    camasDisponiblesIds: [...camasHabitacion]
+                    camasDisponible: camasdisponibles.length,
+                    camasDisponiblesIds: [...camasdisponibles]
                 })
+                camasdisponibles = []
             }
-            // console.log('disponible: ', disponibles)
 
             let habitacionesCompartidas = await Habitacion.findAll({where: {privada: false}, attributes:['id','cantCamas'] ,include: [{model: Cama, attributes: ['id', 'nombre']}]})
 
