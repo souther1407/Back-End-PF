@@ -90,10 +90,9 @@ class habitacionesService {
         for (let i = 0; i < data.cantCamas; i++) {
           Cama.create({
             nombre: `cama ${i+1} de ${data.nombre}`,
-            precio: data.preciosCamas[0]
-              // data.preciosCamas.length > 1
-              //   ? data.preciosCamas[i]
-              //   : data.preciosCamas[0]
+            precio: data.preciosCamas.length > 1
+                ? data.preciosCamas[i]
+                : data.preciosCamas[0]
           })
           .then((cama) => {
             habitacion.setCamas(cama);
