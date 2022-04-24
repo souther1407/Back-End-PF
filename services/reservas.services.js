@@ -253,17 +253,31 @@ class ReservaService {
                     [Op.or]: [
                         {[Op.and]: [
                             {fecha_ingreso: {
-                            [Op.lte]: ingresoFecha
+                            [Op.gte]: ingresoFecha
                             }},
                             {fecha_egreso: {
-                                [Op.gte]: ingresoFecha
+                                [Op.lte]: ingresoFecha
                             }}
                         ]},
-                        {[Op.or]: [
+                        {[Op.and]: [
                             {fecha_ingreso: {
-                                [Op.between]: [ingresoFecha, egreso]
+                                [Op.gte]: ingresoFecha
+                                }},
+                            {fecha_ingreso: {
+                                [Op.lte]: egresoFecha
                             }}
-                        ]}
+                        ]},
+                        {[Op.and]: [
+                            {fecha_egreso: {
+                                [Op.gte]: ingresoFecha
+                                }},
+                            {fecha_egreso: {
+                                [Op.lte]: egresoFecha
+                            }}
+                        ]},
+                        {fecha_ingreso: {
+                            [Op.between]: [ingresoFecha, egreso]
+                        }}
                     ]
                 },
                 include: [
@@ -291,7 +305,10 @@ class ReservaService {
                     camasOcupadas.push(c.id)
                 })
             })
-            // console.log('camasOcupadas: ', camasOcupadas)
+            console.log(reservas)
+            console.log('camasOcupadas: ', camasOcupadas)
+            console.log('habitacionesOcupadas: ', habitacionesOcupadas)
+            
             // console.log('disponibles: ', disponibles)
 
             let habitaciones = await Habitacion.findAll({where: {privada: true}, attributes: ['id', 'nombre']})
