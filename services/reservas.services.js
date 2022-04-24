@@ -241,7 +241,7 @@ class ReservaService {
                         through: {attributes: []}
                     },
                     {
-                        attributes:['HabitacionId','id'],
+                        attributes:['HabitacionId','id', 'nombre'],
                         model: Cama,
                         through: {attributes: []}
                     }
