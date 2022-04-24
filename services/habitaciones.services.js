@@ -11,6 +11,7 @@ class habitacionesService {
     console.log(data.imagenes);
     if (data.privada === true) {
       try {
+        if(!data.precioHabitacion) return boom.badData('no se puede crear una habitacion privada sin precio');
         const habitacion = await Habitacion.create({
           nombre: data.nombre,
           comodidades: data.comodidades,
@@ -48,6 +49,7 @@ class habitacionesService {
       }
     } else {
       try {
+        if(!data.preciosCamas) return boom.badData('no se puede crear una habitacion compartida sin precios de camas');
         let precioHabitacion = 0;
         if(data.preciosCamas.length > 1 && data.preciosCamas.length !== data.cantCamas ){
           return boom.badData('falta precio de una cama')

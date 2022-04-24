@@ -255,7 +255,6 @@ class ReservaService {
                             {fecha_ingreso: {
                             [Op.gte]: ingresoFecha
                             }},             
-                            //  10-10-2020 & 15-10-2020   reserva: 10-10-2020 & 15-10-2020
                             {fecha_egreso: {
                                 [Op.lte]: egresoFecha
                             }}
@@ -264,8 +263,6 @@ class ReservaService {
                             {fecha_ingreso: {
                                 [Op.lte]: ingresoFecha
                             }},
-                                //       ingreso  egreso                 r.ingreso
-                                //  10-10-2020 & 15-10-2020   reserva: 12-10-2020   
                             {fecha_egreso: {
                                 [Op.gte]: ingresoFecha
                             }},
@@ -277,8 +274,6 @@ class ReservaService {
                             {fecha_egreso: {
                                 [Op.gte]: egresoFecha
                                 }},
-                                // ingreso  egreso                       r.egreso
-                                //  10-10-2020 & 15-10-2020   reserva: 15-10-2020   
                             {fecha_ingreso: {
                                 [Op.gte]: ingresoFecha
                             }},
