@@ -232,8 +232,29 @@ class ReservaService {
 
     async mostrardisponibilidad(data){
         try{
-            const { fecha_ingreso, fecha_egreso } = data
+            const { ingreso, egreso } = data
+            console.log(ingreso, egreso)
+            const ingresoFecha= new Date(ingreso)
+            const egresoFecha= new Date(egreso)
+            // console.log(ingresoFecha, egresoFecha)
             const reservas = await ReservaCama.findAll({
+                where: {
+                    [Op.or]: [
+                        {[Op.and]: [
+                            {fecha_ingreso: {
+                            [Op.lte]: ingresoFecha
+                            }},
+                            {fecha_egreso: {
+                                [Op.gte]: ingresoFecha
+                            }}
+                        ]},
+                        {[Op.or]: [
+                            {fecha_ingreso: {
+                                [Op.between]: [ingresoFecha, egreso]
+                            }}
+                        ]}
+                    ]
+                },
                 include: [
                     {
                         attributes:['id'],
@@ -246,17 +267,12 @@ class ReservaService {
                         through: {attributes: []}
                     }
                 ],
-                where: {
-                    fecha_ingreso: {
-                        [Op.between]: [fecha_ingreso, fecha_egreso]
-                    },
-                }
             })
-
+            // console.log('reservas: ', reservas)
             let habitacionesOcupadas = [];
             let camasOcupadas = [];
             let disponibles = [];
-
+            
             reservas.map(r =>{
                 if(r.Habitacions.length) r.Habitacions.map(h =>{
                     habitacionesOcupadas.push(h.id)
@@ -265,13 +281,13 @@ class ReservaService {
                     camasOcupadas.push(c.id)
                 })
             })
-            // console.log('habitaciones no dispobibles: ', habitacionesOcupadas)
-            // console.log('camas no dispobibles: ', camasOcupadas)
+            // console.log('habitacionesOcupadas: ', habitacionesOcupadas)
+            // console.log('camasOcupadas: ', camasOcupadas)
 
-            let habitaciones = await Habitacion.findAll({where: {privada: true}, attributes: ['id']})
+            let habitaciones = await Habitacion.findAll({where: {privada: true}, attributes: ['id', 'nombre']})
             
             for (let i = 0; i < habitaciones.length; i++) {
-                if(!habitacionesOcupadas.includes(habitaciones[i].id)) disponibles.push({idHabitacion: habitaciones[i].id})
+                if(!habitacionesOcupadas.includes(habitaciones[i].id)) disponibles.push({idHabitacion: habitaciones[i].id, nombreHabitacion: habitaciones[i].nombre})
             }
 
             for (let i = 0; i < camasOcupadas.length; i++) {
@@ -279,11 +295,11 @@ class ReservaService {
                 let habitacionCama = await Habitacion.findByPk(datosCama.HabitacionId, {include: [{model: Cama}]});
                 let camasHabitacion = []
                 for (const cama of habitacionCama.Camas) {
-                    camasHabitacion.push(cama.id)
+                    camasHabitacion.push({camaNombre: cama.nombre, camaId: cama.id, })
                 }
                 for (let j = 0; j < camasOcupadas.length; j++) {
                     for (let c = 0; c < camasHabitacion.length; c++) {
-                        if(camasOcupadas[j] === camasHabitacion[c]){
+                        if(camasOcupadas[j] === camasHabitacion[c].camaId){
                             camasOcupadas.splice(j, 1);
                             camasHabitacion.splice(c, 1);
                             break;
@@ -297,14 +313,13 @@ class ReservaService {
                     camasDisponiblesIds: [...camasHabitacion]
                 })
             }
-            console.log('disponible: ', disponibles)
+            // console.log('disponible: ', disponibles)
 
-            let habitacionesCompartidas = await Habitacion.findAll({where: {privada: false}, attributes:['id','cantCamas'] ,include: [{model: Cama, attributes: ['id']}]})
+            let habitacionesCompartidas = await Habitacion.findAll({where: {privada: false}, attributes:['id','cantCamas'] ,include: [{model: Cama, attributes: ['id', 'nombre']}]})
 
             for (let i = 0; i < habitacionesCompartidas.length; i++) {
                 let incluye = false;
                 for (let j = 0; j < disponibles.length; j++) {
-                    console.log('disponible posicion j: '+ j + ': '+disponibles[j])
                     if(disponibles[j].idHabitacion === habitacionesCompartidas[i].id) { 
                         incluye = true
                         continue;
@@ -313,7 +328,7 @@ class ReservaService {
                             idHabitacion: habitacionesCompartidas[i].id, 
                             cantidadCamas: habitacionesCompartidas[i].cantCamas, 
                             camasDisponible: habitacionesCompartidas[i].cantCamas,
-                            camasDisponiblesIds: habitacionesCompartidas[i].Camas.map(c => c.id)
+                            camasDisponiblesIds: habitacionesCompartidas[i].Camas.map(c => ({camaNombre: c.nombre, camaId: c.id, }))
                         })
                     }
                 }
