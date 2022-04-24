@@ -290,7 +290,7 @@ class ReservaService {
                             }}
                         ]},
                         {fecha_ingreso: {
-                            [Op.between]: [ingresoFecha, egreso]
+                            [Op.between]: [ingresoFecha, egresoFecha]
                         }},
                     ]
                 },
@@ -310,7 +310,7 @@ class ReservaService {
             let habitacionesOcupadas = [];
             let camasOcupadas = [];
             let disponibles = [];
-            
+            console.log('reservas: ',reservas)
             reservas.map(r =>{
                 if(r.Habitacions.length) r.Habitacions.map(h =>{
                     habitacionesOcupadas.push(h.id)
@@ -331,6 +331,7 @@ class ReservaService {
                 if(!habitacionesOcupadas.includes(habitaciones[i].id)) disponibles.push({idHabitacion: habitaciones[i].id, nombreHabitacion: habitaciones[i].nombre})
             }
             let camasdisponibles = []
+            let habitacionCompletamenteOupada = []
 
             for (let i = 0; i < camasOcupadas.length; i++) {
                 
@@ -347,38 +348,28 @@ class ReservaService {
                         if(camasHabitacion[c].camaId === camasOcupadas[j]){
                             toggle = true
                         }
-                        // console.log('c: ', c)
-                        // console.log('cama en posicion ', c,  camasHabitacion[c].camaId)
-                        // console.log('cama ocupada  enposicion j: ', j ,camasOcupadas[j])
+                        console.log('c: ', c)
+                        console.log('cama en posicion ', c,  camasHabitacion[c].camaId)
+                        console.log('cama ocupada  enposicion j: ', j ,camasOcupadas[j])
                     }
-                    // console.log('toggle: ', toggle)
+                    console.log('toggle: ', toggle)
+                    // console.log(camasdisponibles)
                     if(!toggle){
-                        // console.log('realizando push')
+                        console.log('haciendo push')
                         camasdisponibles.push({camaNombre: camasHabitacion[c].camaNombre, camaId: camasHabitacion[c].camaId, })
-                        // console.log('camas disponibles: ', camasdisponibles)
                     }
                 }
-                // for (let j = 0; j < camasOcupadas.length; j++) {
-                //     for (let c = 0; c < camasHabitacion.length; c++) {
-                //         if(camasOcupadas[j] === camasHabitacion[c].camaId){
-                //             camasOcupadas.splice(j, 1);
-                //             camasHabitacion.splice(c, 1);
-                //             console.log('camasHbaitacion: ',camasHabitacion)
-                //             console.log('camasOcupadas: ',camasOcupadas)
-                //             break;
-                //         }
-                //     }
-                // }
-                // console.log('camasOcupads: ',camasOcupadas)
-                // console.log('camasHbaitacion: ',camasHabitacion)
-                // console.log('disponibles: ',disponibles)
-
+                console.log(camasdisponibles)
+                if(camasdisponibles.length !== 0){ 
                 disponibles.push({
                     idHabitacion: datosCama.HabitacionId, 
                     cantidadCamas: habitacionCama.cantCamas, 
                     camasDisponible: camasdisponibles.length,
                     camasDisponiblesIds: [...camasdisponibles]
-                })
+                })}
+                if(camasdisponibles.length === 0){
+                    habitacionCompletamenteOupada.push(datosCama.HabitacionId)
+                }
                 camasdisponibles = []
             }
 
@@ -387,7 +378,7 @@ class ReservaService {
             for (let i = 0; i < habitacionesCompartidas.length; i++) {
                 let incluye = false;
                 for (let j = 0; j < disponibles.length; j++) {
-                    if(disponibles[j].idHabitacion === habitacionesCompartidas[i].id) { 
+                    if(disponibles[j].idHabitacion === habitacionesCompartidas[i].id || habitacionCompletamenteOupada.includes(habitacionesCompartidas[i].id)) { 
                         incluye = true
                         continue;
                     }else if(j === disponibles.length - 1 && incluye === false){
