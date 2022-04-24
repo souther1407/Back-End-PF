@@ -298,17 +298,11 @@ class ReservaService {
     async mostrardisponibilidad(data) {
         try {
             const { ingreso, egreso } = data
-<<<<<<< HEAD
-            const ingresoFecha= ingreso
-            const egresoFecha= egreso
-            console.log(ingresoFecha, egresoFecha)
-=======
             const ingresoFecha= new Date(ingreso)
             const egresoFecha= new Date(egreso)
             if(ingresoFecha > egresoFecha) boom.badData('La fecha de ingreso no puede ser mayor a la fecha de egreso')
 
             // console.log(ingresoFecha, egresoFecha)
->>>>>>> 38a0f3e52ab0bba98a2cd3523f11a29f5bc4b27b
             const reservas = await ReservaCama.findAll({
                 where: {
                     [Op.or]: [
@@ -433,13 +427,7 @@ class ReservaService {
                 }
                 camasdisponibles = []
             }
-<<<<<<< HEAD
-
-            let habitacionesCompartidas = await Habitacion.findAll({ where: { privada: false }, attributes: ['id', 'cantCamas'], include: [{ model: Cama, attributes: ['id', 'nombre'] }] })
-
-=======
             let habitacionesCompartidas = await Habitacion.findAll({where: {privada: false}, attributes:['id','cantCamas'] ,include: [{model: Cama, attributes: ['id', 'nombre']}]})
->>>>>>> 38a0f3e52ab0bba98a2cd3523f11a29f5bc4b27b
             for (let i = 0; i < habitacionesCompartidas.length; i++) {
                 let incluye = false;
                 for (let j = 0; j < disponibles.length; j++) {
