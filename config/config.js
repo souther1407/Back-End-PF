@@ -14,8 +14,9 @@ jwtSecret: process.env.JWT_SECRET,
 email: process.env.EMAIL,
 emailPassword: process.env.EMAIL_PASSWORD,
 jwtRecuperacion: process.env.JWT_SECRET_RECOVERY,
-jwtRefresh: process.env.JWT_SECRET_REFRESH
-
+jwtRefresh: process.env.JWT_SECRET_REFRESH,
+googleClient: process.env.GOOGLE_CLIENTE_ID,
+googlePassword: process.env.GOOGLE_CLIENT_SECRET,
 }
 
 module.exports = { config }

@@ -54,7 +54,7 @@ router.post('/',
     }
 );
 
-router.patch('/:id',
+router.patch('/:dni',
   checkApiKey,
   passport.authenticate('jwt', {session: false}),
   chequearRoles("administrador", "recepcionista", "cliente"),
@@ -62,26 +62,27 @@ router.patch('/:id',
   validatorHandler(updateUserSchema, 'body'),
   async (req, res, next) => {
     try {
-      const { id } = req.params;
+      const { dni } = req.params;
       const body = req.body;
-      const category = await service.actualizar(id, body);
-      res.json(category);
+      const usuario = await service.actualizar(dni, body);
+      usuario.respuesta.password = undefined
+      res.json(usuario);
     } catch (error) {
       next(error);
     }
   }
 );
 
-router.delete('/:id',
+router.delete('/:dni',
   checkApiKey,
   passport.authenticate('jwt', {session: false}),
   chequearRoles("administrador", "recepcionista", "cliente"),
   validatorHandler(getUserSchema, 'params'),
   async (req, res, next) => {
     try {
-      const { id } = req.params;
-      await service.delete(id);
-      res.status(201).json({id});
+      const { dni } = req.params;
+      await service.delete(dni);
+      res.status(201).json({dni});
     } catch (error) {
       next(error);
     }

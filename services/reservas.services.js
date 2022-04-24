@@ -332,9 +332,12 @@ class ReservaService {
         try {
             const { id } = data
             console.log(id)
-            const reservas = await Habitacion.findAll({
-                where: { id },
-                include: [{ model: Cama }]
+            const reservas = await ReservaCama.findByPk(id,{
+                include: [
+                    
+                    { model: Cama, attributes: ['id', 'nombre'], through: {attributes: []} },
+                    { model: Habitacion, attributes: ['id', 'nombre', 'cantCamas'], through: {attributes: []}}
+                ]
             })
             return reservas
         } catch (error) {
