@@ -112,7 +112,7 @@ class habitacionesService {
     try {
 
     const habitacion = await Habitacion.findAll({
-      include: [{model:Imagen, attributes: [ 'imagen' ] },{model:Cama, attributes: [ 'id', 'precio', 'estado' ] }]
+      include: [{model:Imagen, attributes: [ 'imagen' ] },{model:Cama, attributes: [ 'id', 'precio', 'estado', 'nombre'] }]
     });
     for (let i = 0; i < habitacion.length; i++) {
       if (habitacion[i].privada === true) {delete habitacion[i].dataValues.Camas}
@@ -129,7 +129,7 @@ class habitacionesService {
   async buscaruno(id) {
     
     let habitacion = await Habitacion.findByPk(id);
-   
+    
     if (habitacion === null) {throw boom.notFound('no exite la habitacion')}
     if (!habitacion.privada) {
       habitacion = await Habitacion.findByPk(id, {
@@ -145,7 +145,7 @@ class habitacionesService {
   // eslint-disable-next-line class-methods-use-this
   async actualizar(id, cambios) {
     const {
-      nombre,
+        nombre,
         cantCamas,
         comodidades,
         privada,
