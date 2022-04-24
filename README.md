@@ -230,7 +230,7 @@ DELETE: /reservas/:ID
 ```
 ---
 ## GET: /reservas/disponibilidad/
-- ### RECIBE POR QUERY: fecha_ingreso, fecha_egreso ⬇️
+- ### RECIBE POR QUERY: ingreso, egreso ⬇️
 
 	? ingreso = 2022-01-01 & egreso = 2022-12-20
 

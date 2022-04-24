@@ -17,8 +17,8 @@ router.get('/byFecha',
     validatorHandler(getReservaByFecha, 'query'), 
     async (req, res)=>{
     try {
-        const {fecha_ingreso, fecha_egreso} = req.query
-        const reservasFiltered = await services.mostrarReservasByFecha(fecha_ingreso, fecha_egreso)
+        const {ingreso,egreso} = req.query
+        const reservasFiltered = await services.mostrarReservasByFecha(ingreso, egreso)
         res.status(200).json(reservasFiltered)
     } catch (error) {
         res.status(error)
@@ -49,7 +49,7 @@ router.get('/disponibilidad', async (req, res)=>{
     }
 });
 
-router.get('/disponibilidad/:id', 
+router.get('/:id', 
 checkApiKey,
 async (req, res)=>{
     try {

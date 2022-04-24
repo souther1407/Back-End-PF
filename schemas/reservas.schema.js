@@ -16,8 +16,8 @@ const crearReservaSchema = joi.object({
 })
 
 const getReservaByFecha = joi.object({
-    fecha_egreso: fecha_egreso.required(),
-    fecha_ingreso: fecha_ingreso.required()
+    egreso: fecha_egreso.required(),
+    ingreso: fecha_ingreso.required()
 })
 
 const getReservaId = joi.object({
