@@ -324,7 +324,6 @@ class ReservaService {
             // console.log(reservas)
             // console.log('camasOcupadas: ', camasOcupadas)
             // console.log('habitacionesOcupadas: ', habitacionesOcupadas)
-            
             // console.log('disponibles: ', disponibles)
 
             let habitaciones = await Habitacion.findAll({where: {privada: true}, attributes: ['id', 'nombre']})
@@ -362,7 +361,7 @@ class ReservaService {
                     }
                 }
                 // console.log(camasdisponibles)
-                if(camasdisponibles.length !== 0){ 
+                if(camasdisponibles.length !== 0){
                 disponibles.push({
                     idHabitacion: datosCama.HabitacionId, 
                     cantidadCamas: habitacionCama.cantCamas, 
@@ -391,8 +390,9 @@ class ReservaService {
                     }
                 }
             }
-
-            return disponibles
+            let nuevoDisponibles = new Set([disponibles])
+            console.log(nuevoDisponibles)
+            return [...nuevoDisponibles]
 
 
         }catch(error){
