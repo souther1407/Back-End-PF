@@ -232,7 +232,7 @@ DELETE: /reservas/:ID
 ## GET: /reservas/disponibilidad/
 - ### RECIBE POR QUERY: fecha_ingreso, fecha_egreso ⬇️
 
-	? fecha_ingreso = 2022-01-01 & fecha_egreso = 2022-12-20
+	? ingreso = 2022-01-01 & egreso = 2022-12-20
 
 - ### Devuelve el siguiente array
 ```javascript
