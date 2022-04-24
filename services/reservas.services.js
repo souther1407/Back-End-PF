@@ -254,30 +254,49 @@ class ReservaService {
                         {[Op.and]: [
                             {fecha_ingreso: {
                             [Op.gte]: ingresoFecha
+                            }},             
+                            //  10-10-2020 & 15-10-2020   reserva: 10-10-2020 & 15-10-2020
+                            {fecha_egreso: {
+                                [Op.lte]: egresoFecha
+                            }}
+                        ]},
+                        {[Op.and]: [
+                            {fecha_ingreso: {
+                                [Op.lte]: ingresoFecha
+                            }},
+                                //       ingreso  egreso                 r.ingreso
+                                //  10-10-2020 & 15-10-2020   reserva: 12-10-2020   
+                            {fecha_egreso: {
+                                [Op.gte]: ingresoFecha
                             }},
                             {fecha_egreso: {
+                                [Op.lte]: egresoFecha
+                            }}
+                        ]},
+                        {[Op.and]: [
+                            {fecha_egreso: {
+                                [Op.gte]: egresoFecha
+                                }},
+                                // ingreso  egreso                       r.egreso
+                                //  10-10-2020 & 15-10-2020   reserva: 15-10-2020   
+                            {fecha_ingreso: {
+                                [Op.gte]: ingresoFecha
+                            }},
+                            {fecha_ingreso: {
+                                [Op.lte]: egresoFecha
+                            }}
+                        ]},
+                        {[Op.and]: [
+                            {fecha_ingreso: {
                                 [Op.lte]: ingresoFecha
-                            }}
-                        ]},
-                        {[Op.and]: [
-                            {fecha_ingreso: {
-                                [Op.gte]: ingresoFecha
-                                }},
-                            {fecha_ingreso: {
-                                [Op.lte]: egresoFecha
-                            }}
-                        ]},
-                        {[Op.and]: [
+                            }},
                             {fecha_egreso: {
-                                [Op.gte]: ingresoFecha
-                                }},
-                            {fecha_egreso: {
-                                [Op.lte]: egresoFecha
+                                [Op.gte]: egresoFecha
                             }}
                         ]},
                         {fecha_ingreso: {
                             [Op.between]: [ingresoFecha, egreso]
-                        }}
+                        }},
                     ]
                 },
                 include: [
