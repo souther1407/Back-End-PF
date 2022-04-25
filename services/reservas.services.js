@@ -362,12 +362,21 @@ class ReservaService {
                 }
                 // console.log(camasdisponibles)
                 if(camasdisponibles.length !== 0){
-                disponibles.push({
-                    idHabitacion: datosCama.HabitacionId, 
-                    cantidadCamas: habitacionCama.cantCamas, 
-                    camasDisponible: camasdisponibles.length,
-                    camasDisponiblesIds: [...camasdisponibles]
-                })}
+                    let handle = false
+                    for (let k = 0; k < disponibles.length; k++) {
+                        if(disponibles[k].idHabitacion === habitacionCama.id){
+                            handle = true;
+                        }
+                    }
+                    if(!handle){
+                        disponibles.push({
+                            idHabitacion: datosCama.HabitacionId, 
+                            cantidadCamas: habitacionCama.cantCamas, 
+                            camasDisponible: camasdisponibles.length,
+                            camasDisponiblesIds: [...camasdisponibles]
+                        })
+                    }
+                }
                 if(camasdisponibles.length === 0){
                     habitacionCompletamenteOupada.push(datosCama.HabitacionId)
                 }
@@ -392,7 +401,7 @@ class ReservaService {
             }
             let nuevoDisponibles = new Set([disponibles])
             console.log(nuevoDisponibles)
-            return [...nuevoDisponibles]
+            return disponibles
 
 
         }catch(error){
