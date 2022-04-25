@@ -9,6 +9,63 @@ const boom = require('@hapi/boom');
 const router = express.Router();
 const service = new UserService
 
+
+/**
+ * 
+ * @swagger
+ * components:
+ *  schemas:
+ *    Usuario:
+ *      type: object
+ *      properties:
+ *        nombre:
+ *          type: string
+ *          description: nombre del usuario
+ *        apellido:
+ *          type: string
+ *          description: apellido del usuario
+ *        tipoDocumento:
+ *          type: string
+ *          description: clase de identificador
+ *        dni:
+ *          type: integer
+ *          description: identificacion numerica del usuario
+ *        password:
+ *          type: string
+ *          description: password del usuario, minimo 8 caracteres - maximo  14 caracteres 
+ *        email:
+ *          type: string
+ *          description: passwordl del usuario, minimo 8 caracteres - maximo  14 caracteres
+ *        fechaNacimiento:
+ *          type: date
+ *          description: formato ISO de tipo YYYY/MM/DD
+ *        Nacionalidad:
+ *          type: string
+ *          description: nacionalidad del usuario
+ *        telefono:
+ *          type: integer
+ *          description: numero de telefono de contacto del usuario
+ *        direccion:
+ *          type: string
+ *          description: direccion real del usuario
+ *        genero:
+ *          type: string
+ *          description: genero del usuario, valores validos -femenino, masculino, no-binario-
+ *        rol:
+ *          type: string
+ *          description: rol en la api del usuario, valores validos -administrador, recepcionista, cliente-
+ *        required:
+ *          nombre:
+ *          - apellido:
+ *              type: string
+ *          - tipo de documento: 
+ *          - email:
+ *          - password:
+ *          - rol:
+ *        
+ */
+
+
 router.get('/',
 checkApiKey,
 // passport.authenticate('jwt', {session: false}),
@@ -38,6 +95,9 @@ async (req, res, next) => {
   }
 );
 
+
+
+// crear usuario
 router.post('/',
   checkApiKey,
 //  passport.authenticate('jwt', {session: false}),

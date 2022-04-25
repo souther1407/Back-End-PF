@@ -25,10 +25,14 @@ const configSwg = {
     {
         "url": "https://backpfhenryv2.herokuapp.com",
         "description": "Development server"
+    },
+    {
+        "url": "http://localhost:3001",
+        "description": "Local server"
     }
     ]
     },
-    apis: [`${path.join(__dirname, "./routes/*.js")}`]
+    apis: [`${path.join(__dirname, "./routes/index.js")}`]
 }
 
 module.exports = { configSwg }
