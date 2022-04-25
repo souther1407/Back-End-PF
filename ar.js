@@ -31,9 +31,9 @@ const arr = [
 ]
 const unicos = []
 
-const quesio = arr.forEach( (elemento) => {
-    if (!unicos.includes(elemento.id)) {
-      unicos.push(elemento);
+ arr.forEach( (e) => {
+    if (!unicos.includes(e)) {
+      unicos.push(e);
     }
   });
 
