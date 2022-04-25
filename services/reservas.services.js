@@ -300,7 +300,7 @@ class ReservaService {
             const { ingreso, egreso } = data
             const ingresoFecha= new Date(ingreso)
             const egresoFecha= new Date(egreso)
-            if(ingresoFecha > egresoFecha) boom.badData('La fecha de ingreso no puede ser mayor a la fecha de egreso')
+            if(ingresoFecha > egresoFecha) return boom.badData('La fecha de ingreso no puede ser mayor a la fecha de egreso')
 
             // console.log(ingresoFecha, egresoFecha)
             const reservas = await ReservaCama.findAll({
@@ -377,7 +377,6 @@ class ReservaService {
             // console.log(reservas)
             // console.log('camasOcupadas: ', camasOcupadas)
             // console.log('habitacionesOcupadas: ', habitacionesOcupadas)
-            
             // console.log('disponibles: ', disponibles)
 
             let habitaciones = await Habitacion.findAll({ where: { privada: true }, attributes: ['id', 'nombre'] })
@@ -415,13 +414,22 @@ class ReservaService {
                     }
                 }
                 // console.log(camasdisponibles)
-                if(camasdisponibles.length !== 0){ 
-                disponibles.push({
-                    idHabitacion: datosCama.HabitacionId, 
-                    cantidadCamas: habitacionCama.cantCamas, 
-                    camasDisponible: camasdisponibles.length,
-                    camasDisponiblesIds: [...camasdisponibles]
-                })}
+                if(camasdisponibles.length !== 0){
+                    let handle = false
+                    for (let k = 0; k < disponibles.length; k++) {
+                        if(disponibles[k].idHabitacion === habitacionCama.id){
+                            handle = true;
+                        }
+                    }
+                    if(!handle){
+                        disponibles.push({
+                            idHabitacion: datosCama.HabitacionId, 
+                            cantidadCamas: habitacionCama.cantCamas, 
+                            camasDisponible: camasdisponibles.length,
+                            camasDisponiblesIds: [...camasdisponibles]
+                        })
+                    }
+                }
                 if(camasdisponibles.length === 0){
                     habitacionCompletamenteOupada.push(datosCama.HabitacionId)
                 }
@@ -444,7 +452,7 @@ class ReservaService {
                     }
                 }
             }
-
+            
             return disponibles
 
 
