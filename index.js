@@ -3,7 +3,7 @@ const routerApi = require('./routes')
 const cors = require('cors')
 const { logErrors, errorHandler, boomErrorHandler, error404Handler } = require('./middleware/error.handler')
 const path = require('path')
-const {configSwg} = require('./config/swagger')
+
 
 // Swagger 
 const swaggerUI = require('swagger-ui-express');
