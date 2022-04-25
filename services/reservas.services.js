@@ -399,8 +399,7 @@ class ReservaService {
                     }
                 }
             }
-            let nuevoDisponibles = new Set([disponibles])
-            console.log(nuevoDisponibles)
+            
             return disponibles
 
 
