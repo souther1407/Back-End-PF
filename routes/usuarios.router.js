@@ -1,7 +1,7 @@
 const express = require('express');
 const UserService = require('../services/usuarios.services');
 const validatorHandler = require('../middleware/validator.handler');
-const {chequearRoles, chequearAdminRole} = require('../middleware/auth.handler')
+const {chequearRoles} = require('../middleware/auth.handler')
 const {checkApiKey} =require('../middleware/auth.handler');
 const { updateUserSchema, createUserSchema, getUserSchema } = require('../schemas/usuario.schema');
 const passport = require('passport'); 
@@ -11,12 +11,20 @@ const service = new UserService
 
 
 /**
- * 
- * @swagger
+ *
+ *  @swagger
  * components:
  *  schemas:
  *    Usuario:
  *      type: object
+ *      required:
+ *        - dni
+ *        - tipoDocumento
+ *        - nombre
+ *        - apellido
+ *        - password
+ *        - email
+ *        - rol
  *      properties:
  *        nombre:
  *          type: string
@@ -30,15 +38,20 @@ const service = new UserService
  *        dni:
  *          type: integer
  *          description: identificacion numerica del usuario
+ *          required: true
  *        password:
  *          type: string
- *          description: password del usuario, minimo 8 caracteres - maximo  14 caracteres 
+ *          description: password del usuario
+ *          minLength: 8
+ *          maxLength: 20
  *        email:
  *          type: string
- *          description: passwordl del usuario, minimo 8 caracteres - maximo  14 caracteres
+ *          description: email valido del usuario
+ *          format: email
  *        fechaNacimiento:
- *          type: date
+ *          type: string
  *          description: formato ISO de tipo YYYY/MM/DD
+ *          format: date
  *        Nacionalidad:
  *          type: string
  *          description: nacionalidad del usuario
@@ -49,23 +62,35 @@ const service = new UserService
  *          type: string
  *          description: direccion real del usuario
  *        genero:
+ *          description: genero del usuario
  *          type: string
- *          description: genero del usuario, valores validos -femenino, masculino, no-binario-
+ *          oneOf :
+ *            - masculino
+ *            - femenino 
+ *            - no binario 
  *        rol:
  *          type: string
- *          description: rol en la api del usuario, valores validos -administrador, recepcionista, cliente-
- *        required:
- *          nombre:
- *          - apellido:
- *              type: string
- *          - tipo de documento: 
- *          - email:
- *          - password:
- *          - rol:
- *        
+ *          description: rol en la api del usuario
+ *          oneOf:
+ *            - administrador
+ *            - recepcionista
+ *            - cliente
  */
 
 
+/**
+ * @swagger
+ * path:
+ * /usuarios:
+ *  get:
+ *    summary: lista todos los usuarios
+ *    tags: [Usuario]
+ *    requestBody:
+ *      required: false
+ *  responses:
+ *      200:
+ *        description: array de usuarios
+ */
 router.get('/',
 checkApiKey,
 // passport.authenticate('jwt', {session: false}),
@@ -79,12 +104,31 @@ async (req, res, next) => {
   }
 });
 
+/**
+ * @swagger
+ * path:
+ * /usuarios/{dni}:
+ *  get:
+ *    summary: buscar usuario por numero de dni
+ *    tags: [Usuario]
+ *    parameters:
+ *      - in: path
+ *        name: dni   
+ *        required: true
+ *        schema:
+ *          type: integer
+ *          required: true
+ *          description: el dni del usuario
+ *    responses:
+ *        "200":
+ *          description: json con el detalle del usuario
+ */
 router.get('/:dni',
 passport.authenticate('jwt', {session: false}),
 chequearRoles("administrador", "recepcionisa"),
 validatorHandler(getUserSchema, 'params'),
 async (req, res, next) => {
-  console.log(req)
+  
   try {
       const { dni } = req.params;
       const usuarios = await service.mostrarByDni(dni);
@@ -96,12 +140,28 @@ async (req, res, next) => {
 );
 
 
+/**
+ * @swagger
+ * /usuarios:
+ *  post:
+ *    summary: crear un nuevo usuario
+ *    tags: [Usuario]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            $ref: "#/components/schemas/Usuario"           
+ *    responses:
+ *      200:
+ *        description: request body
+ */
+
 
 // crear usuario
 router.post('/',
   checkApiKey,
-//  passport.authenticate('jwt', {session: false}),
-//  chequearRoles("administrador", "recepcionista", "cliente"),
   validatorHandler(createUserSchema, 'body'), 
   async (req, res, next) => {
     try {
