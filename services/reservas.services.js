@@ -321,7 +321,9 @@ class ReservaService {
                     camasOcupadas.push(c.id)
                 })
             })
-
+            console.log(reservas)
+            console.log('habitaciones ocupadas: ',habitacionesOcupadas)
+            console.log('camas ocupadas: ',camasOcupadas)
             let habitaciones = await Habitacion.findAll({where: {privada: true}, attributes: ['id', 'nombre']})
             
             for (let i = 0; i < habitaciones.length; i++) {
@@ -372,11 +374,26 @@ class ReservaService {
                     habitacionCompletamenteOupada.push(datosCama.HabitacionId)
                 }
             }
+            console.log('habitaciones completamente ocupadas: ',habitacionCompletamenteOupada)
+            
             let habitacionesCompartidas = await Habitacion.findAll({where: {privada: false}, attributes:['id','cantCamas'] ,include: [{model: Cama, attributes: ['id', 'nombre']}]})
+            
+            
             for (let i = 0; i < habitacionesCompartidas.length; i++) {
                 let incluye = false;
+                
+                if(disponibles.length === 0 && !habitacionCompletamenteOupada.includes(habitacionesCompartidas[i].id)){
+                    disponibles.push({
+                        idHabitacion: habitacionesCompartidas[i].id, 
+                        cantidadCamas: habitacionesCompartidas[i].cantCamas, 
+                        camasDisponible: habitacionesCompartidas[i].cantCamas,
+                        camasDisponiblesIds: habitacionesCompartidas[i].Camas.map(c => ({camaNombre: c.nombre, camaId: c.id, }))
+                    })
+                }
                 for (let j = 0; j < disponibles.length; j++) {
+                    
                     if(disponibles[j].idHabitacion === habitacionesCompartidas[i].id || habitacionCompletamenteOupada.includes(habitacionesCompartidas[i].id)) { 
+
                         incluye = true
                         continue;
                     }else if(j === disponibles.length - 1 && incluye === false){
@@ -389,7 +406,7 @@ class ReservaService {
                     }
                 }
             }
-
+            console.log(disponibles)
             return disponibles
 
 
