@@ -11,16 +11,18 @@ const stripe = new Stripe(config.stripeSecret)
 
 class pagosService {
 
-    async crearPago(habitaciones, camas) {
+    async crearPago(data) {
         try {
             const payment = await stripe.paymentIntents.create({
-                amount: await this.calcularAmountItems(habitaciones, camas),
+                amount: 123,
                 currency: "USD",
                 automatic_payment_methods: {
                     enabled: true,
                 },
+                // await this.calcularAmountItems(data)
             });
-
+            console.log(data)
+            console.log(data.cart)
             return {
                 clientSecret: payment.client_secret
             }
