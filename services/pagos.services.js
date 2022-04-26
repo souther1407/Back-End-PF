@@ -14,6 +14,7 @@ class pagosService {
     async crearPago(data) {
         let habitaciones = []
         let camas = []
+        console.log(data.items)
         for (let i = 0; i < data.length; i++) {
             if(data[i].private === 'shared'){
                 const beds = data[i].beds
