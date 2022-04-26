@@ -1,15 +1,15 @@
 const joi = require('joi')
 
-const nombre = joi.string().min(3).max(12)
-const apellido = joi.string().min(3).max(15)
+const name = joi.string().min(3).max(12)
+const lastname = joi.string().min(3).max(15)
 const email = joi.string().email()
-const mensaje = joi.string()
+const textarea = joi.string()
 
 const mensajeSchema = joi.object({
-   nombre: nombre.required(),
-   apellido: apellido.required(),
+   name: name.required(),
+   lastname: lastname.required(),
    email: email.required(),
-   mensaje: mensaje.required(), 
+   textarea: textarea.required(), 
 })
 
 

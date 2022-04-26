@@ -10,19 +10,19 @@ class ContactoService {
 
 
 async crear(data) {
-    const { nombre, apellido, email, mensaje} = data
+    const { name, lastname, email, textarea} = data
     const nuevoMensaje = await Contacto.create({
-        nombre,
-        apellido,
-        email,
-        mensaje
+        nombre: name,
+        apellido: lastname,
+        email: email,
+        mensaje: textarea
     })
     if(!nuevoMensaje){
         throw boom.badData('no se pudo enviar el mensaje')
     }
     const mail = {
         from: 'Soy Hostel',
-        to: `${data.email}`, 
+        to: `${email}`, 
         subject: "Recibimos su Mensaje",
         html: `<b>Gracias por comunicarse con nosotros, nos pondremos en contacto con usted a la brevedad </b>`,
         }
@@ -31,12 +31,12 @@ async crear(data) {
         throw boom.badData('no pudimos enviar su mail')
     }
     const interno = {
-        from: `mensaje de -${nombre}- -${apellido}- desde -${email}-`, 
+        from: `mensaje de -${name}- -${lastname}- desde -${email}-`, 
         to: "soyhostel@gmail.com", 
         subject: "Nuevo conctacto de Soy Henry", 
         text: `desde la web`, 
-        html: `mensaje de: <b>${nombre} ${apellido}</b>, 
-              <br>mensaje: <b>${mensaje}</b>
+        html: `mensaje de: <b>${name} ${lastname}</b>, 
+              <br>mensaje: <b>${textarea}</b>
               <br> direccion para respuesta: <span>${email}</span> `, 
       };
       const enviarInterno = await servicesAuth.enviarEmail(interno)
