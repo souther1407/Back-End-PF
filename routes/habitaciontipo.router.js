@@ -13,7 +13,7 @@ const services = new HabitacionestipoService
 router.get('/',
 checkApiKey,
 validatorHandler(getHabitacionTipoSchema, 'query'),
-  async (req, res)=>{
+  async (req, res, next)=>{
 
     const {tipo, bano} = req.query;
     let habitaciones=''
@@ -29,7 +29,7 @@ validatorHandler(getHabitacionTipoSchema, 'query'),
       res.status(201).json(habitaciones)
 
     } catch(error) {
-      return error
+      next(error)
     }
 
     // if(req.query.tipo){
