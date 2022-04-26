@@ -46,6 +46,7 @@ class pagosService {
         try {
             if(habitaciones.length !== 0){
                 for (let i = 0; i < habitaciones.length; i++) {
+                    console.log("entrando a habitacion findByPk")
                     const habitacion = await Habitacion.findByPk(habitaciones[i])
                     console.log(habitacion)
                     amount += habitacion.precio;
