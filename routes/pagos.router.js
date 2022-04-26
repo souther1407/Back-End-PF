@@ -6,7 +6,7 @@ const service = new pagoService()
 router.post('/checkout', async (req, res) => {
     try {
         const {items} = req.body
-        console.log(items)
+        console.log(req.headers.authorization)
         const payment = await service.crearPago(items)
         return res.status(200).json(payment);
     } catch (error) {
