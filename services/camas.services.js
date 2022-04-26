@@ -14,25 +14,33 @@ class camasServices {
                 attributes: ['id', 'nombre'] 
                 }
             })
+        if(!newCama){
+            throw boom.notFound('no se encontraron camas')
+        }
         return newCama
     }
 
     async mostrarByHabitacion(id){
         const camas = await Cama.findAll({where: { HabitacionId : id}})
+        if(!camas){
+            throw boom.notFound(`no existen camas en la habitacion ${id}`)
+        }
         return camas
     }
 
     async traeruna(id){
-        const camas = await Cama.findByPk(id)
-        
-        return camas;
+        const cama = await Cama.findByPk(id)
+        if (!cama){
+            throw boom.notFound(`no existe la cama ${id}`)
+        } 
+        return cama;
     }
 
     async crear(data){
     const {HabitacionId, precio} = data
-    try {
-        let habitacion = await Habitacion.findByPk( parseInt(HabitacionId));
-        if(!habitacion) return boom.notFound('Habitacion no encontrada');
+    let habitacion = await Habitacion.findByPk( parseInt(HabitacionId));
+        if(!habitacion) {
+            throw boom.notFound('Habitacion no encontrada')};
         if(habitacion.privada){
             await Habitacion.update(
                 { cantCamas: habitacion.cantCamas + 1 },
@@ -50,14 +58,14 @@ class camasServices {
                 {where: {id: cama.HabitacionId}})
             return cama
         }
-        
-    } catch(error) {
-        console.log(error)
-        }
     }
 
     async actualizar(id, cambios){
-        const { precio, estado } = cambios
+        const { precio, estado } = cambios;
+        const checkCama = Cama.findByPk(id);
+        if (!checkCama) {
+        throw boom.notFound('no existe la cama que intenta actualizar')
+        }
         const camaUpdate = Cama.update(
             {
             precio,
@@ -66,16 +74,14 @@ class camasServices {
             { where: {id : id}}
         )
         if(!camaUpdate) {
-            throw boom.notFound('cama no encontrada');
+            throw boom.notFound('no se pudo actualizar');
         }
         return 'Cama actualizada';
     }
 
     async borrar(id, tipo) {
-        
-        try{
-            if(tipo === 'Habitacion'){
-                
+        if(tipo === 'Habitacion'){
+            
                 let habitacion = await Habitacion.findByPk( parseInt(id));
                 if(!habitacion.privada){
                     const cama = await Cama.findOne({where:{HabitacionId: id}})
@@ -100,12 +106,8 @@ class camasServices {
                 return `Se elimino la cama id: ${id}`
             }
             
-        }catch(e){
-            console.log(e)
-        }
-        
-        
-        return `Habitacion con id: ${id} fue borrada con exito`;
+       
+        return {message: `Habitacion con id: ${id} fue borrada con exito`};
     }
 }
 module.exports = camasServices;

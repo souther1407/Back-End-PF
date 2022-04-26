@@ -14,26 +14,26 @@ const services = new camasServices
 
 router.get('/', 
 checkApiKey,
-async (req, res) => {
+async (req, res, next,) => {
   try {
     const camas = await services.mostrarTodas()
     res.status(200).json(camas)
   } catch(error) {
-    res.status(error)
+    next(error)
   }
 })
 
 router.get('/:id', 
 checkApiKey,
 validatorHandler(getCamaSchema, 'params'),
-async (req, res) =>{
+async (req, res, next) =>{
   try {
     const {id} = req.params
     console.log(id)
     const camas = await services.traeruna(id);
     res.status(200).json(camas)
   } catch (error) {
-    res.status(error)
+    next(error)
   }
 })
 
@@ -42,13 +42,13 @@ checkApiKey,
 passport.authenticate('jwt', {session: false}),
 chequearRoles('administrador'),
  validatorHandler(crearCamaSchema, 'body'), // validation
-  async (req, res)=>{
+  async (req, res, next)=>{
     try {
       const body = req.body
       const nuevaCama = await services.crear(body)
       res.status(201).json(nuevaCama)
     } catch(error) {
-      res.status(error)
+      next(error)
     }
 });
 
@@ -56,14 +56,14 @@ router.patch('/:id',
 checkApiKey, 
 passport.authenticate('jwt', {session: false}),
 chequearRoles('administrador'),
-async (req, res)=> {
+async (req, res, next)=> {
   try {
     const {id} = req.params
     const body = req.body
     const camaUpdate = await services.actualizar(id, body)
     res.json(camaUpdate)
   } catch (error) {
-    res.status(error)
+    next(error)
   }
 })
 
@@ -71,7 +71,7 @@ router.delete('/',
 checkApiKey, 
 passport.authenticate('jwt', {session: false}),
 chequearRoles('administrador'),
-async (req, res)=>{
+async (req, res, next)=>{
   try {
     const { habitacionid, camaId } = req.query
     let cama;
@@ -80,9 +80,7 @@ async (req, res)=>{
   camaId ? cama = await services.borrar(camaId, 'Cama') : null
   res.json(cama)
   } catch(error) {
-    res.status(404).json({
-      message: error
-    })
+    next(error)
   }
 });
 
