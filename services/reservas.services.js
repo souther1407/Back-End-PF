@@ -148,7 +148,6 @@ class ReservaService {
             if (data.camas) {
                 for (let i = 0; i < data.camas.length; i++) {
                     Cama.findByPk(data.camas[i])
-<<<<<<< HEAD
                     .then(cama => {
                         newReserva.addCama(cama)
                     })
@@ -159,15 +158,6 @@ class ReservaService {
             if(! data.habitaciones){
                 throw boom.badData('Estas mandando un id de una habitación compartida')
                 }else{
-=======
-                        .then(cama => {
-                            newReserva.addCama(cama)
-                        })
-                        .catch(error => { return boom.badData(error) })
-                }
-            }
-            if (data.habitaciones) {
->>>>>>> 2b3d2adaaa0b3c8c8b4a2c79672142eb10269303
                 for (let i = 0; i < data.habitaciones.length; i++) {
                     if(habitacion.dataValues.privada){
                         await Habitacion.findByPk(data.habitaciones[i])
@@ -177,27 +167,11 @@ class ReservaService {
                     }
                 }
             }
-<<<<<<< HEAD
             await Usuario.findByPk(tokendec.sub)
             .then(user =>{
                 newReserva.setUsuario(user)
             })
             return newReserva
-=======
-
-
-            Usuario.findByPk(tokendec.sub)
-                .then(user => {
-                    newReserva.setUsuario(user)
-                })
-            return newReserva
-        } catch (error) {
-            console.log(error)
-            return error
-
-        }
-
->>>>>>> 2b3d2adaaa0b3c8c8b4a2c79672142eb10269303
     }
 
     async eliminarReserva(id) {
@@ -483,15 +457,9 @@ class ReservaService {
             return error;
         }
     }
-<<<<<<< HEAD
 // creando un pull 
     async mostrardisponibilidadById(data){
         
-=======
-    // creando un pull 
-    async mostrardisponibilidadById(data) {
-        try {
->>>>>>> 2b3d2adaaa0b3c8c8b4a2c79672142eb10269303
             const { id } = data
             console.log(id)
             const reservas = await ReservaCama.findByPk(id, {
