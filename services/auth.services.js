@@ -33,6 +33,7 @@ class AuthServices {
         return ({
         usuario :usuario.email,
         rol: usuario.rol,
+        avatar:usuario.avatar,
         token,
         // refreshToken
     });
