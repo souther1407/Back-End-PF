@@ -14,7 +14,9 @@ class huespedServices {
 
     async crearHuesped(data){
         const huesped = await Huesped.findByPk(data.dni)
-        if(!huesped){
+        if(huesped){
+            throw  boom.badRequest({msg : 'Este huesped ya existe en la bd'})
+        }else{
             const createdHuesped = await Huesped.create(data)
             const tipoDocu = await TipoDocumento.create({nombre: data.tipoDocumento})
             const nacionalidad = await Nacionalidades.create({nombre: data.nacionalidad})
@@ -22,17 +24,22 @@ class huespedServices {
             createdHuesped.setNacionalidade(nacionalidad)
             return createdHuesped
         }
-        return  boom.badRequest({msg : 'Este huesped ya existe en la bd'})
-
     }
 
     async eliminarHuesped(id){
         const huesped = await Huesped.destroy({where: {dni: id}})
+        if(!huesped){
+            throw boom.notFound('no existe el usuario que intenta eliminar')
+        }
         return huesped
     }
 
     async actualizarHuesped(cambios){
         const { nombre, apellido, genero, dni } = cambios
+        const checkHuesped = await Huesped.findByPk(dni)
+        if(!checkHuesped){
+            throw boom.notFound('el huespe que intenta modificar no existe')
+        }
         const huespedUpdate = Huesped.update(
             {
             nombre,
@@ -42,7 +49,7 @@ class huespedServices {
             { where: {dni : dni}}
         )
         if(!huespedUpdate) {
-            throw boom.notFound('huesped no encontrada');
+            throw boom.notFound('no se pudo actualizar');
         }
         return huespedUpdate
     }

@@ -71,21 +71,20 @@ class ReservaService {
     async crearReserva(data, token){
         const tokenInfo = token.split(' ')
         const tokendec = jwt.decode(tokenInfo[1])
-
-        try {
             let cama;
             let habitacion;
 
             if(data.camas){
                 for (let i = 0; i < data.camas.length; i++) {
                     cama = await Cama.findByPk(data.camas[i])
-                    if(!cama) { return(`no existe la cama con id ${data.camas[i]}`)}
+                    if(!cama) { throw boom.notFound(`no existe la cama con id ${data.camas[i]}`)}
                 }
             }
             if(data.habitaciones){
                 for (let i = 0; i < data.habitaciones.length; i++){
                     habitacion = await Habitacion.findByPk(data.habitaciones[i])
-                    if(!habitacion) { return(`no existe la habitacion con id ${data.habitaciones[i]}`)}
+                    if(!habitacion) { 
+                        throw boom.notFound(`no existe la habitacion con id ${data.habitaciones[i]}`)}
                 }
             }
             const newReserva = await ReservaCama.create({
@@ -99,18 +98,19 @@ class ReservaService {
                     .then(cama => {
                         newReserva.addCama(cama)
                     })
-                    .catch(error => { return boom.badData(error)})
+                    .catch(error => { 
+                        throw boom.badData(error)})
                 }
             }
-            if(data.habitaciones){
+            if(! data.habitaciones){
+                throw boom.badData('Estas mandando un id de una habitación compartida')
+                }else{
                 for (let i = 0; i < data.habitaciones.length; i++) {
                     if(habitacion.dataValues.privada){
                         Habitacion.findByPk(data.habitaciones[i])
                         .then(habitacion =>{
                             newReserva.addHabitacion(habitacion)
-                        }).catch(error => {return boom.badData(error)})
-                    }else{
-                        boom.badData('Estas mandando un id de una habitación compartida')
+                        }).catch(error => {throw boom.badData(error)})
                     }
                 }
             }
@@ -121,18 +121,13 @@ class ReservaService {
                 newReserva.setUsuario(user)
             })
             return newReserva
-        } catch (error) {
-            console.log(error)
-            return error
-            
-        }
-
+        
     }
 
     async eliminarReserva(id) {
         const reserva = await ReservaCama.destroy({ where: { id } })
         if (!reserva) {
-            boom.notFound('Reserva no encontrada')
+            throw boom.notFound('Reserva no encontrada')
         }
         return `La reserva con ID: ${id} se ha borrado con exito`
     }
@@ -148,7 +143,7 @@ class ReservaService {
             include: [{ model: Cama }, { model: Habitacion }]
         })
         if (!reserva) {
-            return boom.notFound({ msg: 'La reserva que intentas buscar no existe' })
+            throw boom.notFound({ msg: 'La reserva que intentas buscar no existe' })
         }
         //Calcular la cantidad de camas disponibles y que la cant de huespedes enviados sean correctos
         let cantDisponible = 0;
@@ -169,7 +164,7 @@ class ReservaService {
         }
 
         if ((cantDisponible - huespedes.length) !== 0) {
-            return { msg: 'Cantidad de huespedes no coincide con cantidad de camas disponibles' }
+            throw boom.badData('Cantidad de huespedes no coincide con cantidad de camas disponibles')
         }
         if (reserva.Camas.length) {
             for (let i = 0; i < reserva.Camas.length; i++) {
@@ -247,7 +242,8 @@ class ReservaService {
             const { ingreso, egreso } = data
             const ingresoFecha= new Date(ingreso)
             const egresoFecha= new Date(egreso)
-            if(ingresoFecha > egresoFecha) return boom.badData('La fecha de ingreso no puede ser mayor a la fecha de egreso')
+            if(ingresoFecha > egresoFecha) {
+                throw boom.badData('La fecha de ingreso no puede ser mayor a la fecha de egreso')}
 
             // console.log(ingresoFecha, egresoFecha)
             const reservas = await ReservaCama.findAll({
@@ -410,7 +406,7 @@ class ReservaService {
     }
 // creando un pull 
     async mostrardisponibilidadById(data){
-        try {
+        
             const { id } = data
             console.log(id)
             const reservas = await ReservaCama.findByPk(id,{
@@ -420,12 +416,11 @@ class ReservaService {
                     { model: Habitacion, attributes: ['id', 'nombre', 'cantCamas'], through: {attributes: []}}
                 ]
             })
+            if(!reservas){
+                throw boom.notFound('no existen reservas')
+            }
             return reservas
-        } catch (error) {
-            console.log(error)
-            return error
-        }
-    }
+     }
 
 
 }

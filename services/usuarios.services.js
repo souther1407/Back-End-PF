@@ -57,14 +57,14 @@ class UserService {
           usuario
         }
       } catch(error) {
-        return boom.notFound('algo salio mal')
+        throw boom.notFound('algo salio mal')
       }
     }else{
       try {
         const usuario = await Usuario.findAll()
         return usuario
       } catch(error) {
-      return boom.badData('algo salio mal')  
+        throw boom.badData('algo salio mal')  
       }
 
 
