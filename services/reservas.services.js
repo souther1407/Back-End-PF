@@ -107,21 +107,18 @@ class ReservaService {
                 }else{
                 for (let i = 0; i < data.habitaciones.length; i++) {
                     if(habitacion.dataValues.privada){
-                        Habitacion.findByPk(data.habitaciones[i])
+                        await Habitacion.findByPk(data.habitaciones[i])
                         .then(habitacion =>{
                             newReserva.addHabitacion(habitacion)
                         }).catch(error => {throw boom.badData(error)})
                     }
                 }
             }
-        
-    
-            Usuario.findByPk(tokendec.sub)
+            await Usuario.findByPk(tokendec.sub)
             .then(user =>{
                 newReserva.setUsuario(user)
             })
             return newReserva
-        
     }
 
     async eliminarReserva(id) {
