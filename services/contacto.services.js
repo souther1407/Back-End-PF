@@ -24,7 +24,7 @@ async crear(data) {
         from: 'Soy Hostel',
         to: `${data.email}`, 
         subject: "Recibimos su Mensaje",
-        html: `<b>Gracias por omunicarse con nosotros, nos pondremos en contacto con usted a la brevedad </b>`,
+        html: `<b>Gracias por comunicarse con nosotros, nos pondremos en contacto con usted a la brevedad </b>`,
         }
     const enviarMail = await servicesAuth.enviarEmail(mail)
     if(!enviarMail){
