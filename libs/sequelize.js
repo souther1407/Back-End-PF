@@ -6,11 +6,7 @@ const USER = encodeURIComponent(config.dbUser);
 const PASSWORD = encodeURIComponent(config.dbPassword);
 
 
-<<<<<<< HEAD
- /* const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}` */ /* local */
-=======
 //  const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}` /* local */
->>>>>>> 7f4268bf2fe67ce53c9c0b6c4f1614f550562aae
 const URI = `postgres://aooxfnqy:hivKnFb8AHd99C3CaeCb4AVbqRc1OTCG@kesavan.db.elephantsql.com/aooxfnqy` /* db dev */
  
 // const URI = 'postgres://ebzvjeht:2vQxks0hV0POuEpWoQKyyFo-_Uoi66QW@heffalump.db.elephantsql.com/ebzvjeht' /* db produccion */
