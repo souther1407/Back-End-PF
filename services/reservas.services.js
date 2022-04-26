@@ -18,57 +18,110 @@ const serviceHuesped = new huespedServices
 class ReservaService {
 
     async mostrarReservasByFecha(ingreso, egreso) {
-
+        const ingresoFecha = ingreso
+        const egresoFecha = egreso
+        if(ingreso >= egreso) {
+            return boom.badData('la fecha de ingreso no puede ser mayor que la de egreso')
+        }
         const reservas = await ReservaCama.findAll(
             {
                 include: [
                     {
                         model: Habitacion,
+                        attributes: ['id','nombre'],
+                        through: {attributes: []}
                     },
                     {
-                        model: Cama
+                        model: Cama,
+                        attributes: ['id','nombre'],
+                        through: {attributes: []}
                     }
-                ]
+                ],
+                where: {
+                    [Op.or]: [
+                        {[Op.and]: [
+                            {fecha_ingreso: {
+                            [Op.gte]: ingresoFecha
+                            }},             
+                            {fecha_egreso: {
+                                [Op.lte]: egresoFecha
+                            }}
+                        ]},
+                        {[Op.and]: [
+                            {fecha_ingreso: {
+                                [Op.lte]: ingresoFecha
+                            }},
+                            {fecha_egreso: {
+                                [Op.gte]: ingresoFecha
+                            }},
+                            {fecha_egreso: {
+                                [Op.lte]: egresoFecha
+                            }}
+                        ]},
+                        {[Op.and]: [
+                            {fecha_egreso: {
+                                [Op.gte]: egresoFecha
+                                }},
+                            {fecha_ingreso: {
+                                [Op.gte]: ingresoFecha
+                            }},
+                            {fecha_ingreso: {
+                                [Op.lte]: egresoFecha
+                            }}
+                        ]},
+                        {[Op.and]: [
+                            {fecha_ingreso: {
+                                [Op.lte]: ingresoFecha
+                            }},
+                            {fecha_egreso: {
+                                [Op.gte]: egresoFecha
+                            }}
+                        ]},
+                        {fecha_ingreso: {
+                            [Op.between]: [ingresoFecha, egreso]
+                        }},
+                    ]
+                }
             })
-            
-        if(!reservas.length) {
-            return boom.badData('no hay reservas registradas')
-        }
-        const reservasFiltradas = reservas.filter(r =>
-            (r.fecha_ingreso >= ingreso && r.fecha_ingreso <= egreso)
-            ||
-            (
-                (r.fecha_ingreso < ingreso && r.fecha_egreso >= ingreso && r.fecha_egreso <= egreso)
-                ||
-                (r.fecha_egreso > egreso && r.fecha_ingreso > ingreso && r.fecha_ingreso <= egreso))
-        )
-        return reservasFiltradas
+
+        // if (!reservas.length) {
+        //     return boom.badData('no hay reservas registradas')
+        // }
+        // const reservasFiltradas = reservas.filter(r =>
+        //     (r.fecha_ingreso >= ingresoFecha && r.fecha_ingreso <= egresoFecha)
+            // ||
+            // (
+            //     (r.fecha_ingreso < ingreso && r.fecha_egreso >= ingreso && r.fecha_egreso <= egreso)
+            //     ||
+            //     (r.fecha_egreso > egreso && r.fecha_ingreso > ingreso && r.fecha_ingreso <= egreso))
+        // )
+        return reservas
     }
 
     async mostrar() {
         const reservas = await ReservaCama.findAll({
-            include: 
-            [{
-                attributes: ['id'],
-                model: Habitacion,
-                through: {attributes: []} 
-            },
-            {
-                attributes: [ "HabitacionId",'id'],
-                model: Cama,
-                through: {attributes: []}
-            },
-            ]
+            include:
+                [{
+                    attributes: ['id', 'nombre'],
+                    model: Habitacion,
+                    through: { attributes: [] }
+                },
+                {
+                    attributes: ["HabitacionId", 'id', 'nombre'],
+                    model: Cama,
+                    through: { attributes: [] }
+                },
+                ]
         })
-        if(!reservas.length) {
+        if (!reservas.length) {
             return boom.badData('no hay reservas registradas')
-        }else {
+        } else {
 
             return reservas
         }
     }
-    
-    async crearReserva(data, token){
+
+    async crearReserva(data, token) {
         const tokenInfo = token.split(' ')
         const tokendec = jwt.decode(tokenInfo[1])
             let cama;
@@ -92,9 +145,10 @@ class ReservaService {
                 fecha_egreso: data.fecha_egreso,
                 saldo: data.saldo
             })
-            if(data.camas){
+            if (data.camas) {
                 for (let i = 0; i < data.camas.length; i++) {
                     Cama.findByPk(data.camas[i])
+<<<<<<< HEAD
                     .then(cama => {
                         newReserva.addCama(cama)
                     })
@@ -105,6 +159,15 @@ class ReservaService {
             if(! data.habitaciones){
                 throw boom.badData('Estas mandando un id de una habitación compartida')
                 }else{
+=======
+                        .then(cama => {
+                            newReserva.addCama(cama)
+                        })
+                        .catch(error => { return boom.badData(error) })
+                }
+            }
+            if (data.habitaciones) {
+>>>>>>> 2b3d2adaaa0b3c8c8b4a2c79672142eb10269303
                 for (let i = 0; i < data.habitaciones.length; i++) {
                     if(habitacion.dataValues.privada){
                         await Habitacion.findByPk(data.habitaciones[i])
@@ -114,11 +177,27 @@ class ReservaService {
                     }
                 }
             }
+<<<<<<< HEAD
             await Usuario.findByPk(tokendec.sub)
             .then(user =>{
                 newReserva.setUsuario(user)
             })
             return newReserva
+=======
+
+
+            Usuario.findByPk(tokendec.sub)
+                .then(user => {
+                    newReserva.setUsuario(user)
+                })
+            return newReserva
+        } catch (error) {
+            console.log(error)
+            return error
+
+        }
+
+>>>>>>> 2b3d2adaaa0b3c8c8b4a2c79672142eb10269303
     }
 
     async eliminarReserva(id) {
@@ -234,15 +313,14 @@ class ReservaService {
     //     return 'Huespedes Cargados'
     // }
 
-    async mostrardisponibilidad(data){
-        try{
+    async mostrardisponibilidad(data) {
+        try {
             const { ingreso, egreso } = data
             const ingresoFecha= new Date(ingreso)
             const egresoFecha= new Date(egreso)
             if(ingresoFecha > egresoFecha) {
                 throw boom.badData('La fecha de ingreso no puede ser mayor a la fecha de egreso')}
 
-            // console.log(ingresoFecha, egresoFecha)
             const reservas = await ReservaCama.findAll({
                 where: {
                     [Op.or]: [
@@ -291,49 +369,46 @@ class ReservaService {
                 },
                 include: [
                     {
-                        attributes:['id'],
+                        attributes: ['id'],
                         model: Habitacion,
-                        through: {attributes: []}
+                        through: { attributes: [] }
                     },
                     {
-                        attributes:['HabitacionId','id', 'nombre'],
+                        attributes: ['HabitacionId', 'id', 'nombre'],
                         model: Cama,
-                        through: {attributes: []}
+                        through: { attributes: [] }
                     }
                 ],
             })
+
             let habitacionesOcupadas = [];
             let camasOcupadas = [];
             let disponibles = [];
-            // console.log('reservas: ',reservas)
+
             reservas.map(r =>{
                 if(r.Habitacions.length) r.Habitacions.map(h =>{
                     habitacionesOcupadas.push(h.id)
-                }) 
-                if(r.Camas.length) r.Camas.map(c =>{
+                })
+                if (r.Camas.length) r.Camas.map(c => {
                     camasOcupadas.push(c.id)
                 })
             })
-            // console.log(reservas)
-            // console.log('camasOcupadas: ', camasOcupadas)
-            // console.log('habitacionesOcupadas: ', habitacionesOcupadas)
-            // console.log('disponibles: ', disponibles)
-
             let habitaciones = await Habitacion.findAll({where: {privada: true}, attributes: ['id', 'nombre']})
             
             for (let i = 0; i < habitaciones.length; i++) {
-                if(!habitacionesOcupadas.includes(habitaciones[i].id)) disponibles.push({idHabitacion: habitaciones[i].id, nombreHabitacion: habitaciones[i].nombre})
+                if (!habitacionesOcupadas.includes(habitaciones[i].id)) disponibles.push({ idHabitacion: habitaciones[i].id, nombreHabitacion: habitaciones[i].nombre })
             }
-            let camasdisponibles = []
-            let habitacionCompletamenteOupada = []
 
+            let habitacionCompletamenteOupada = []
+            
             for (let i = 0; i < camasOcupadas.length; i++) {
                 
+                let camasdisponibles = []
                 const datosCama = await Cama.findByPk(camasOcupadas[i]);
-                let habitacionCama = await Habitacion.findByPk(datosCama.HabitacionId, {include: [{model: Cama}]});
+                let habitacionCama = await Habitacion.findByPk(datosCama.HabitacionId, { include: [{ model: Cama }] });
                 let camasHabitacion = []
                 for (const cama of habitacionCama.Camas) {
-                    camasHabitacion.push({camaNombre: cama.nombre, camaId: cama.id, })
+                    camasHabitacion.push({ camaNombre: cama.nombre, camaId: cama.id, })
                 }
 
                 for (let c = 0; c < camasHabitacion.length; c++) {
@@ -342,18 +417,12 @@ class ReservaService {
                         if(camasHabitacion[c].camaId === camasOcupadas[j]){
                             toggle = true
                         }
-                        // console.log('c: ', c)
-                        // console.log('cama en posicion ', c,  camasHabitacion[c].camaId)
-                        // console.log('cama ocupada  enposicion j: ', j ,camasOcupadas[j])
                     }
-                    // console.log('toggle: ', toggle)
-                    // console.log(camasdisponibles)
                     if(!toggle){
-                        // console.log('haciendo push')
                         camasdisponibles.push({camaNombre: camasHabitacion[c].camaNombre, camaId: camasHabitacion[c].camaId, })
                     }
                 }
-                // console.log(camasdisponibles)
+
                 if(camasdisponibles.length !== 0){
                     let handle = false
                     for (let k = 0; k < disponibles.length; k++) {
@@ -373,44 +442,63 @@ class ReservaService {
                 if(camasdisponibles.length === 0){
                     habitacionCompletamenteOupada.push(datosCama.HabitacionId)
                 }
-                camasdisponibles = []
             }
+            
             let habitacionesCompartidas = await Habitacion.findAll({where: {privada: false}, attributes:['id','cantCamas'] ,include: [{model: Cama, attributes: ['id', 'nombre']}]})
+            
+            
             for (let i = 0; i < habitacionesCompartidas.length; i++) {
                 let incluye = false;
+                
+                if(disponibles.length === 0 && !habitacionCompletamenteOupada.includes(habitacionesCompartidas[i].id)){
+                    disponibles.push({
+                        idHabitacion: habitacionesCompartidas[i].id, 
+                        cantidadCamas: habitacionesCompartidas[i].cantCamas, 
+                        camasDisponible: habitacionesCompartidas[i].cantCamas,
+                        camasDisponiblesIds: habitacionesCompartidas[i].Camas.map(c => ({camaNombre: c.nombre, camaId: c.id, }))
+                    })
+                }
                 for (let j = 0; j < disponibles.length; j++) {
+                    
                     if(disponibles[j].idHabitacion === habitacionesCompartidas[i].id || habitacionCompletamenteOupada.includes(habitacionesCompartidas[i].id)) { 
+
                         incluye = true
                         continue;
-                    }else if(j === disponibles.length - 1 && incluye === false){
+                    } else if (j === disponibles.length - 1 && incluye === false) {
                         disponibles.push({
-                            idHabitacion: habitacionesCompartidas[i].id, 
-                            cantidadCamas: habitacionesCompartidas[i].cantCamas, 
+                            idHabitacion: habitacionesCompartidas[i].id,
+                            cantidadCamas: habitacionesCompartidas[i].cantCamas,
                             camasDisponible: habitacionesCompartidas[i].cantCamas,
-                            camasDisponiblesIds: habitacionesCompartidas[i].Camas.map(c => ({camaNombre: c.nombre, camaId: c.id, }))
+                            camasDisponiblesIds: habitacionesCompartidas[i].Camas.map(c => ({ camaNombre: c.nombre, camaId: c.id, }))
                         })
                     }
                 }
             }
-            
+            console.log(disponibles)
             return disponibles
 
 
-        }catch(error){
+        } catch (error) {
             console.log(error)
             return error;
         }
     }
+<<<<<<< HEAD
 // creando un pull 
     async mostrardisponibilidadById(data){
         
+=======
+    // creando un pull 
+    async mostrardisponibilidadById(data) {
+        try {
+>>>>>>> 2b3d2adaaa0b3c8c8b4a2c79672142eb10269303
             const { id } = data
             console.log(id)
-            const reservas = await ReservaCama.findByPk(id,{
+            const reservas = await ReservaCama.findByPk(id, {
                 include: [
-                    
-                    { model: Cama, attributes: ['id', 'nombre'], through: {attributes: []} },
-                    { model: Habitacion, attributes: ['id', 'nombre', 'cantCamas'], through: {attributes: []}}
+
+                    { model: Cama, attributes: ['id', 'nombre'], through: { attributes: [] } },
+                    { model: Habitacion, attributes: ['id', 'nombre', 'cantCamas'], through: { attributes: [] } }
                 ]
             })
             if(!reservas){

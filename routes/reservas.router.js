@@ -17,8 +17,8 @@ router.get('/byFecha',
     validatorHandler(getReservaByFecha, 'query'), 
     async (req, res, next)=>{
     try {
-        const {fecha_ingreso, fecha_egreso} = req.query
-        const reservasFiltered = await services.mostrarReservasByFecha(fecha_ingreso, fecha_egreso)
+        const {ingreso,egreso} = req.query
+        const reservasFiltered = await services.mostrarReservasByFecha(ingreso, egreso)
         res.status(200).json(reservasFiltered)
     } catch (error) {
         next(error)
