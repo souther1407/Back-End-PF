@@ -7,12 +7,12 @@ const huespedServices = require('../services/huesped.sevices');
 // eslint-disable-next-line new-cap
 const services = new huespedServices
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
     try {
         const huespedes = await services.mostrarTodo()
         res.status(200).json(huespedes)
     } catch (error) {
-        res.status(error)
+        next(error)
     }
 })
 

@@ -7,13 +7,13 @@ const services = new habitacionDisponiblesService
 
 router.get('/', validatorHandler(getReservaByFecha, 'query'), 
 
-async (req, res)=>{
+async (req, res, next)=>{
     try {
         const {fecha_ingreso, fecha_egreso} = req.query
         const reservasFiltered = await services.mostrarReservasByFecha(fecha_ingreso, fecha_egreso)
         res.status(200).json(reservasFiltered)
     } catch (error) {
-        res.status(error)
+        next(error)
     }
 });
 
