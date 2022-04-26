@@ -36,6 +36,7 @@ const UsuarioSchema = {
     type: DataTypes.ENUM('administrador', 'recepcionista',
     'cliente'),
     allowNull: false,
+    defaultValue: 'cliente'
   },
   telefono:{
     type: DataTypes.STRING,

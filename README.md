@@ -16,18 +16,17 @@
 	"Camas": Array Vacio,
 	"Imagens": [
 		{
-			"id": 1,
-			"imagen": "https://w7.pngwing.com/pngs/331/812/png-transparent-bedroom-computer-icons-bed.png",
-			"HabitacionId": 1
+			"id": number,
+			"imagen": string,
+			"HabitacionId": number
 		}, ...
-	],
-	"Reservas": []
+	]
 }, ...]
 ```
 - ### Sí es una habitacion compartida el objeto tendrá la forma:
 ```javascript
   [{
-	"id": 1,
+	"id": number,
 	"nombre": String,
 	"comodidades": String,
 	"descripcion": String,
@@ -38,21 +37,20 @@
 	"createdAt": "2022-04-15T13:00:26.870Z",
 	"Camas": [
     {
-			"id": "ca8f3891-3f6d-4bcb-ac08-f6dfb3eec7b7",
+			"id": string,
 			"precio": Number,
 			"estado": String,
-			"HabitacionId": 1,
+			"HabitacionId": string,
 			"HuespedId": null
 		}, ...
   ],
 	"Imagens": [
 		{
-			"id": 1,
-			"imagen": "https://w7.pngwing.com/pngs/331/812/png-transparent-bedroom-computer-icons-bed.png",
-			"HabitacionId": 1
+			"id": number,
+			"imagen": string,
+			"HabitacionId": number
 		}, ...
-	],
-	"Reservas": []
+	]
 }, ...]
 ```
 ---
@@ -60,7 +58,7 @@
 - ### Entrega un objeto con los datos de la habitación.
 ```javascript
 {
-	"id": 1,
+	"id": number,
 	"nombre": String,
 	"comodidades": String,
 	"descripcion": String,
@@ -69,15 +67,14 @@
 	"precio": Number,
 	"banoPrivado": Boolean,
 	"createdAt": "2022-04-15T13:00:26.870Z",
-	"Camas": Array Vacio,
+	"Camas": Array,
 	"Imagens": [
 		{
-			"id": 1,
-			"imagen": "https://w7.pngwing.com/pngs/331/812/png-transparent-bedroom-computer-icons-bed.png",
-			"HabitacionId": 1
+			"id": number,
+			"imagen": string,
+			"HabitacionId": number
 		}, ...
-	],
-	"Reservas": []
+	]
 }
 ```
 - ### En caso de una Habitación privada la propiedad cama es un array vacio.
@@ -101,12 +98,12 @@ Habitación compartida:
 {
 	"nombre": String,
   "comodidades": String,
-  "cantCamas": 5,
-  "privada": false,
-  "banoPrivado": false,
+  "cantCamas": number,
+  "privada": boolean,
+  "banoPrivado": boolean,
   "preciosCamas": [1000],
-	"descripcion": "soy la descripcion",
-	"imagenes": ["https://media-cdn.tripadvisor.com/media/photo-s/16/af/28/82/dormitorio-de-12-camas.jpg", "https://pix10.agoda.net/hotelImages/285046/-1/5dc1a6d87c68b8ecc5528eff4c29c0ab.jpg?ca=7&ce=1&s=1024x768"]
+	"descripcion": string,
+	"imagenes": [string, string]
 }
 
 En caso de querer que todas las camas compartidas tengan el mismo precio 
@@ -116,5 +113,184 @@ Habitación Privada:
 se reemplaza "preciosCamas" por "precioHabitacion"
  
  "precioHabitacion": 1500
+```
+---
+## DELETE: /habitaciones/:ID
+- ### Recibe por query el id de la habitación a eliminar.
+- ### devuelve la connfirmación del la habitacion eliminada.
+---
+## POST: /reservas
+- ### RECIBE POR BODY ⬇️
+```javascript	
+	{
+	"fecha_ingreso":"2022-01-10",
+	"fecha_egreso":"2022-01-15",
+	"camas":["5b920a51-0651-42f4-b72d-e18bb3f63ad4"],
+	"habitaciones": [],
+	"saldo": 100
+}
+```
+- ### Devuelve:
+```javascript
+{
+	"fecha_ingreso": "2022-01-10T00:00:00.000Z",
+	"fecha_egreso": "2022-01-15T00:00:00.000Z",
+	"id": "6bf29482-ed25-4a00-8dc0-88fcc33f5938",
+	"saldo": number,
+	"UsuarioDni": number
+}
+```
+---
+DELETE: /reservas/:ID
+- ### Recibe por query el id de la reserva a eliminar.
+- ### devuelve la connfirmación del la reserva eliminada.
+---
+
+## GET: /camas/:ID
+- ### Recibe por query el id de la cama a consultar.
+- ### Retorna el siguiente Objeto.
+```javascript
+{
+	"id": "5b920a51-0651-42f4-b72d-e18bb3f63ad4",
+	"precio": number,
+	"estado": "libre",
+	"nombre": string, // aun por implementar
+	"HabitacionId": number,
+	"HuespedDni": number
+}
+```
+---
+## GET: camas/
+- ### devuelve un array de objetos donde muestra la infor de las camas.
+```javascript
+[{
+	"id": "5b920a51-0651-42f4-b72d-e18bb3f63ad4",
+	"precio": number,
+	"estado": "libre",
+	"nombre": string, // aun por implementar
+	"HabitacionId": number,
+	"HuespedDni": number
+}, ...]
+```
+---
+## POST: /camas
+- ### Recibe por BODY: el precio de la cama a agregar, (en caso  de adicionar una cama a una habitacion privada el precio de ser 0) y HabitacionId corresponde al id de la habitacion a la cual se le va a agregar la cama.
+
+```javascript
+{precio: 12, HabitacionID:1}
+```
+- ### devuelve
+```javascript
+{
+	"mensaje": "Cama Agregada a la Habitación con Id: 2"
+}
+```
+---
+## DELETE: /camas/
+- ### Recibe por query el id de la cama a eliminar.
+
+	?camaId=id de la cama a eliminar
+
+- ### En caso de eliminar una cama de una habitacion privada recibe el id de la hbaitacion a la cual se le va a elimisr una cama.
+	?habitacionid=id de la habitacion a la cual se le va a eliminar una cama.
+---
+## GET: /reservas 
+- ### devuelve un array de objetos donde muestra la infor de las reservas.
+```javascript
+[
+	// Reserva de una cama 
+	{
+		"fecha_ingreso": "2022-01-10T00:00:00.000Z",
+		"fecha_egreso": "2022-01-15T00:00:00.000Z",
+		"id": "6bf29482-ed25-4a00-8dc0-88fcc33f5938",
+		"saldo": number, 
+		"UsuarioDni": number,
+		"Habitacions": [],
+		"Camas": [
+			{
+				"HabitacionId": 3,
+				"id": "5b920a51-0651-42f4-b72d-e18bb3f63ad4"
+			}
+		]
+	},{
+		// Reserva de una habitacion
+		"fecha_ingreso": "2022-10-15T00:00:00.000Z",
+		"fecha_egreso": "2022-10-20T00:00:00.000Z",
+		"id": "a1d5e62d-3e06-4ebb-a6bc-a39575be713d",
+		"saldo": number,
+		"UsuarioDni": number,
+		"Habitacions": [
+			{
+				"id": 2
+			}
+		],
+		"Camas": []
+	} ...
+]
+```
+---
+## GET: /reservas/disponibilidad/
+- ### RECIBE POR QUERY: ingreso, egreso ⬇️
+
+	? ingreso = 2022-01-01 & egreso = 2022-12-20
+
+- ### Devuelve el siguiente array
+```javascript
+[
+	{
+		// Hbaitacion Compartida
+		"idHabitacion": 3,
+		"cantidadCamas": 5,
+		"camasDisponible": 1,
+		"camasDisponiblesIds": [
+			"5b920a51-0651-42f4-b72d-e18bb3f63ad4"
+		]
+	},
+	{
+		// Habitacion Privada
+		"idHabitacion": 7
+	}, {...}
+]
+```	
+---
+### GET: /usuarios
+- ### devuelve un array de objetos donde muestra la infor de los usuarios.
+```javascript
+[
+	{
+		"dni": string,
+		"nombre": string,
+		"apellido": string,
+		"rol": "administrador",
+		"telefono": string,
+		"direccion": string,
+		"email": string,
+		"password": string, //Hasheado
+		"genero": "masculino",
+		"tokenRecuperacion": null,
+		"createdAt": "2022-04-22T20:37:43.883Z",
+		"NacionalidadeId": null,
+		"TipoDocumentoId": null
+	}
+]
+```
+---
+### POST: /usuarios
+- ### Recibe por BODY:
+```javascript
+[
+	{
+		"dni": number,
+		"nombre": string,
+		"apellido": string,
+		"telefono":number,
+		"email": string,
+		"password":string/number,
+		"rol": "administrador",
+		"fechaNacimiento": string,
+		"TipoDocumento": number,
+		"genero": "masculino"
+	}
+]
 ```
 ---

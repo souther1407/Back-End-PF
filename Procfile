@@ -1,1 +1,1 @@
-web:npm run startgit add .
+web:npm run start

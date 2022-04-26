@@ -1,16 +1,20 @@
 const express = require('express');
 const router = express.Router();
-
+const {chequearRoles} = require('../middleware/auth.handler');
+const passport = require('passport');
 const camasServices = require('../services/camas.services');
 const validatorHandler = require('../middleware/validator.handler');
-const {crearCamaSchema, actualizarCamaSchema, getCamaSchema} = require('../schemas/camas.schema');
+const {crearCamaSchema, actualizarCamaSchema, getCamaSchema, borrarCama} = require('../schemas/camas.schema');
+const {checkApiKey} =require('../middleware/auth.handler');
 
 
 
 // eslint-disable-next-line new-cap
 const services = new camasServices
 
-router.get('/', async (req, res) => {
+router.get('/', 
+checkApiKey,
+async (req, res) => {
   try {
     const camas = await services.mostrarTodas()
     res.status(200).json(camas)
@@ -20,6 +24,7 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/:id', 
+checkApiKey,
 validatorHandler(getCamaSchema, 'params'),
 async (req, res) =>{
   try {
@@ -33,6 +38,9 @@ async (req, res) =>{
 })
 
 router.post('/',
+checkApiKey,
+passport.authenticate('jwt', {session: false}),
+chequearRoles('administrador'),
  validatorHandler(crearCamaSchema, 'body'), // validation
   async (req, res)=>{
     try {
@@ -44,7 +52,11 @@ router.post('/',
     }
 });
 
-router.patch('/:id', async (req, res)=> {
+router.patch('/:id',
+checkApiKey, 
+passport.authenticate('jwt', {session: false}),
+chequearRoles('administrador'),
+async (req, res)=> {
   try {
     const {id} = req.params
     const body = req.body
@@ -55,16 +67,18 @@ router.patch('/:id', async (req, res)=> {
   }
 })
 
-router.delete('/', async (req, res)=>{
+router.delete('/',
+checkApiKey, 
+passport.authenticate('jwt', {session: false}),
+chequearRoles('administrador'),
+async (req, res)=>{
   try {
-
     const { habitacionid, camaId } = req.query
     let cama;
-
-    habitacionid ? cama = await services.borrar(habitacionid, 'Habitacion') : 
-    camaId ? cama = await services.borrar(camaId, 'Cama') : null
-    
-    res.json(cama)
+  // eslint-disable-next-line no-unused-expressions
+  habitacionid ? cama = await services.borrar(habitacionid, 'Habitacion') : 
+  camaId ? cama = await services.borrar(camaId, 'Cama') : null
+  res.json(cama)
   } catch(error) {
     res.status(404).json({
       message: error

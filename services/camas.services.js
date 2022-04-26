@@ -32,7 +32,7 @@ class camasServices {
     const {HabitacionId, precio} = data
     try {
         let habitacion = await Habitacion.findByPk( parseInt(HabitacionId));
-        if(!habitacion) 
+        if(!habitacion) return boom.notFound('Habitacion no encontrada');
         if(habitacion.privada){
             await Habitacion.update(
                 { cantCamas: habitacion.cantCamas + 1 },
@@ -92,7 +92,9 @@ class camasServices {
                 let habitacioModificada = await services.buscaruno(camaAEliminar.HabitacionId)
                 await Cama.destroy({where: { id }})
                 await habitacioModificada.update(
-                    { cantCamas: habitacioModificada.cantCamas  - 1},
+                    { cantCamas: habitacioModificada.cantCamas  - 1,
+                        precio: habitacioModificada.precio - camaAEliminar.precio
+                    },
                     { where : { id: habitacioModificada.id } }
                 )
                 return `Se elimino la cama id: ${id}`

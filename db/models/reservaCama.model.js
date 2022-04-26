@@ -12,6 +12,12 @@ const ReservaCamaSchema = {
   fecha_ingreso:{
     type: DataTypes.DATEONLY,
     allowNull: false,
+    get() {
+      return new Date(this.getDataValue('fecha_ingreso'));
+    },
+    // set(fecha_ingreso){
+    //   this.setDataValue('fecha_ingreso', fecha_ingreso.toISOString().splice('T')[0]);
+    // }
   },
   cancelada:{
     type:DataTypes.BOOLEAN,
@@ -21,6 +27,9 @@ const ReservaCamaSchema = {
   fecha_egreso:{
     type: DataTypes.DATEONLY,
     allowNull: false,
+    get() {
+      return new Date(this.getDataValue('fecha_egreso'));
+    },
   },
   saldo: {
     type: DataTypes.FLOAT,
