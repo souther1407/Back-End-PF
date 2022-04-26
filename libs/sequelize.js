@@ -117,6 +117,7 @@ sequelize.sync({ force: false })
     console.log(`base de datos creada/actualizada `);
     
     
+  
   })
   .catch(err => console.log(err));
 
