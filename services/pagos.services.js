@@ -40,7 +40,7 @@ class pagosService {
             throw boom.badData({ msg: error })
         }
     }
-
+    //a
     async calcularAmountItems (habitaciones, camas){
         let amount = 0;
         try {
