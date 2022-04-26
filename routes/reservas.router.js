@@ -105,7 +105,7 @@ router.post('/',
             const newReserva = await services.crearReserva(body, token)
             res.status(201).json(newReserva)
         } catch(error) {
-            res.status(error)
+            res.status(400).json(error)
         }
 });
 
