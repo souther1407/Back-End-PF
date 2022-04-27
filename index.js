@@ -14,15 +14,10 @@ const swaggerSpect = {
   info: {
       "title": "soy Hostel App Express-Postgres API",
       "description": "servidor de arquitectura SOLID para Soy Hostel",
-      "termsOfService": "http://daleclick.com/terms/",
       "contact": {
       "name": "API Support",
       "url": "http://www.soyhostel.com/support",
       "email": "soyhostel@gmail.com"
-      },
-      "license": {
-      "name": "Valkiria NN",
-      "url": "rodrigoquintero.tamarindorivas.com"
       },
       "version": "1.0.0"
   },
@@ -40,7 +35,7 @@ const swaggerSpect = {
   }
   ]
   },
-  apis: [`${path.join(__dirname, "./routes/*.js")}`]
+  apis: [`${path.join(__dirname, "./*.js")}`]
 }
 
 const app = express();
