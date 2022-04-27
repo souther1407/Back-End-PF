@@ -181,9 +181,13 @@ class ReservaService {
         }
         return `La reserva con ID: ${id} se ha borrado con exito`
     }
+    
+    
     async actualizarReserva() {
 
     }
+    
+    
     async cargarHuespedes(data, id_reserva) {
         const huespedes = data
         const reserva = await ReservaCama.findOne({
