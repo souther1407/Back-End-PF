@@ -102,9 +102,11 @@ router.post('/',
         try {
             
             const token = req.headers['authorization'];
-            const body = req.body
-            console.log("body",body)
-            const newReserva = await services.crearReserva(body, token)
+            const {toBack, infoPayment} = req.body
+            
+            console.log("toBack--->>",toBack)
+            console.log("infoPayment--->>",infoPayment)
+            const newReserva = await services.crearReserva(toBack, token)
             res.status(201).json(newReserva)
         } catch(error) {
             next(error)
