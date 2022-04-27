@@ -99,7 +99,7 @@ router.delete('/:id',
 router.post('/',
     checkApiKey,
     passport.authenticate('jwt', {session: false}),
-    chequearRoles('administrador', 'recepcionista, cliente'),
+    chequearRoles('administrador', 'recepcionista', 'cliente'),
     /* validatorHandler(crearReservaSchema, 'body'), */
     async (req, res, next)=>{
         try {
