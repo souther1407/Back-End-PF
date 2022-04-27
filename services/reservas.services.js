@@ -27,6 +27,10 @@ class ReservaService {
             {
                 include: [
                     {
+                        model: Usuario,
+                        attributes: ['dni', 'nombre', 'apellido'],
+                    },
+                    {
                         model: Habitacion,
                         attributes: ['id','nombre'],
                         through: {attributes: []}
@@ -36,9 +40,6 @@ class ReservaService {
                         attributes: ['id','nombre'],
                         through: {attributes: []}
                     },
-                    {
-                        
-                    }
                 ],
                 where: {
                     [Op.or]: [
