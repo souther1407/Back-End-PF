@@ -97,7 +97,7 @@ router.post('/',
     checkApiKey,
     passport.authenticate('jwt', {session: false}),
     chequearRoles('administrador', 'recepcionista, cliente'),
-    validatorHandler(crearReservaSchema, 'body'),
+    /* validatorHandler(crearReservaSchema, 'body'), */
     async (req, res, next)=>{
         try {
             const {toBack, infoPayment} = req.body
