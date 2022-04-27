@@ -28,10 +28,6 @@ const CamaSchema = {
     allowNull: false,
     defaultValue: 'libre',
   },
-  nombre:{
-    type: DataTypes.STRING,
-    // allowNull: false,
-  }
 }
 
 class Cama extends Model {
