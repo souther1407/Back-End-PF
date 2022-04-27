@@ -14,7 +14,6 @@ class pagosService {
     async crearPago(data) {
         let habitaciones = []
         let camas = []
-        console.log(data.items)
         for (let i = 0; i < data.length; i++) {
             if(data[i].private === 'shared'){
                 const beds = data[i].beds
@@ -35,19 +34,23 @@ class pagosService {
                 },
             });
             return {
-                clientSecret: payment.client_secret
+                clientSecret: payment.client_secret,
+                cart:data
             }
         } catch (error) {
             throw boom.badData({ msg: error })
         }
     }
-
+    //a
+   
     async calcularAmountItems (habitaciones, camas){
         let amount = 0;
         try {
             if(habitaciones.length !== 0){
                 for (let i = 0; i < habitaciones.length; i++) {
+                    console.log("entrando a habitacion findByPk")
                     const habitacion = await Habitacion.findByPk(habitaciones[i])
+                    console.log(habitacion)
                     amount += habitacion.precio;
                 }
             }
@@ -62,6 +65,9 @@ class pagosService {
         } catch (error) {
             throw boom.conflict(error)
         }
+    }
+    async guardarPago(infoPago){
+        //TODO: guardar en la tabla pago la info del pago, asociar a reserva
     }
 }
 
