@@ -114,7 +114,7 @@ Habitacion.belongsToMany(Huesped, {through: 'Huesped_Habitacion'})
 Habitacion.hasMany(Imagen, {onDelete: 'cascade'});
 Imagen.belongsTo(Habitacion)
 
-// relacion pagos 
+// relacion pagos - correccion de la tabla
 Reserva.hasOne(Pago)
 Pago.belongsTo(Reserva)
 
