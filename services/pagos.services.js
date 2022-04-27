@@ -34,7 +34,8 @@ class pagosService {
                 },
             });
             return {
-                clientSecret: payment.client_secret
+                clientSecret: payment.client_secret,
+                cart:data
             }
         } catch (error) {
             throw boom.badData({ msg: error })
