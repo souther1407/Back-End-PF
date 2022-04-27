@@ -66,6 +66,9 @@ class pagosService {
             throw boom.conflict(error)
         }
     }
+    async guardarPago(infoPago){
+        //TODO: guardar en la tabla pago la info del pago, asociar a reserva
+    }
 }
 
 module.exports = pagosService

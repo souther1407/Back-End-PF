@@ -1,17 +1,25 @@
 const { Model, DataTypes, Sequelize } = require('sequelize')
 
-const PAGO_TABLE = 'habitaciones';
+const PAGO_TABLE = 'pagos';
 
 const PagoSchema = {
     id: {
-        type: DataTypes.UUID,
-        defaultValue: Sequelize.UUIDV4,
-        allowNull: false,
-        primaryKey: true,
+       type:DataTypes.STRING,
+       primaryKey:true,
     },
     monto: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DECIMAL,
         allowNull: false
+    },
+    moneda:{
+        type:DataTypes.STRING,
+
+    },
+    metodoDePago:{
+        type:DataTypes.ENUM("card","cash")
+    },
+    estado:{
+        type:DataTypes.STRING
     },
     createdAt: {
         allowNull: false,

@@ -7,9 +7,9 @@ const PASSWORD = encodeURIComponent(config.dbPassword);
 
 
 //  const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}` /* local */
-const URI = `postgres://aooxfnqy:hivKnFb8AHd99C3CaeCb4AVbqRc1OTCG@kesavan.db.elephantsql.com/aooxfnqy` /* db dev */
+/* const URI = `postgres://aooxfnqy:hivKnFb8AHd99C3CaeCb4AVbqRc1OTCG@kesavan.db.elephantsql.com/aooxfnqy` */ /* db dev */
  
-// const URI = 'postgres://ebzvjeht:2vQxks0hV0POuEpWoQKyyFo-_Uoi66QW@heffalump.db.elephantsql.com/ebzvjeht' /* db produccion */
+const URI = 'postgres://ebzvjeht:2vQxks0hV0POuEpWoQKyyFo-_Uoi66QW@heffalump.db.elephantsql.com/ebzvjeht' /* db produccion */
 // const URI = 'postgres://dbmaljaxgxxrba:c5b9e2743cf628b388e5d24ceb7d0cc87069dbaacd9ca113e4a3fb3582b4ebed@ec2-44-199-143-43.compute-1.amazonaws.com:5432/d2cvc1so8ve8q8' /* db en heroku, sin uso */
 
 const sequelize = new Sequelize(URI, {
@@ -19,7 +19,7 @@ const sequelize = new Sequelize(URI, {
 
 setupModels(sequelize);
 
-const {Usuario, Habitacion, Reserva, Cama, Huesped, Nacionalidades, TipoDocumento, Imagen } = sequelize.models;
+const {Usuario, Habitacion, Reserva, Cama, Huesped, Nacionalidades, TipoDocumento, Imagen, } = sequelize.models;
 
 const Historial = sequelize.define('Historial',{
   checkIn:{
@@ -31,6 +31,33 @@ checkOut:{
     allowed: false
 }
 })
+
+const Pago = sequelize.define("Pagos",{
+  id: {
+     type:DataTypes.STRING,
+     primaryKey:true,
+  },
+  monto: {
+      type: DataTypes.DECIMAL,
+      allowNull: false
+  },
+  moneda:{
+      type:DataTypes.STRING,
+
+  },
+  metodoDePago:{
+      type:DataTypes.ENUM("card","cash")
+  },
+  estado:{
+      type:DataTypes.STRING
+  },
+  createdAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
+      field: 'create_at',
+      defaultValue: Sequelize.NOW
+  }
+}) 
 
 // relacion habitacion-camas 1 a muchos muchos a 1
 //  una habitacion tiene muchas camas
@@ -111,8 +138,11 @@ Habitacion.belongsToMany(Huesped, {through: 'Huesped_Habitacion'})
 Habitacion.hasMany(Imagen, {onDelete: 'cascade'});
 Imagen.belongsTo(Habitacion)
 
+// relacion imágenes con habitaciones con pago
+Pago.hasOne(Reserva)
+Reserva.belongsTo(Pago)
 
-sequelize.sync({ force: false })
+sequelize.sync({ force: true })
   .then(() => {
     console.log(`base de datos creada/actualizada `);
     
