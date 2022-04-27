@@ -1,28 +1,22 @@
-const express = require('express');
-const router = express.Router();
-const {chequearRoles} = require('../middleware/auth.handler');
-const passport = require('passport');
-const validatorHandler = require('../middleware/validator.handler');
-const {checkApiKey} =require('../middleware/auth.handler');
-const stripe = require('stripe')
+const express = require('express')
+const passport = require('passport')
+const { checkApiKey } = require('../middleware/auth.handler')
+const router = express.Router()
+const pagoService = require('../services/pagos.services')
+const service = new pagoService()
 
-
-router.post('/',
-checkApiKey,
-passport.authenticate('jwt', {session: false}),
-chequearRoles('administrador'),
- validatorHandler(crearCamaSchema, 'body'), // validation
-  async (req, res, next)=>{
+router.post('/checkout',checkApiKey,passport.authenticate('jwt', {session: false}), async (req, res) => {
     try {
-      res.send('aca van los pagos')
-      
-    } catch(error) {
-      next(error)
+
+        const {cart} = req.body
+        console.log(req.body)
+        const payment = await service.crearPago(cart)
+        return res.status(200).json(payment);
+    } catch (error) {
+        console.log(error);
+        return res.json({ message: error });
     }
-});
-
-
-
+})
 
 
 module.exports = router

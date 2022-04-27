@@ -25,7 +25,7 @@ function boomErrorHandler (err, req, res, next) {
 next(err);
 }
 
-function error404Handler (req, res, next) {
+function error404Handler (req, res,) {
   res.status(404)
   res.send ({
   message: boom.notFound('el recurso que busca no existe')
