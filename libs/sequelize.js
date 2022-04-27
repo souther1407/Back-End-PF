@@ -112,7 +112,7 @@ Habitacion.hasMany(Imagen, {onDelete: 'cascade'});
 Imagen.belongsTo(Habitacion)
 
 
-sequelize.sync({ force: false })
+sequelize.sync({ force: true })
   .then(() => {
     console.log(`base de datos creada/actualizada `);
     
