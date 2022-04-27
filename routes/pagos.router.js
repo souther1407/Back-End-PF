@@ -9,7 +9,7 @@ router.post('/checkout',checkApiKey,passport.authenticate('jwt', {session: false
     try {
 
         const {cart} = req.body
-        console.log(cart)
+        console.log(req.body)
         const payment = await service.crearPago(cart)
         return res.status(200).json(payment);
     } catch (error) {
