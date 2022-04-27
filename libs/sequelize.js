@@ -120,7 +120,7 @@ Pago.belongsTo(Reserva)
 
 
 
-sequelize.sync({ force: false })
+sequelize.sync({ force: true })
   .then(() => {
     console.log(`base de datos creada/actualizada `);
     
