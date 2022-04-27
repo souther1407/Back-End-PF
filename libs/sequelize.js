@@ -142,7 +142,7 @@ Imagen.belongsTo(Habitacion)
 Pago.hasOne(Reserva)
 Reserva.belongsTo(Pago)
 
-sequelize.sync({ force: true })
+sequelize.sync({ force: false })
   .then(() => {
     console.log(`base de datos creada/actualizada `);
     
