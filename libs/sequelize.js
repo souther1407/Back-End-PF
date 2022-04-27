@@ -19,10 +19,10 @@ if (config.isProd) {
 }
 
 const sequelize = new Sequelize(config.dbUrl, options);
-
 setupModels(sequelize);
 
-const {Usuario, Habitacion, Reserva, Cama, Huesped, Nacionalidades, TipoDocumento, Imagen } = sequelize.models;
+const {Usuario, Habitacion, Reserva, Cama, Huesped, Nacionalidades, TipoDocumento, Imagen, Pago } = sequelize.models;
+console.log(sequelize.models)
 
 const Historial = sequelize.define('Historial',{
   checkIn:{
@@ -113,6 +113,11 @@ Habitacion.belongsToMany(Huesped, {through: 'Huesped_Habitacion'})
 
 Habitacion.hasMany(Imagen, {onDelete: 'cascade'});
 Imagen.belongsTo(Habitacion)
+
+// relacion pagos 
+Reserva.hasOne(Pago)
+Pago.belongsTo(Reserva)
+
 
 
 sequelize.sync({ force: false })

@@ -27,15 +27,20 @@ class ReservaService {
             {
                 include: [
                     {
+                        model: Usuario,
+                        attributes: ['dni', "nombre", "apellido"],
+                        
+                    },
+                    {
                         model: Habitacion,
                         attributes: ['id','nombre'],
                         through: {attributes: []}
                     },
                     {
                         model: Cama,
-                        attributes: ['id','nombre'],
+                        attributes: ['id','nombre','HabitacionId'],
                         through: {attributes: []}
-                    },                   
+                    } 
                 ],
                 where: {
                     [Op.or]: [
@@ -124,6 +129,10 @@ class ReservaService {
     async crearReserva(data, token) {
         const tokenInfo = token.split(' ')
         const tokendec = jwt.decode(tokenInfo[1])
+        const checkUs = await Usuario.findByPk(tokendec.sub)
+        if(!checkUs){
+            throw boom.badData('el usuario no existe')
+        }
             let cama;
             let habitacion;
 
