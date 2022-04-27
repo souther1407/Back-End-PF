@@ -12,7 +12,7 @@ const { isNumber } = require('util');
 
 //servicios
 const huespedServices = require('./huesped.sevices');
-const { threadId } = require('worker_threads');
+
 const serviceHuesped = new huespedServices
 
 class ReservaService {
@@ -21,11 +21,16 @@ class ReservaService {
         const ingresoFecha = ingreso
         const egresoFecha = egreso
         if(ingreso >= egreso) {
-            return boom.badData('la fecha de ingreso no puede ser mayor que la de egreso')
+            throw boom.badData('la fecha de ingreso no puede ser mayor que la de egreso')
         }
         const reservas = await ReservaCama.findAll(
             {
                 include: [
+                    {
+                        model: Usuario,
+                        attributes: ['dni', "nombre", "apellido"],
+                        
+                    },
                     {
                         model: Habitacion,
                         attributes: ['id','nombre'],
@@ -33,12 +38,9 @@ class ReservaService {
                     },
                     {
                         model: Cama,
-                        attributes: ['id','nombre'],
+                        attributes: ['id','nombre','HabitacionId'],
                         through: {attributes: []}
-                    },
-                    {
-                        
-                    }
+                    } 
                 ],
                 where: {
                     [Op.or]: [
@@ -127,6 +129,10 @@ class ReservaService {
     async crearReserva(data, token) {
         const tokenInfo = token.split(' ')
         const tokendec = jwt.decode(tokenInfo[1])
+        const checkUs = await Usuario.findByPk(tokendec.sub)
+        if(!checkUs){
+            throw boom.badData('el usuario no existe')
+        }
             let cama;
             let habitacion;
 
@@ -184,9 +190,13 @@ class ReservaService {
         }
         return `La reserva con ID: ${id} se ha borrado con exito`
     }
+    
+    
     async actualizarReserva() {
 
     }
+    
+    
     async cargarHuespedes(data, id_reserva) {
         const huespedes = data
         const reserva = await ReservaCama.findOne({

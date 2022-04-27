@@ -105,11 +105,11 @@ class habitacionesService {
       throw boom.notFound('no se encontro ninguna habitacio')
     }
     for (let i = 0; i < habitacion.length; i++) {
-      if (habitacion[i].privada === true) {delete habitacion[i].dataValues.Camas}
-      if (habitacion[i].Imagens.length<0) {habitacion[i].dataValues.Imagens.push("https://w7.pngwing.com/pngs/331/812/png-transparent-bedroom-computer-icons-bed.png")}
-      }
+      if (habitacion[i].privada === true) {
+        delete habitacion[i].dataValues.Camas}
+      
       return habitacion;
-  }
+  }}
 
   
   // eslint-disable-next-line class-methods-use-this
