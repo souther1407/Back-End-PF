@@ -126,15 +126,16 @@ class ReservaService {
         }
     }
 
-    async crearReserva(data,infoPayment, token) {
+    async crearReserva(data, infoPayment, token) {
         const tokenInfo = token.split(' ')
         const tokendec = jwt.decode(tokenInfo[1])
         const checkUs = await Usuario.findByPk(tokendec.sub)
         if(!checkUs){
             throw boom.badData('el usuario no existe')
         }
-            let cama;
-            let habitacion;
+        console.log("data en crear reserva",data);
+        let cama;
+        let habitacion;
 
             if(data.camas){
                 for (let i = 0; i < data.camas.length; i++) {
