@@ -33,7 +33,7 @@ class UserService {
       delete nuevoUsuario.dataValues.password;
       return nuevoUsuario; 
     } catch(error) {  
-      return boom.badData('no se creo el usuario')
+      return boom.badData('El usuario no pudo ser creado')
     }
 
   }

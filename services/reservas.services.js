@@ -35,6 +35,9 @@ class ReservaService {
                         model: Cama,
                         attributes: ['id','nombre'],
                         through: {attributes: []}
+                    },
+                    {
+                        
                     }
                 ],
                 where: {
@@ -432,10 +435,10 @@ class ReservaService {
                         camasDisponiblesIds: habitacionesCompartidas[i].Camas.map(c => ({camaNombre: c.nombre, camaId: c.id, }))
                     })
                 }
+                console.log('habitacion completamente ocupada',habitacionCompletamenteOupada)
                 for (let j = 0; j < disponibles.length; j++) {
                     
                     if(disponibles[j].idHabitacion === habitacionesCompartidas[i].id || habitacionCompletamenteOupada.includes(habitacionesCompartidas[i].id)) { 
-
                         incluye = true
                         continue;
                     } else if (j === disponibles.length - 1 && incluye === false) {
@@ -448,6 +451,7 @@ class ReservaService {
                     }
                 }
             }
+
             console.log(disponibles)
             return disponibles
 
