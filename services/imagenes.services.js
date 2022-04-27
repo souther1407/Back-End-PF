@@ -7,33 +7,20 @@ const { Imagen } =  require('../db/models/imagen.model')
 class ImagenService {
 
   async mostrarTodo() {
-    try {
-      const imagenes = Imagen.findAll();
-      return imagenes
-    } catch(error) {
-      return boom.notFound('no hay imagenes disponibles')
-    }
-    
+    const imagenes = await Imagen.findAll();
+      if(!imagenes) {
+        throw boom.notFound('no hay imagenes disponibles')
+      }
+      return imagenes 
   }
 
   async buscarPorId(id) {
-    try {
-      
-    } catch(error) {
-      
-    }
+    
   }
 
   async crear(id, imagen) {
-    try {
-      if(imagen.length<1) {
-        const imagen = Imagen.create
-      }
 
-    } catch(error) {
-      
-    }
-   }
+  }
 
 
 

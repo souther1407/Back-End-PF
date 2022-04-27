@@ -15,12 +15,12 @@ const {checkApiKey} =require('../middleware/auth.handler');
 
 router.get('/',
 checkApiKey,
-async (req, res)=>{
+async (req, res, next)=>{
   try{
     const habitaciones = await services.buscar();
     res.json(habitaciones)
   }catch(error){
-    return boom.badData('algo salio mal')
+    next(error)
   }
 });
 
@@ -28,27 +28,25 @@ router.post('/',
 passport.authenticate('jwt', {session: false}),
 chequearRoles('administrador'),
 validatorHandler(crearHabitacionSchema, 'body'), // validation
-async (req, res)=>{
+async (req, res, next)=>{
       try {
       const body = req.body
       const nuevaHabitacion = await services.crear(body)
       res.status(201).json(nuevaHabitacion)
     } catch(error) {
-      return boom.notFound('algo salio mal')
+      next(error)
     }
 });
 
 router.get('/:id',
   validatorHandler(getHabitacionSchema, 'params'),
-  async (req, res)=>{
+  async (req, res, next)=>{
     try {
       const {id} = req.params;
       const habitacion = await services.buscaruno(id);
       res.json(habitacion)
     } catch(error) {
-      res.status(404).json({
-        message: error
-      })
+      next(error)
     }
 });
 
@@ -58,7 +56,7 @@ passport.authenticate('jwt', {session: false}),
 chequearRoles('administrador'),
 validatorHandler(getHabitacionSchema, 'params'),
 validatorHandler(actualizarHabitacionSchema, 'body'),
-  async (req, res)=>{
+  async (req, res, next)=>{
     try {
       const { id } = req.params
       const body = req.body
@@ -66,20 +64,20 @@ validatorHandler(actualizarHabitacionSchema, 'body'),
       const habitacion = await services.actualizar(id, body)
       res.json(habitacion)
     } catch(error) {
-      return boom.notFound('algo salio mal')
+      next(error)
   }
 });
 
 router.delete('/:id', 
 passport.authenticate('jwt', {session: false}),
 chequearRoles('administrador'),
-async (req, res)=>{
+async (req, res, next)=>{
   try {
     const { id } = req.params
     const habitacion = await services.borrar(id)
     res.json(habitacion)
   } catch(error) {
-    return boom.notFound('algo salio mal')
+    next(error)
   }
 });
 

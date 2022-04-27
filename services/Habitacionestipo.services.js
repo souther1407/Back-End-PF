@@ -17,37 +17,21 @@ class habitacionTipoService {
   // eslint-disable-next-line consistent-return
   async mostrarBytipo(tipo) {
     if(tipo === 'privada'){
-    try {
         const habitaciones = await Habitacion.findAll({where:{privada: true}})
         return habitaciones
-    } catch(error) {
-        return error
-
-    }} else if(tipo === 'compartida'){
-      try {
+    } else if(tipo === 'compartida'){
         const habitaciones = await Habitacion.findAll({where:{privada:false}})
         return habitaciones
-      } catch(error) {
-        return error
-      }
     }
   }
 
   async mostrarBybano(bano) {
     if(bano === 'privado'){
-    try {
         const habitaciones = await Habitacion.findAll({where:{banoPrivado: true}})
         return habitaciones
-    } catch(error) {
-        return error
-
-    }} else if(bano === 'compartido'){
-      try {
+    } else if(bano === 'compartido') {
         const habitaciones = await Habitacion.findAll({where:{banoPrivado:false}})
         return habitaciones
-      } catch(error) {
-        return error
-      }
     }
   }
 

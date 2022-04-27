@@ -28,10 +28,6 @@ const swaggerSpect = {
   {
       "url": "https://backpfhenryv2.herokuapp.com",
       "description": "Development server"
-  },
-  {
-      "url": "localhost:3001",
-      "description": "Local server"
   }
   ]
   },
