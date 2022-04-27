@@ -9,7 +9,7 @@ const { Habitacion } = require('../db/models/habitacion.model');
 const { Cama } = require('../db/models/cama.model');
 const stripe = new Stripe(config.stripeSecret)
 
-class pagosService {
+class PagosService {
 
     async crearPago(data) {
         let habitaciones = []
@@ -66,9 +66,27 @@ class pagosService {
             throw boom.conflict(error)
         }
     }
+    /*
+        {
+            id,
+            status,
+            receipt_email,
+            currency,
+            payment_method_types
+        } 
+     */
     async guardarPago(infoPago){
-        //TODO: guardar en la tabla pago la info del pago, asociar a reserva
+        //TODO: guardar en la tabla pago la info del pago,
+        const newPago = await Pago.create({
+            id:infoPago.id,
+            moneda:infoPago.currency,
+            monto:infoPago.amount,
+            metodoDePago:infoPago.payment_method_types[0],
+            estado:infoPago.status,
+        })
+
+        return newPago
     }
 }
 
-module.exports = pagosService
+module.exports = PagosService
