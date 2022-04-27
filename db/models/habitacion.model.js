@@ -32,6 +32,11 @@ const HabitacionSchema = {
   precio:{
     type: DataTypes.INTEGER,
   },
+  estado:{
+    type: DataTypes.ENUM('reservada', 'ocupada', 'libre', 'mantenimiento'),
+    allowNull: false,
+    defaultValue: 'libre',
+  },
   banoPrivado:{
     type: DataTypes.BOOLEAN,
     allowNull: false,

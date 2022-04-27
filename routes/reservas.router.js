@@ -18,6 +18,7 @@ router.get('/byFecha',
     async (req, res, next)=>{
     try {
         const {ingreso,egreso} = req.query
+        console.log(ingreso, egreso);
         const reservasFiltered = await services.mostrarReservasByFecha(ingreso, egreso)
         res.status(200).json(reservasFiltered)
     } catch (error) {

@@ -33,7 +33,7 @@ class UserService {
       delete nuevoUsuario.dataValues.password;
       return nuevoUsuario; 
     } catch(error) {  
-      return boom.badData('no se creo el usuario')
+      return boom.badData('El usuario no pudo ser creado')
     }
 
   }
@@ -41,7 +41,7 @@ class UserService {
   async mostrarTodo() {
   const usuariosexistentes = await Usuario.findAll();
     if (!usuariosexistentes.length) {
-      try {
+      
         await this.crear(usuarioAdmin)
         const usuario = await Usuario.findAll()
         delete usuario[0].dataValues.createdAt;
@@ -52,20 +52,15 @@ class UserService {
         delete usuario[0].dataValues.telefono;
         delete usuario[0].dataValues.direccion;
         
-        return {
-          mensaje: `se creo el usuario Super admin (password: admin123), uselo para generar un usuario administrador y elimine a SuperAdmin inmediatamente, hasta tanto lo haga las medidas de seguridad estan desactivadas` ,
-          usuario
-        }
-      } catch(error) {
-        throw boom.notFound('algo salio mal')
-      }
+    return {
+    mensaje: `se creo el usuario Super admin (password: admin123), uselo para generar un usuario administrador y elimine a SuperAdmin inmediatamente, hasta tanto lo haga las medidas de seguridad estan desactivadas` ,
+    usuario}
+
+    
     }else{
-      try {
-        const usuario = await Usuario.findAll()
-        return usuario
-      } catch(error) {
-        throw boom.badData('algo salio mal')  
-      }
+    const usuario = await Usuario.findAll()
+    return usuario
+      
 
 
     }

@@ -7,7 +7,7 @@ function checkApiKey(req, res, next){
     if (apiKey === config.apiKey) {
         next();
     }else {
-        next(boom.unauthorized('pega la vuelta pibe!, no tenes permiso para entrar!'))
+        next(boom.unauthorized('se necesita API KEY'))
     }
 }
 
@@ -26,7 +26,7 @@ function chequearRoles(...roles) {
     if (roles.includes(user.role)){
         next()
     }else {
-        next(boom.unauthorized(`a donde vas??!?!, no tenes permiso pibe!`))
+        next(boom.unauthorized(`no tienes los permisos para este recurso`))
     }
     }
 }
