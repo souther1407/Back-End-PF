@@ -40,7 +40,9 @@ class ReservaService {
                         model: Cama,
                         attributes: ['id','nombre','HabitacionId'],
                         through: {attributes: []}
+
                     } 
+
                 ],
                 where: {
                     [Op.or]: [
