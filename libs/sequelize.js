@@ -6,11 +6,6 @@ const USER = encodeURIComponent(config.dbUser);
 const PASSWORD = encodeURIComponent(config.dbPassword);
 
 
-// const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}` /* local */
-// const URI = `postgres://aooxfnqy:hivKnFb8AHd99C3CaeCb4AVbqRc1OTCG@kesavan.db.elephantsql.com/aooxfnqy` /* db dev */
-// const URI = 'postgres://dbmaljaxgxxrba:c5b9e2743cf628b388e5d24ceb7d0cc87069dbaacd9ca113e4a3fb3582b4ebed@ec2-44-199-143-43.compute-1.amazonaws.com:5432/d2cvc1so8ve8q8' /* db en heroku, sin uso */ 
-// const URI = 'postgres://ebzvjeht:2vQxks0hV0POuEpWoQKyyFo-_Uoi66QW@heffalump.db.elephantsql.com/ebzvjeht' /* db produccion */
-
 const options = {
   dialect: `postgres`,
   logging: config.isProd ? false: true,
