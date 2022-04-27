@@ -41,7 +41,7 @@ class pagosService {
         }
     }
     //a
-    console.log("habitaciones",)
+   
     async calcularAmountItems (habitaciones, camas){
         let amount = 0;
         try {
