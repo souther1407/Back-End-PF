@@ -12,7 +12,7 @@ const { isNumber } = require('util');
 
 //servicios
 const huespedServices = require('./huesped.sevices');
-const { threadId } = require('worker_threads');
+
 const serviceHuesped = new huespedServices
 
 class ReservaService {
@@ -21,7 +21,7 @@ class ReservaService {
         const ingresoFecha = ingreso
         const egresoFecha = egreso
         if(ingreso >= egreso) {
-            return boom.badData('la fecha de ingreso no puede ser mayor que la de egreso')
+            throw boom.badData('la fecha de ingreso no puede ser mayor que la de egreso')
         }
         const reservas = await ReservaCama.findAll(
             {
@@ -35,10 +35,7 @@ class ReservaService {
                         model: Cama,
                         attributes: ['id','nombre'],
                         through: {attributes: []}
-                    },
-                    {
-                        
-                    }
+                    },                   
                 ],
                 where: {
                     [Op.or]: [
