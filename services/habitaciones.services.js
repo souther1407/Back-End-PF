@@ -109,7 +109,7 @@ class habitacionesService {
         delete habitacion[i].dataValues.Camas}
       
       return habitacion;
-  }
+  }}
 
   
   // eslint-disable-next-line class-methods-use-this
