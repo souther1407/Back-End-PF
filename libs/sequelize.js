@@ -14,7 +14,13 @@ const PASSWORD = encodeURIComponent(config.dbPassword);
 
 const sequelize = new Sequelize(URI,  {
   dialect: 'postgres',
-  logging: false
+  logging: false,
+  dialectOptions: {
+    ssl: {
+      require: true, // This will help you. But you will see nwe error
+      rejectUnauthorized: false // This line will fix new error
+    }
+  },
 });
 
 setupModels(sequelize);
