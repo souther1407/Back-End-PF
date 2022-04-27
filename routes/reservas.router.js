@@ -100,13 +100,12 @@ router.post('/',
     validatorHandler(crearReservaSchema, 'body'),
     async (req, res, next)=>{
         try {
-            
-            const token = req.headers['authorization'];
             const {toBack, infoPayment} = req.body
-            
             console.log("toBack--->>",toBack)
             console.log("infoPayment--->>",infoPayment)
-            const newReserva = await services.crearReserva(toBack, token)
+            const token = req.headers['authorization'];
+            
+            const newReserva = await services.crearReserva(toBack,infoPayment, token)
             res.status(201).json(newReserva)
         } catch(error) {
             next(error)
