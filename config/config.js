@@ -3,6 +3,7 @@ require('dotenv').config();
 
 const config = {
 env: process.env.NODE_ENV || 'dev',
+isProd: process.env.NODE_ENV === 'production',
 port: process.env.PORT || 3001,
 dbUser: process.env.DB_USER,
 dbPassword: process.env.DB_PASSWORD,
@@ -17,7 +18,9 @@ jwtRecuperacion: process.env.JWT_SECRET_RECOVERY,
 jwtRefresh: process.env.JWT_SECRET_REFRESH,
 googleClient: process.env.GOOGLE_CLIENTE_ID,
 googlePassword: process.env.GOOGLE_CLIENT_SECRET,
-stripeSecret: process.env.API_KEY_STRIPE_SECRET
+stripeSecret: process.env.API_KEY_STRIPE_SECRET,
+dbUrl: process.env.DATABASE_URL,
+
 }
 
 module.exports = { config }

@@ -10,7 +10,7 @@ const pagoRouter = require('./pagos.router')
 
 const nacionalidadesRouter = require("./nacionalidades.router")
 
-
+const huespedRouter = require("./huesped.router")
 const authRouter = require('./auth.router')
 
 
@@ -27,6 +27,7 @@ function routerApi (app) {
   app.use('/contacto', contactoRouter )
   // app.use('/huespedes', huespedRouter)
   app.use('/pagos', pagoRouter)
+  app.use('/huespedes', huespedRouter)
 }
 
 module.exports = routerApi;
