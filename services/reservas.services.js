@@ -234,7 +234,7 @@ class ReservaService {
         }
         if (reserva.Camas.length) {
             for (let i = 0; i < reserva.Camas.length; i++) {
-                Cama.findByPk(reserva.Camas[i].id)
+                await Cama.findByPk(reserva.Camas[i].id)
                     .then(async (cama) => {
                         try {
                             const findHuesped = await Huesped.findByPk(huespedes[i].dni)
@@ -257,7 +257,7 @@ class ReservaService {
             for (let i = 0; i < reserva.Habitacions.length; i++) {
                 const cantHuesped = reserva.Habitacions[i].cantCamas
                 for (let j = 0; j < cantHuesped; j++) {
-                    Habitacion.findByPk(reserva.Habitacions[i].id)
+                    await Habitacion.findByPk(reserva.Habitacions[i].id)
                         .then(async (habitacion) => {
                             try {
                                 const findHuesped = await Huesped.findByPk(huespedes[j].dni)
@@ -319,7 +319,7 @@ class ReservaService {
                             [Op.gte]: ingresoFecha
                             }},             
                             {fecha_egreso: {
-                                [Op.lte]: egresoFecha
+                                [Op.lt]: egresoFecha
                             }}
                         ]},
                         {[Op.and]: [
@@ -327,7 +327,7 @@ class ReservaService {
                                 [Op.lte]: ingresoFecha
                             }},
                             {fecha_egreso: {
-                                [Op.gte]: ingresoFecha
+                                [Op.gt]: ingresoFecha
                             }},
                             {fecha_egreso: {
                                 [Op.lte]: egresoFecha
