@@ -39,6 +39,11 @@ const ReservaCamaSchema = {
   saldo: {
     type: DataTypes.FLOAT,
     allowNull: false
+  }, 
+  estado:{
+    type: DataTypes.ENUM('Booked','Occupied', 'For Manteinance', 'closed'),
+    allowNull: false,
+    defaultValue: 'Booked'
   }
 }
 

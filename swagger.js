@@ -2,18 +2,13 @@
  * @swagger
  * components:
  *  securitySchemes:
- *    ApiKeySecurity:
+ *   ApiKeySecurity:
  *     type: apiKey
- *     name: api
- */
-
-/**
- * @swagger
- * components:
- *   Token:
- *    type: http
- *     scheme: bearer
  *     in: header
+ *     name: api
+ *   Token:
+ *     type: http
+ *     scheme: bearer
  *     bearerFormat: JWT 
  */
 
@@ -128,6 +123,7 @@
  *        description: el dni del usuario
  *    security:
  *     - ApiKeySecurity: []
+ *       Token: []
  *    responses:
  *      200:
  *         description: devuelve un usuario
@@ -250,6 +246,7 @@
  *   tags: [Reserva]
  *   security:
  *    - ApiKeySecurity: []
+ *      Token: []
  *   responses:
  *     200:
  *       description: Array de reservas
@@ -267,7 +264,7 @@
 /**
  * @swagger
  * path:
- * /reservas/?{ingreso}&{egreso}:
+ * /reservas/?:
  *  get:
  *    summary: Retorna las reservas en un rango de fecha determinado
  *    tags: [Reserva]
@@ -286,6 +283,7 @@
  *          description: fomato yyyy-mm-dd
  *    security:
  *      - ApiKeySecurity: []
+ *        Token: []
  *    responses:
  *       200:
  *         description: Devuelve un array con las reservas en esa fecha
@@ -382,6 +380,7 @@
  *            $ref: '#/components/schemas/Reserva'           
  *    security:
  *      - ApiKeySecurity: []
+ *        Token: []
  *    responses:
  *      200:
  *        description: Retorna la reserva creada, un un Json
@@ -404,10 +403,11 @@
  *        name: id   
  *        required: true
  *        schema:
- *          type: integer
+ *          type: string
  *        description: Se pasa el id de la reserva a eliminar
  *    security:
  *      - ApiKeySecurity: []
+ *        Token: []
  *    responses:
  *       201:
  *         description: Retora la confirmacion de eliminacion
@@ -547,6 +547,7 @@
  *            $ref: '#/components/schemas/Habitación'           
  *    security:
  *      - ApiKeySecurity: []
+ *        Token: []
  *    responses:
  *      200:
  *        description: Retorna la habitacion creada, en un Json
@@ -571,6 +572,7 @@
  *        description: Se pasa el id de la habitación a eliminar           
  *    security:
  *      - ApiKeySecurity: []
+ *        Token: []
  *    responses:
  *       201:
  *         description: devuelve la confirmación de la eliminación
@@ -649,7 +651,7 @@
  *        name: id   
  *        required: true
  *        schema:
- *          type: integer
+ *          type: string
  *        description: Recibe el id de la cama a buscar
  *    security:
  *      - ApiKeySecurity: []
@@ -682,11 +684,14 @@
  *            $ref: '#/components/schemas/Cama'
  *    security:
  *      - ApiKeySecurity: []
+ *        Token: []
  *    responses:
  *      200:
  *        description: Retorna la cama creada, en un Json
  *      401:
  *        description: El usuario no tiene los permisos necesarios
+ *      404:
+ *        description: Habitación no encontrada
  */
 
 // DELETE CAMA POR ID
@@ -702,10 +707,11 @@
  *        name: id   
  *        required: true
  *        schema:
- *          type: integer
+ *          type: string
  *        description: Se pasa el id de la cama a eliminar
  *    security:
  *      - ApiKeySecurity: []
+ *        Token: []
  *    responses:
  *      201:
  *         description: devuelve la confirmación de la eliminación

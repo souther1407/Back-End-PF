@@ -21,8 +21,9 @@ if (config.isProd) {
 const sequelize = new Sequelize(config.dbUrl, options);
 setupModels(sequelize);
 
+
 const {Usuario, Habitacion, Reserva, Cama, Huesped, Nacionalidades, TipoDocumento, Imagen, Pago } = sequelize.models;
-console.log(sequelize.models)
+
 
 const Historial = sequelize.define('Historial',{
   checkIn:{
@@ -34,6 +35,8 @@ checkOut:{
     allowed: false
 }
 })
+
+
 
 // relacion habitacion-camas 1 a muchos muchos a 1
 //  una habitacion tiene muchas camas
@@ -114,16 +117,19 @@ Habitacion.belongsToMany(Huesped, {through: 'Huesped_Habitacion'})
 Habitacion.hasMany(Imagen, {onDelete: 'cascade'});
 Imagen.belongsTo(Habitacion)
 
-// relacion pagos - correccion de la tabla
-Reserva.hasOne(Pago)
-Pago.belongsTo(Reserva)
+
+// relacion imágenes con habitaciones con pago
+Pago.hasOne(Reserva)
+Reserva.belongsTo(Pago)
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5a9694d4b2c9d207c40a2fc89ce924e52f07d445
 sequelize.sync({ force: true })
   .then(() => {
     console.log(`base de datos creada/actualizada `);
-    
     
   })
   .catch(err => console.log(err));

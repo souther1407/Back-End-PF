@@ -12,6 +12,7 @@ class huespedServices {
         return huespedes
     }
 
+    //TODO: modificar logica: tipo dni es enum ahora
     async crearHuesped(data){
         const huesped = await Huesped.findByPk(data.dni)
         if(huesped){
@@ -29,7 +30,7 @@ class huespedServices {
     async eliminarHuesped(id){
         const huesped = await Huesped.destroy({where: {dni: id}})
         if(!huesped){
-            throw boom.notFound('no existe el usuario que intenta eliminar')
+            throw boom.notFound('no existe el huesped que intenta eliminar')
         }
         return huesped
     }
@@ -52,6 +53,13 @@ class huespedServices {
             throw boom.notFound('no se pudo actualizar');
         }
         return huespedUpdate
+    }
+    async detalleHuesped(id){
+        const huesped = await Huesped.findByPk(id)
+        if(!huesped){
+            throw boom.notFound('no existe el huesped solicitado')
+        }
+        return huesped;
     }
 }
 
