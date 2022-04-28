@@ -123,10 +123,6 @@ Pago.hasOne(Reserva)
 Reserva.belongsTo(Pago)
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 5a9694d4b2c9d207c40a2fc89ce924e52f07d445
 sequelize.sync({ force: true })
   .then(() => {
     console.log(`base de datos creada/actualizada `);
