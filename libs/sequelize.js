@@ -18,7 +18,6 @@ if (config.isProd) {
   } 
 }
 
-
 const sequelize = new Sequelize(config.dbUrl, options);
 setupModels(sequelize);
 
@@ -124,7 +123,7 @@ Pago.hasOne(Reserva)
 Reserva.belongsTo(Pago)
 
 
-sequelize.sync({ force: false })
+sequelize.sync({ force: true })
   .then(() => {
     console.log(`base de datos creada/actualizada `);
     
