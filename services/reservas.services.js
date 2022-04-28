@@ -234,7 +234,7 @@ class ReservaService {
         }
         if (reserva.Camas.length) {
             for (let i = 0; i < reserva.Camas.length; i++) {
-                Cama.findByPk(reserva.Camas[i].id)
+               await Cama.findByPk(reserva.Camas[i].id)
                     .then(async (cama) => {
                         try {
                             const findHuesped = await Huesped.findByPk(huespedes[i].dni)
@@ -490,7 +490,7 @@ class ReservaService {
                 throw boom.notFound('no existen reservas')
             }
             return reservas
-     }
+}
 
 
 }
