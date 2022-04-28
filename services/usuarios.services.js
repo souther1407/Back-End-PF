@@ -89,7 +89,7 @@ class UserService {
   }
 
   async buscarPorGoogleId(googleId){
-    const user = Usuario.findOne({where: { googleId}})
+    const user = await Usuario.findOne({where: { googleId}})
     return user
   }
 
