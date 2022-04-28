@@ -8,7 +8,6 @@ const {TipoDocumento,tipoDocumentoSchema} = require("./tipoDocumento.model");
 const { HistorialOcupante, HistorialOcupanteSchema } = require('./historialOcupante.model');
 const {Pago, PagoSchema} = require("./pago.model")
 const {Imagen,ImagenesSchema} = require("./imagen.model")
-const {Pago,PagoSchema} = require("./pago.model")
 
 function setupModels(sequelize) {
   Imagen.init(ImagenesSchema, Imagen.config(sequelize))

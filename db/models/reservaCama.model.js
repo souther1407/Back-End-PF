@@ -36,9 +36,9 @@ const ReservaCamaSchema = {
     allowNull: false
   }, 
   estado:{
-    type: DataTypes.ENUM('Available','Booked','Occupied', 'For Manteinance'),
+    type: DataTypes.ENUM('Booked','Occupied', 'For Manteinance', 'closed'),
     allowNull: false,
-    defaultValue: 'Available'
+    defaultValue: 'Booked'
   }
 }
 
