@@ -41,6 +41,7 @@ async (req, res, next) => {
 router.get("/existGoogleUser/:googleId",async (req, res) => {
   const { googleId } = req.params;
   try {
+    console.log("el id", googleId)
     const googleUser = await service.buscarPorGoogleId(googleId)
     res.json({ existe: googleUser })
   } catch (error) {
