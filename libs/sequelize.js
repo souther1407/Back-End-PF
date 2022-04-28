@@ -121,7 +121,7 @@ Imagen.belongsTo(Habitacion)
 
 // relacion imágenes con habitaciones con pago
 Pago.hasOne(Reserva)
-Reserva.belongsTo(Pago)
+Reserva.belongsTo(Pago,{onDelete: "cascade" })
 
 
 sequelize.sync({ force: false })

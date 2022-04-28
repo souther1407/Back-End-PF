@@ -88,6 +88,11 @@ class UserService {
     return usuario;
   }
 
+  async buscarPorGoogleId(googleId){
+    const user = Usuario.findOne({where: { googleId}})
+    return user
+  }
+
   async actualizar(dni, changes) {
     const usuario = await Usuario.findByPk(dni)
     const respuesta = await usuario.update(changes);
