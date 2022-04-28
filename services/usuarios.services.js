@@ -89,7 +89,8 @@ class UserService {
   }
 
   async buscarPorGoogleId(googleId){
-    const user = await Usuario.findOne({ where: { googleId }})
+    const user = await Usuario.findOne({ where: { googleId:googleId }})
+    console.log("adafaf el user",user)
     return user
   }
 
