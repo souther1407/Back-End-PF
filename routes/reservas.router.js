@@ -1,5 +1,7 @@
 const express = require('express')
 const ReservaService = require('./../services/reservas.services')
+const { isNumber } = require('util');
+const PagosService = require("../services/pagos.services")
 const validatorHandler = require('../middleware/validator.handler')
 const { crearReservaSchema, getReservaByFecha, getReservaId } = require('../schemas/reservas.schema')
 const { chequearRoles } = require('../middleware/auth.handler')
@@ -8,6 +10,7 @@ const { createArrayHuespedesSchema } = require('../schemas/huesped.schema')
 const router = express.Router()
 const {checkApiKey} =require('../middleware/auth.handler');
 const services = new ReservaService
+const servicesPago= new PagosService
 
 
 router.get('/byFecha',
@@ -92,19 +95,23 @@ router.delete('/:id',
         }
 
     })
-
+//TODO: corregir validatorHandler para que acepte  toBack e infoPayment
 router.post('/',
     checkApiKey,
     passport.authenticate('jwt', {session: false}),
-    chequearRoles('administrador', 'recepcionista, cliente'),
-    validatorHandler(crearReservaSchema, 'body'),
+    chequearRoles('administrador', 'recepcionista', 'cliente'),
+    /* validatorHandler(crearReservaSchema, 'body'), */
     async (req, res, next)=>{
         try {
-            
+
+            let {toBack, infoPayment} = req.body
+            console.log("toBack--->>",toBack)
+            console.log("infoPayment--->>",infoPayment)
             const token = req.headers['authorization'];
-            const body = req.body
-            console.log("body",body)
-            const newReserva = await services.crearReserva(body, token)
+            infoPayment.amount = toBack.saldo
+            const newReserva = await services.crearReserva(toBack, token)
+            const newPago = await servicesPago.guardarPago(infoPayment)
+            newReserva.setPago(newPago);
             res.status(201).json(newReserva)
         } catch(error) {
             next(error)
