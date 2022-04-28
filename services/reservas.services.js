@@ -8,7 +8,7 @@ const { Habitacion } = require('../db/models/habitacion.model')
 const jwt = require('jsonwebtoken');
 const { config } = require('../config/config')
 const { Op } = require('sequelize');
-const { isNumber } = require('util');
+
 
 //servicios
 const huespedServices = require('./huesped.sevices');
@@ -135,54 +135,55 @@ class ReservaService {
         if(!checkUs){
             throw boom.badData('el usuario no existe')
         }
-            let cama;
-            let habitacion;
+        console.log("data en crear reserva",data);
+        let cama;
+        let habitacion;
 
-            if(data.camas){
-                for (let i = 0; i < data.camas.length; i++) {
-                    cama = await Cama.findByPk(data.camas[i])
-                    if(!cama) { throw boom.notFound(`no existe la cama con id ${data.camas[i]}`)}
+        if(data.camas){
+            for (let i = 0; i < data.camas.length; i++) {
+                cama = await Cama.findByPk(data.camas[i])
+                if(!cama) { throw boom.notFound(`no existe la cama con id ${data.camas[i]}`)}
+            }
+        }
+        if(data.habitaciones){
+            for (let i = 0; i < data.habitaciones.length; i++){
+                habitacion = await Habitacion.findByPk(data.habitaciones[i])
+                if(!habitacion) { 
+                    throw boom.notFound(`no existe la habitacion con id ${data.habitaciones[i]}`)}
+            }
+        }
+        const newReserva = await ReservaCama.create({
+            fecha_ingreso: data.fecha_ingreso,
+            fecha_egreso: data.fecha_egreso,
+            saldo: data.saldo
+        })
+        if (data.camas) {
+            for (let i = 0; i < data.camas.length; i++) {
+                Cama.findByPk(data.camas[i])
+                .then(cama => {
+                    newReserva.addCama(cama)
+                })
+                .catch(error => { 
+                    throw boom.badData(error)})
+            }
+        }
+        if(! data.habitaciones){
+            throw boom.badData('Estas mandando un id de una habitación compartida')
+            }else{
+            for (let i = 0; i < data.habitaciones.length; i++) {
+                if(habitacion.dataValues.privada){
+                    await Habitacion.findByPk(data.habitaciones[i])
+                    .then(habitacion =>{
+                        newReserva.addHabitacion(habitacion)
+                    }).catch(error => {throw boom.badData(error)})
                 }
             }
-            if(data.habitaciones){
-                for (let i = 0; i < data.habitaciones.length; i++){
-                    habitacion = await Habitacion.findByPk(data.habitaciones[i])
-                    if(!habitacion) { 
-                        throw boom.notFound(`no existe la habitacion con id ${data.habitaciones[i]}`)}
-                }
-            }
-            const newReserva = await ReservaCama.create({
-                fecha_ingreso: data.fecha_ingreso,
-                fecha_egreso: data.fecha_egreso,
-                saldo: data.saldo
-            })
-            if (data.camas) {
-                for (let i = 0; i < data.camas.length; i++) {
-                    Cama.findByPk(data.camas[i])
-                    .then(cama => {
-                        newReserva.addCama(cama)
-                    })
-                    .catch(error => { 
-                        throw boom.badData(error)})
-                }
-            }
-            if(! data.habitaciones){
-                throw boom.badData('Estas mandando un id de una habitación compartida')
-                }else{
-                for (let i = 0; i < data.habitaciones.length; i++) {
-                    if(habitacion.dataValues.privada){
-                        await Habitacion.findByPk(data.habitaciones[i])
-                        .then(habitacion =>{
-                            newReserva.addHabitacion(habitacion)
-                        }).catch(error => {throw boom.badData(error)})
-                    }
-                }
-            }
-            await Usuario.findByPk(tokendec.sub)
-            .then(user =>{
-                newReserva.setUsuario(user)
-            })
-            return newReserva
+        }
+        await Usuario.findByPk(tokendec.sub)
+        .then(user =>{
+            newReserva.setUsuario(user)
+        })
+        return newReserva
     }
 
     async eliminarReserva(id) {
