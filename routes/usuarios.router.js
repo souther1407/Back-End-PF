@@ -24,7 +24,7 @@ async (req, res, next) => {
 
 router.get('/:dni',
 passport.authenticate('jwt', {session: false}),
-chequearRoles("administrador", "recepcionisa","cliente"),
+chequearRoles("administrador", "recepcionista","cliente"),
 validatorHandler(getUserSchema, 'params'),
 async (req, res, next) => {
   
