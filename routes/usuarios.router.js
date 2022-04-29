@@ -55,15 +55,15 @@ router.get("/existGoogleUser/:googleId",async (req, res) => {
 // crear usuario
 //TODO: modificada ruta por Eric, nombres de atributos del body incompatibles con el front
 router.post("/",
-  /* checkApiKey, */
+  checkApiKey,
   /* validatorHandler(createUserSchema, 'body'),  */
   async (req, res) => {
     try {
-      const {name, lastName, role,email,dni, typeofdocument,password,nationality,birthdate, genre} = req.body
+      const {name, lastname, role,email,dni, typeofdocument,password,nationality,birthdate, genre} = req.body
 
       const body = {
         nombre:name,
-        apellido:lastName,
+        apellido:lastname,
         rol:role.toLowerCase(),
         email,
         dni,
