@@ -30,10 +30,11 @@ class UserService {
         ...data,
         password: hash
       }); 
-      delete nuevoUsuario.dataValues.password;
+      nuevoUsuario.dataValues.password = undefined;
+      console.log("nuevo usuario", nuevoUsuario)
       return nuevoUsuario; 
     } catch(error) {  
-      return boom.badData('El usuario no pudo ser creado')
+      return {...error}
     }
 
   }
@@ -86,6 +87,12 @@ class UserService {
     delete usuario.dataValues.createdAt;
     delete usuario.dataValues.tokenRecuperacion;
     return usuario;
+  }
+
+  async buscarPorGoogleId(googleId){
+    const user = await Usuario.findOne({ where: { googleId:googleId }})
+    console.log("adafaf el user",user)
+    return user
   }
 
   async actualizar(dni, changes) {
