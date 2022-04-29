@@ -77,7 +77,8 @@ router.post('/',
       const newUsuario = await service.crear(body);
       res.status(201).json(newUsuario);
     } catch (error) {
-      return boom.badData()
+  /*     return boom.badData() */
+          res.json(error)
       };
     }
 );
