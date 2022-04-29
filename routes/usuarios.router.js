@@ -73,7 +73,8 @@ router.post("/",
         fechaNacimiento:birthdate,
         genero:genre
       };
-      console.log("el body")
+
+      console.log("el body", body)
       const newUsuario = await service.crear(body);
       res.status(201).json(newUsuario);
     } catch (error) {
