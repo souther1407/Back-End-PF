@@ -30,11 +30,11 @@ class UserService {
         ...data,
         password: hash
       }); 
-      delete nuevoUsuario.dataValues.password;
+      nuevoUsuario.dataValues.password = undefined;
       console.log("nuevo usuario", nuevoUsuario)
       return nuevoUsuario; 
     } catch(error) {  
-      return {error}
+      return {...error}
     }
 
   }
