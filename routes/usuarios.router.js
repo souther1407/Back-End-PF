@@ -79,7 +79,7 @@ router.post("/",
       res.status(201).json(newUsuario);
     } catch (error) {
   /*     return boom.badData() */
-          res.json
+          res.json(error)
       };
     }
 );
