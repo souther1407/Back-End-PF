@@ -41,41 +41,42 @@ class AuthServices {
 
   
     async enviarEmail(infomail) {
-    const MAIL = config.email;
-    const PASSWORD = config.emailPassword
-    const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    secure: true,
-    port: 465,
-    auth: {
-    user: MAIL,
-    pass: PASSWORD
-            }
-        });
-    await transporter.sendMail(infomail);
-    return {message: 'se envio el correo'}        
+        const MAIL = config.email;
+        const PASSWORD = config.emailPassword
+        const transporter = nodemailer.createTransport({
+          host: "smtp.gmail.com",
+          secure: true,
+          port: 465,
+          auth: {
+          user: MAIL,
+          pass: PASSWORD
+                  }
+              });
+        await transporter.sendMail(infomail);
+        return {message: 'se envio el correo'}        
     }
 
+
     async enviarRecuperacion(email){
-    const usuario = await service.buscarPorEmail(email);
-    if (!usuario) {
-    throw boom.unauthorized();
-    }
-    const payload = {sub: usuario.dni };
-    const token = jwt.sign(payload, config.jwtSecret, {expiresIn: '10min'} );
-    //TODO: cambiar luego
-    /* const link = `http://rodrigoquintero.tamarindorivas.com?token=${token}` */
-    const link = `http://localhost:3000/changepassword?token=${token}`;
-    await service.actualizar(usuario.dni, {tokenRecuperacion: token });
-    const mail = {
-    from: 'WebMaster',
-    to: `${usuario.email}`, 
-    subject: "Email para recuperar contraseña",
-    html: `<b>Ingresa a este link => ${link} </b>`,
-    }
-    const respuesta = await this.enviarEmail(mail);
-    return respuesta;
-    }
+        const usuario = await service.buscarPorEmail(email);
+        if (!usuario) {
+        throw boom.unauthorized();
+        }
+        const payload = {sub: usuario.dni };
+        const token = jwt.sign(payload, config.jwtSecret, {expiresIn: '10min'} );
+        //TODO: cambiar luego
+        /* const link = `http://rodrigoquintero.tamarindorivas.com?token=${token}` */
+        const link = `http://localhost:3000/changepassword?token=${token}`;
+        await service.actualizar(usuario.dni, {tokenRecuperacion: token });
+        const mail = {
+          from: 'WebMaster',
+          to: `${usuario.email}`, 
+          subject: "Email para recuperar contraseña",
+          html: `<b>Ingresa a este link => ${link} </b>`,
+        }
+        const respuesta = await this.enviarEmail(mail);
+        return respuesta;
+      }
 
     async cambiarPaswword(token, newPassword){
 

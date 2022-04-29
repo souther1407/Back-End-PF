@@ -53,12 +53,26 @@ router.get("/existGoogleUser/:googleId",async (req, res) => {
 
 
 // crear usuario
+//TODO: modificada ruta por Eric, nombres de atributos del body incompatibles con el front
 router.post('/',
   checkApiKey,
-  validatorHandler(createUserSchema, 'body'), 
+  /* validatorHandler(createUserSchema, 'body'),  */
   async (req, res, next) => {
     try {
-      const body = req.body;
+      const {name, lastName, role,email,dni, typeofdocument,password,nationality,birthdate,genre} = req.body
+
+      const body = {
+        nombre:name,
+        apellido:lastName,
+        rol:role.toLowerCase(),
+        email,
+        dni,
+        tipoDocumento:typeofdocument,
+        password,
+        nacionalidad:nationality,
+        fechaNacimiento:birthdate,
+        genero:genre
+      };
       const newUsuario = await service.crear(body);
       res.status(201).json(newUsuario);
     } catch (error) {
@@ -79,7 +93,6 @@ router.patch('/:dni',
       const { dni } = req.params;
       /* const body = req.body; */
       const {name,lastname,email,birthdate} = req.body
-
       const body = {
         nombre:name,
         apellido:lastname,
