@@ -74,8 +74,8 @@ router.post("/",
         genero:genre
       };
       console.log("el body")
-     /*  const newUsuario = await service.crear(body); */
-      res.status(201).json({msg:"holaa"});
+      const newUsuario = await service.crear(body);
+      res.status(201).json(newUsuario);
     } catch (error) {
   /*     return boom.badData() */
           res.json
