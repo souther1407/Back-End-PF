@@ -31,6 +31,7 @@ class UserService {
         password: hash
       }); 
       delete nuevoUsuario.dataValues.password;
+      console.log("nuevo usuario", nuevoUsuario)
       return nuevoUsuario; 
     } catch(error) {  
       return boom.badData('El usuario no pudo ser creado')
