@@ -67,16 +67,26 @@ router.post('/',
     }
 );
 
+//RUTA EDITADA POR ERIC, problemas de variables
 router.patch('/:dni',
   checkApiKey,
   passport.authenticate('jwt', {session: false}),
   chequearRoles("administrador", "recepcionista", "cliente"),
-  validatorHandler(getUserSchema, 'params'),
-  validatorHandler(updateUserSchema, 'body'),
+  /* validatorHandler(getUserSchema, 'params'),
+  validatorHandler(updateUserSchema, 'body'), */
   async (req, res, next) => {
     try {
       const { dni } = req.params;
-      const body = req.body;
+      /* const body = req.body; */
+      const {name,lastname,email,birthdate} = req.body
+
+      const body = {
+        nombre:name,
+        apellido:lastname,
+        email,
+        fechaNacimiento:birthdate
+      }
+
       const usuario = await service.actualizar(dni, body);
       usuario.respuesta.password = undefined
       res.json(usuario);
