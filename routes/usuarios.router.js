@@ -24,7 +24,7 @@ async (req, res, next) => {
 
 router.get('/:dni',
 passport.authenticate('jwt', {session: false}),
-chequearRoles("administrador", "recepcionisa","cliente"),
+chequearRoles("administrador", "recepcionista","cliente"),
 validatorHandler(getUserSchema, 'params'),
 async (req, res, next) => {
   
@@ -79,7 +79,7 @@ router.post("/",
       res.status(201).json(newUsuario);
     } catch (error) {
   /*     return boom.badData() */
-          res.json
+          res.json(error)
       };
     }
 );
