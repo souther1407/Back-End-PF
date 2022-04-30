@@ -147,12 +147,12 @@ class habitacionesService {
     const habitacionUpdate = await Habitacion.update(
       {
         nombre,
-        cantCamas:Number(cantCamas),
+        cantCamas,
         comodidades,
         privada,
         banoPrivado,
         tipo,
-        precioHabitacion:Number(precioHabitacion),
+        precioHabitacion,
         descripcion,
         imagenes,
       },
