@@ -143,7 +143,7 @@ class habitacionesService {
         descripcion,
         imagenes,
     } = cambios;
-
+    console.log("cambios -- >",cambios)
     const habitacionUpdate = await Habitacion.update(
       {
         nombre,
