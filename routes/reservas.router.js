@@ -103,7 +103,7 @@ router.post('/',
     /* validatorHandler(crearReservaSchema, 'body'), */
     async (req, res, next)=>{
         try {
-
+            
             let {toBack, infoPayment} = req.body
             console.log("toBack--->>",toBack)
             console.log("infoPayment--->>",infoPayment)
