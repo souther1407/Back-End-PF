@@ -139,7 +139,7 @@ class habitacionesService {
         privada,
         banoPrivado,
         tipo,
-        precioHabitacion,
+        precio,
         descripcion,
         imagenes,
     } = cambios;
@@ -152,7 +152,7 @@ class habitacionesService {
         privada,
         banoPrivado,
         tipo,
-        precioHabitacion,
+        precio,
         descripcion,
         imagenes,
       },
