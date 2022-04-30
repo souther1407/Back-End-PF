@@ -50,12 +50,12 @@ router.get('/:id',
     }
 });
 
-
+//TODO: Editado por Eric, problemas con variables
 router.patch('/:id',
 passport.authenticate('jwt', {session: false}),
 chequearRoles('administrador'),
-validatorHandler(getHabitacionSchema, 'params'),
-validatorHandler(actualizarHabitacionSchema, 'body'),
+/* validatorHandler(getHabitacionSchema, 'params'),
+validatorHandler(actualizarHabitacionSchema, 'body'), */
   async (req, res, next)=>{
     try {
       const { id } = req.params
