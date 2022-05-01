@@ -116,7 +116,6 @@ class UserService {
           nacionalidad:changes.nationality,
           fechaNacimiento:changes.birthdate,
           genero:data.changes
-
     });
     return {
       respuesta
