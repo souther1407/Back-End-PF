@@ -21,23 +21,27 @@ const usuarioAdmin = {
   rol:"administrador"
 }
 class UserService {
+  
   async crear(data) {
-
+    console.log('el que llega------>',data)
     try {
       const hash = await bcrypt.hash(data.password, 12)
       const nuevoUsuario = await Usuario.create({
-          nombre:data.name,
+          nombre: data.name,
           apellido:data.lastname,
           rol:data.role.toLowerCase(),
-          email,
-          dni,
+          email: data.email,
+          dni: data.email,
           tipoDocumento:data.typeofdocument,
           password: hash,
           nacionalidad:data.nationality,
           fechaNacimiento:data.birthdate,
           genero:data.genre
-        
       }); 
+      console.log('el que se crea------>',nuevoUsuario)
+      if(!nuevoUsuario){
+        throw boom.badData('no se pudo crear el usuario')
+      }
       nuevoUsuario.dataValues.password = undefined;
       console.log("nuevo usuario", nuevoUsuario)
       return nuevoUsuario; 
@@ -51,7 +55,7 @@ class UserService {
   const usuariosexistentes = await Usuario.findAll();
     if (!usuariosexistentes.length) {
         const hash = await bcrypt.hash(usuarioAdmin.password, 12)
-        const nuevoadmin =await Usuario.create({
+        const nuevoadmin = await Usuario.create({
           ...usuarioAdmin,
           password:hash
         })

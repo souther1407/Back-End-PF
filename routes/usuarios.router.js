@@ -50,19 +50,17 @@ router.get("/existGoogleUser/:googleId",async (req, res) => {
 
 })
 
-
-
 // crear usuario
-
 router.post("/",
   checkApiKey,
   validatorHandler(createUserSchema, 'body'), 
-  async (req, res) => {
+  async (req, res, next) => {
     try {
-            const newUsuario = await service.crear(body);
+      const body = req.body
+      const newUsuario = await service.crear(body);
       res.status(201).json(newUsuario);
     } catch (error) {
-       return boom.badData()
+       next(error)
           
       };
     }
