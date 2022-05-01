@@ -22,7 +22,7 @@ const sequelize = new Sequelize(config.dbUrl, options);
 setupModels(sequelize);
 
 
-const {Usuario, Habitacion, Reserva, Cama, Huesped, Nacionalidades, TipoDocumento, Imagen, Pago } = sequelize.models;
+const {Usuario, Habitacion, Reserva, Cama, Huesped, Imagen, Pago } = sequelize.models;
 
 
 const Historial = sequelize.define('Historial',{
@@ -72,34 +72,6 @@ Cama.belongsToMany(Reserva,{through:"Reserva_Cama"});
 Reserva.belongsToMany(Habitacion,{through:"Reserva_Habitacion"});
 Habitacion.belongsToMany(Reserva,{through:"Reserva_Habitacion"});
 
-// relacion user nacionalidad
-// un usuario tiene una nacionalidad
-// un nacionalidad pertenece a un usuario
-
-Nacionalidades.hasMany(Usuario)
-Usuario.belongsTo(Nacionalidades)
-
-// relacion huesped nacionalidad
-// un huesped tiene una nacionalidad
-// un nacionalidad pertenece a un huesped
-
-Nacionalidades.hasMany(Huesped)
-Huesped.belongsTo(Nacionalidades)
-
-
-// un user tiene una tipoDocumento
-// un tipoDocumento pertenece a un user
-
-TipoDocumento.hasMany(Usuario)
-Usuario.belongsTo(TipoDocumento)
-
-// relacion huesped tipoDocumento
-// un huesped tiene una tipoDocumento
-// un tipoDocumento pertenece a un huesped
-
-TipoDocumento.hasMany(Huesped)
-Huesped.belongsTo(TipoDocumento)
-
 // relacion historialOcupante huesped cama
 
 Huesped.belongsToMany( Cama,{through: Historial})
@@ -120,10 +92,10 @@ Imagen.belongsTo(Habitacion)
 
 // relacion imágenes con habitaciones con pago
 Pago.hasOne(Reserva)
-Reserva.belongsTo(Pago)
+Reserva.belongsTo(Pago,{onDelete: "cascade" })
 
 
-sequelize.sync({ force: true })
+sequelize.sync({ force: false })
   .then(() => {
     console.log(`base de datos creada/actualizada `);
     
