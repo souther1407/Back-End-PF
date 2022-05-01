@@ -21,7 +21,6 @@ const usuarioAdmin = {
   rol:"administrador"
 }
 class UserService {
-
   async crear(data) {
 
     try {
@@ -51,8 +50,14 @@ class UserService {
   async mostrarTodo() {
   const usuariosexistentes = await Usuario.findAll();
     if (!usuariosexistentes.length) {
-      
-        await this.crear(usuarioAdmin)
+        const hash = await bcrypt.hash(usuarioAdmin.password, 12)
+        const nuevoadmin =await Usuario.create({
+          ...usuarioAdmin,
+          password:hash
+        })
+        if(!nuevoadmin){
+          throw boom.badData('no se pudo crear el SuperAdmin')
+        }
         const usuario = await Usuario.findAll()
         delete usuario[0].dataValues.createdAt;
         delete usuario[0].dataValues.tokenRecuperacion;
@@ -116,6 +121,7 @@ class UserService {
           nacionalidad:changes.nationality,
           fechaNacimiento:changes.birthdate,
           genero:data.changes
+
     });
     return {
       respuesta

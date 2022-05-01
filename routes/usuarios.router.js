@@ -11,8 +11,8 @@ const service = new UserService
 
 router.get('/',
 checkApiKey,
-passport.authenticate('jwt', {session: false}),
-chequearRoles("administrador", "recepcionisa"),
+// passport.authenticate('jwt', {session: false}),
+// chequearRoles("administrador", "recepcionisa"),
 async (req, res, next) => {
   try {
     const users = await service.mostrarTodo();
