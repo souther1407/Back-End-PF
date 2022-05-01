@@ -18,25 +18,33 @@ const direccion = Joi.string()
 const createUserSchema = Joi.object({
   dni: dni.required(),
   password: password.required(),
-  nombre: nombre.required(),
-  apellido: apellido.required(),
+  name: nombre.required(),
+  lastname: apellido.required(),
   email: email.required(),
-  fechaNacimiento: fechaNacimiento.required(),
-  Nacionalidad,
+  birthdate: fechaNacimiento.required(),
+  nationality,
   telefono,
   direccion,
-  tipoDocumento: tipoDocumento.required(),
-  genero: genero.required(),
-  rol: rol.valid('administrador', 'recepcionista',
+  typeofdocument: tipoDocumento.required(),
+  genre: genero.required(),
+  role: rol.valid('administrador', 'recepcionista',
   'cliente')
 });
 
 const updateUserSchema = Joi.object({
+  dni: dni,
   password: password,
-  nombre: nombre,
-  apellido: apellido,
+  name: nombre,
+  lastname: apellido,
   email: email,
-  tipoUsuario: tipoUsuario,
+  birthdate: fechaNacimiento,
+  nationality,
+  telefono,
+  direccion,
+  typeofdocument: tipoDocumento,
+  genre: genero,
+  role: rol.valid('administrador', 'recepcionista',
+  'cliente')
 });
 
 const getUserSchema = Joi.object({

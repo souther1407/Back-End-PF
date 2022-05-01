@@ -27,8 +27,17 @@ class UserService {
     try {
       const hash = await bcrypt.hash(data.password, 12)
       const nuevoUsuario = await Usuario.create({
-        ...data,
-        password: hash
+          nombre:data.name,
+          apellido:data.lastname,
+          rol:data.role.toLowerCase(),
+          email,
+          dni,
+          tipoDocumento:data.typeofdocument,
+          password: hash,
+          nacionalidad:data.nationality,
+          fechaNacimiento:data.birthdate,
+          genero:data.genre
+        
       }); 
       nuevoUsuario.dataValues.password = undefined;
       console.log("nuevo usuario", nuevoUsuario)
@@ -97,7 +106,18 @@ class UserService {
 
   async actualizar(dni, changes) {
     const usuario = await Usuario.findByPk(dni)
-    const respuesta = await usuario.update(changes);
+    const respuesta = await usuario.update({
+          nombre:changes.name,
+          apellido:changes.lastname,
+          rol:changes.role.toLowerCase(),
+          email,
+          dni,
+          tipoDocumento:changes.typeofdocument,
+          nacionalidad:changes.nationality,
+          fechaNacimiento:changes.birthdate,
+          genero:data.changes
+
+    });
     return {
       respuesta
     };
