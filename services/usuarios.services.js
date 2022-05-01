@@ -21,15 +21,27 @@ const usuarioAdmin = {
   rol:"administrador"
 }
 class UserService {
-
+  
   async crear(data) {
-
+    console.log('el que llega------>',data)
     try {
       const hash = await bcrypt.hash(data.password, 12)
       const nuevoUsuario = await Usuario.create({
-        ...data,
-        password: hash
+          nombre: data.name,
+          apellido:data.lastname,
+          rol:data.role.toLowerCase(),
+          email: data.email,
+          dni: data.email,
+          tipoDocumento:data.typeofdocument,
+          password: hash,
+          nacionalidad:data.nationality,
+          fechaNacimiento:data.birthdate,
+          genero:data.genre
       }); 
+      console.log('el que se crea------>',nuevoUsuario)
+      if(!nuevoUsuario){
+        throw boom.badData('no se pudo crear el usuario')
+      }
       nuevoUsuario.dataValues.password = undefined;
       console.log("nuevo usuario", nuevoUsuario)
       return nuevoUsuario; 
@@ -42,8 +54,14 @@ class UserService {
   async mostrarTodo() {
   const usuariosexistentes = await Usuario.findAll();
     if (!usuariosexistentes.length) {
-      
-        await this.crear(usuarioAdmin)
+        const hash = await bcrypt.hash(usuarioAdmin.password, 12)
+        const nuevoadmin = await Usuario.create({
+          ...usuarioAdmin,
+          password:hash
+        })
+        if(!nuevoadmin){
+          throw boom.badData('no se pudo crear el SuperAdmin')
+        }
         const usuario = await Usuario.findAll()
         delete usuario[0].dataValues.createdAt;
         delete usuario[0].dataValues.tokenRecuperacion;
@@ -97,7 +115,18 @@ class UserService {
 
   async actualizar(dni, changes) {
     const usuario = await Usuario.findByPk(dni)
-    const respuesta = await usuario.update(changes);
+    const respuesta = await usuario.update({
+          nombre:changes.name,
+          apellido:changes.lastname,
+          rol:changes.role.toLowerCase(),
+          email,
+          dni,
+          tipoDocumento:changes.typeofdocument,
+          nacionalidad:changes.nationality,
+          fechaNacimiento:changes.birthdate,
+          genero:data.changes
+
+    });
     return {
       respuesta
     };
