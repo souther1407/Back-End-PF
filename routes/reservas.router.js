@@ -64,16 +64,50 @@ async (req, res, next)=>{
     }
 });
 
-router.patch('/:id',
+
+//Cargar Huespedes V1
+
+// router.patch('/:id',
+//     passport.authenticate('jwt', {session: false}),
+//     validatorHandler(getReservaId, 'params'),
+//     validatorHandler(createArrayHuespedesSchema, 'body'),
+//     async (req, res, next) => {
+//         try {
+//             const {id} = req.params
+//             const body = req.body
+//             const updateHuesped = await services.cargarHuespedes(body, id) 
+//             res.status(200).json(updateHuesped)
+//         } catch (error) {
+//             next(error)
+//         }
+//     }
+// )
+
+//Cargar huesped V2
+router.patch('/huesped',
     passport.authenticate('jwt', {session: false}),
-    validatorHandler(getReservaId, 'params'),
-    validatorHandler(createArrayHuespedesSchema, 'body'),
+    chequearRoles("administrador", "recepcionista"),
     async (req, res, next) => {
         try {
-            const {id} = req.params
-            const body = req.body
-            const updateHuesped = await services.cargarHuespedes(body, id) 
+            const data = req.body
+            const updateHuesped = await services.cargarHuesped(data) 
             res.status(200).json(updateHuesped)
+        } catch (error) {
+            next(error)
+        }
+    }
+)
+
+//Modificar estado de la reserva
+
+router.patch('/estado',
+    passport.authenticate('jwt', {session: false}),
+    chequearRoles("administrador", "recepcionista"),
+    async (req, res, next) =>{
+        try {
+            const {id, state} = req.body
+            const updateStateReserva = await services.actualizarEstadoReserva(id, state)
+            res.status(200).json(updateStateReserva)
         } catch (error) {
             next(error)
         }

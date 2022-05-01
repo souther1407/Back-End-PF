@@ -111,11 +111,13 @@ class ReservaService {
                 [{
                     attributes: ['id', 'nombre'],
                     model: Habitacion,
+                    include: [Huesped],
                     through: { attributes: [] }
                 },
                 {
                     attributes: ["HabitacionId", 'id', 'nombre'],
                     model: Cama,
+                    include: [Huesped],
                     through: { attributes: [] }
                 },
                 ]
@@ -195,113 +197,138 @@ class ReservaService {
     }
     
     
-    async actualizarReserva() {
-
-    }
-    
-    
-    async cargarHuespedes(data, id_reserva) {
-        const huespedes = data
-        const reserva = await ReservaCama.findOne({
-            where: {
-                id: id_reserva
-            },
-            include: [{ model: Cama }, { model: Habitacion }]
-        })
-        if (!reserva) {
-            throw boom.notFound({ msg: 'La reserva que intentas buscar no existe' })
-        }
-        //Calcular la cantidad de camas disponibles y que la cant de huespedes enviados sean correctos
-        let cantDisponible = 0;
-        if ((reserva.Habitacions.length) > 1 && reserva.Camas.length) {
-            for (let i = 0; i < reserva.Habitacions.length; i++) {
-                cantDisponible += reserva.Habitacions[i].cantCamas
-            }
-            cantDisponible += reserva.Camas.length
-        } else if ((reserva.Habitacions.length) === 1 && reserva.Camas.length) {
-            cantDisponible += reserva.Habitacions[0].cantCamas;
-            cantDisponible += reserva.Camas.length
-        } else if (reserva.Habitacions.length && !reserva.Camas.length) {
-            for (let i = 0; i < reserva.Habitacions.length; i++) {
-                cantDisponible += reserva.Habitacions[i].cantCamas;
-            }
-        } else if (!reserva.Habitacions.length && reserva.Camas.length) {
-            cantDisponible += reserva.Camas.length
-        }
-
-        if ((cantDisponible - huespedes.length) !== 0) {
-            throw boom.badData('Cantidad de huespedes no coincide con cantidad de camas disponibles')
-        }
-        if (reserva.Camas.length) {
-            for (let i = 0; i < reserva.Camas.length; i++) {
-                await Cama.findByPk(reserva.Camas[i].id)
-                    .then(async (cama) => {
-                        try {
-                            const findHuesped = await Huesped.findByPk(huespedes[i].dni)
-                            if (!findHuesped) {
-                                const huesped = await serviceHuesped.crearHuesped(huespedes.shift())
-                                console.log(huesped)
-                                cama.setHuesped(huesped)
-                            }
-                            cama.setHuesped(findHuesped)
-                        } catch (error) {
-                            console.log(error)
-                        }
-                    })
-                    .catch((error) => {
-                        console.error(error)
-                    })
-            }
-        }
-        if (reserva.Habitacions.length) {
-            for (let i = 0; i < reserva.Habitacions.length; i++) {
-                const cantHuesped = reserva.Habitacions[i].cantCamas
-                for (let j = 0; j < cantHuesped; j++) {
-                    await Habitacion.findByPk(reserva.Habitacions[i].id)
-                        .then(async (habitacion) => {
-                            try {
-                                const findHuesped = await Huesped.findByPk(huespedes[j].dni)
-                                if (!findHuesped) {
-                                    const huesped = await serviceHuesped.crearHuesped(huespedes.shift())
-                                    habitacion.setHuespeds(huesped)
-                                }
-                                habitacion.setHuespeds(findHuesped)
-                            } catch (error) {
-                                console.log(error)
-                            }
-                        })
-                        .catch((error) => {
-                            console.error(error)
-                        })
-                }
-            }
-        }
-        return { msg: 'Huespedes Cargados' }
-    }
-
-    // async cargarHuespedes(data, id_reserva){
+    // async cargarHuespedes(data, id_reserva) {
+    //     const huespedes = data
     //     const reserva = await ReservaCama.findOne({
     //         where: {
     //             id: id_reserva
     //         },
-    //         include: Cama
+    //         include: [{ model: Cama }, { model: Habitacion }]
     //     })
-    //     for (let i = 0; i < reserva.Camas.length; i++) {
-    //         Cama.findByPk(reserva.Camas[i].id)
-    //         .then( async (cama) =>{
-    //             const findUser = await Usuario.findOne({where: { id: data[i].dni}})
-    //             if(!findUser){
-    //                 const userCreated = await Usuario.create({
-    //                     ...data,
-    //                     tipoUsuario: 'huesped'
-    //                 })
-    //                 cama.setUsuario(userCreated)
-    //             }
-    //             cama.setUsuario(findUser)
-    //         })
+    //     if (!reserva) {
+    //         throw boom.notFound({ msg: 'La reserva que intentas buscar no existe' })
     //     }
-    //     return 'Huespedes Cargados'
+    //     //Calcular la cantidad de camas disponibles y que la cant de huespedes enviados sean correctos
+    //     let cantDisponible = 0;
+    //     if ((reserva.Habitacions.length) > 1 && reserva.Camas.length) {
+    //         for (let i = 0; i < reserva.Habitacions.length; i++) {
+    //             cantDisponible += reserva.Habitacions[i].cantCamas
+    //         }
+    //         cantDisponible += reserva.Camas.length
+    //     } else if ((reserva.Habitacions.length) === 1 && reserva.Camas.length) {
+    //         cantDisponible += reserva.Habitacions[0].cantCamas;
+    //         cantDisponible += reserva.Camas.length
+    //     } else if (reserva.Habitacions.length && !reserva.Camas.length) {
+    //         for (let i = 0; i < reserva.Habitacions.length; i++) {
+    //             cantDisponible += reserva.Habitacions[i].cantCamas;
+    //         }
+    //     } else if (!reserva.Habitacions.length && reserva.Camas.length) {
+    //         cantDisponible += reserva.Camas.length
+    //     }
+
+    //     if (cantDisponible < huespedes.length) {
+    //         throw boom.badData('Cantidad de huespedes no coincide con cantidad de camas disponibles')
+    //     }
+    //     if (reserva.Camas.length) {
+    //         for (let i = 0; i < reserva.Camas.length; i++) {
+    //             await Cama.findByPk(reserva.Camas[i].id)
+    //                 .then(async (cama) => {
+    //                     try {
+    //                         const findHuesped = await Huesped.findByPk(huespedes[i].dni)
+    //                         if (!findHuesped) {
+    //                             const huesped = await serviceHuesped.crearHuesped(huespedes.shift())
+    //                             console.log(huesped)
+    //                             cama.setHuesped(huesped)
+    //                         }
+    //                         cama.setHuesped(findHuesped)
+    //                     } catch (error) {
+    //                         console.log(error)
+    //                     }
+    //                 })
+    //                 .catch((error) => {
+    //                     console.error(error)
+    //                 })
+    //         }
+    //     }
+    //     if (reserva.Habitacions.length) {
+    //         for (let i = 0; i < reserva.Habitacions.length; i++) {
+    //             const cantHuesped = reserva.Habitacions[i].cantCamas
+    //             for (let j = 0; j < cantHuesped; j++) {
+    //                 await Habitacion.findByPk(reserva.Habitacions[i].id)
+    //                     .then(async (habitacion) => {
+    //                         try {
+    //                             const findHuesped = await Huesped.findByPk(huespedes[j].dni)
+    //                             if (!findHuesped) {
+    //                                 const huesped = await serviceHuesped.crearHuesped(huespedes.shift())
+    //                                 habitacion.setHuespeds(huesped)
+    //                             }
+    //                             habitacion.setHuespeds(findHuesped)
+    //                         } catch (error) {
+    //                             console.log(error)
+    //                         }
+    //                     })
+    //                     .catch((error) => {
+    //                         console.error(error)
+    //                     })
+    //             }
+    //         }
+    //     }
+    //     return { msg: 'Huespedes Cargados' }
     // }
+
+    async cargarHuesped (data){
+        const { id, huesped } = data;
+        if(id.length > 10){
+            try {
+                const habitacion = await Habitacion.findByPk(id)
+                const findHuesped = await Huesped.findByPk(huesped.dni)
+                if(!habitacion){
+                    throw boom.notFound('La habitacion no existe')
+                }
+                if(!findHuesped){
+                    const huespedCreated = await Huesped.create(huesped)
+                    habitacion.setHuespeds(huespedCreated)
+                }else{
+                    habitacion.setHuespeds(findHuesped)
+                }
+                return 'Huesped creado con exito'
+            } catch (error) {
+                throw boom.badData(error)
+            }
+        }
+        if(id.length < 10){
+            try {
+                const cama = await Cama.findByPk(id)
+                const findHuesped = await Huesped.findByPk(huesped.dni)
+                if(!cama){
+                    throw boom.notFound('La habitacion no existe')
+                }
+                if(!findHuesped){
+                    const huespedCreated = await Huesped.create(huesped)
+                    cama.setHuesped(huespedCreated)
+                }else{
+                    cama.setHuesped(findHuesped)
+                }
+                return 'Huesped creado con exito'
+            } catch (error) {
+                throw boom.badData(error)
+            }
+        }
+    }
+
+    //Actualizar estado de reserva
+    async actualizarEstadoReserva(id, state){
+        try {
+            const reserva = await ReservaCama.findByPk(id)
+            if(!reserva){
+                throw boom.notFound('La reserva no existe')
+            }else{
+                reserva.update({estado: state})
+            }
+        } catch (error) {
+            throw boom.badData(error)
+        }
+    }
 
     async mostrardisponibilidad(data) {
         try {
