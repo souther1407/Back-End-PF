@@ -82,9 +82,7 @@ class UserService {
     }else{
     const usuario = await Usuario.findAll()
     return usuario
-      
-
-
+    
     }
     
   }

@@ -311,7 +311,7 @@ class ReservaService {
     //     }
     //     return 'Huespedes Cargados'
     // }
-
+    
     async mostrardisponibilidad(data) {
         try {
             const { ingreso, egreso } = data
@@ -483,7 +483,7 @@ class ReservaService {
             return error;
         }
     }
-// creando un pull 
+
     async mostrardisponibilidadById(data){
         
             const { id } = data
@@ -499,8 +499,7 @@ class ReservaService {
                 throw boom.notFound('no existen reservas')
             }
             return reservas
-}
-
+    }
 
 }
 
