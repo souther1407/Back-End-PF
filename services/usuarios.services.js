@@ -3,6 +3,9 @@ const bcrypt = require('bcrypt')
 
 const { sequelize } = require('../libs/sequelize')
 const { Usuario } =  require('../db/models/usuario.model')
+const HubSpotHelper = require('../utils/hubspot')
+const hubservices = new HubSpotHelper
+
 // const {Tipo_Documento} = require('../db/models/tipoDocumento.model')
 // const {Nacionalidades} = require('../db/models/tipoDocumento.model')
 
@@ -23,8 +26,8 @@ const usuarioAdmin = {
 class UserService {
   
   async crear(data) {
-    console.log('el que llega------>',data)
-    try {
+   
+      //console.log(data)
       const hash = await bcrypt.hash(data.password, 12)
       const nuevoUsuario = await Usuario.create({
           nombre: data.name,
@@ -38,16 +41,16 @@ class UserService {
           fechaNacimiento:data.birthdate,
           genero:data.genre
       }); 
-      console.log('el que se crea------>',nuevoUsuario)
+      //console.log('el que se crea------>',nuevoUsuario)
       if(!nuevoUsuario){
         throw boom.badData('no se pudo crear el usuario')
       }
+      const hub = await hubservices.crearUsuario(nuevoUsuario)
+
       nuevoUsuario.dataValues.password = undefined;
-      console.log("nuevo usuario", nuevoUsuario)
+      //console.log("nuevo usuario", nuevoUsuario)
       return nuevoUsuario; 
-    } catch(error) {  
-      return {...error}
-    }
+    
 
   }
 
