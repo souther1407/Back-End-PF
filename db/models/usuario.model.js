@@ -74,7 +74,7 @@ const UsuarioSchema = {
     type: DataTypes.STRING
   },
   genero:{
-    type: DataTypes.ENUM("female","male","other"),
+    type: DataTypes.ENUM("Female","Male","Other"),
     allowNull: false,
   },
   createdAt: {
