@@ -129,7 +129,7 @@ class habitacionesService {
     }
     return habitacion;
   }
-
+ //toqueteado por eric, cambiado precioHabiacion por precio
   // eslint-disable-next-line class-methods-use-this
   async actualizar(id, cambios) {
     const {
@@ -139,11 +139,11 @@ class habitacionesService {
         privada,
         banoPrivado,
         tipo,
-        precioHabitacion,
+        precio,
         descripcion,
         imagenes,
     } = cambios;
-
+    console.log("cambios -- >",cambios)
     const habitacionUpdate = await Habitacion.update(
       {
         nombre,
@@ -152,7 +152,7 @@ class habitacionesService {
         privada,
         banoPrivado,
         tipo,
-        precioHabitacion,
+        precio,
         descripcion,
         imagenes,
       },

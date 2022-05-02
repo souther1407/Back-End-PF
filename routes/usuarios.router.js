@@ -24,7 +24,7 @@ async (req, res, next) => {
 
 router.get('/:dni',
 passport.authenticate('jwt', {session: false}),
-chequearRoles("administrador", "recepcionisa"),
+chequearRoles("administrador", "recepcionista","cliente"),
 validatorHandler(getUserSchema, 'params'),
 async (req, res, next) => {
   
@@ -38,23 +38,35 @@ async (req, res, next) => {
   }
 );
 
+router.get("/existGoogleUser/:googleId",async (req, res) => {
+  const { googleId } = req.params;
+  try {
+    console.log("el id", googleId)
+    const googleUser = await service.buscarPorGoogleId(googleId)
+    res.json({ existe: googleUser })
+  } catch (error) {
+    res.status(400).json(error)
+  }
 
+})
 
 // crear usuario
-router.post('/',
+router.post("/",
   checkApiKey,
   validatorHandler(createUserSchema, 'body'), 
   async (req, res, next) => {
     try {
-      const body = req.body;
+      const body = req.body
       const newUsuario = await service.crear(body);
       res.status(201).json(newUsuario);
     } catch (error) {
-      return boom.badData()
+       next(error)
+          
       };
     }
 );
 
+//RUTA EDITADA POR ERIC, problemas de variables
 router.patch('/:dni',
   checkApiKey,
   passport.authenticate('jwt', {session: false}),
@@ -64,7 +76,8 @@ router.patch('/:dni',
   async (req, res, next) => {
     try {
       const { dni } = req.params;
-      const body = req.body;
+      const body = req.body; 
+      const {name,lastname,email,birthdate} = req.body
       const usuario = await service.actualizar(dni, body);
       usuario.respuesta.password = undefined
       res.json(usuario);

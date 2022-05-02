@@ -19,6 +19,11 @@ const ReservaCamaSchema = {
     //   this.setDataValue('fecha_ingreso', fecha_ingreso.toISOString().splice('T')[0]);
     // }
   },
+  estado:{
+    type: DataTypes.ENUM('Booked','Occupied', 'For Manteinance', 'closed'),
+    allowNull: false,
+    defaultValue: 'Booked'
+  },
   cancelada:{
     type:DataTypes.BOOLEAN,
     allowNull:false,
@@ -36,7 +41,7 @@ const ReservaCamaSchema = {
     allowNull: false
   }, 
   estado:{
-    type: DataTypes.ENUM('Booked','Occupied', 'For Manteinance', 'closed'),
+    type: DataTypes.ENUM('Booked','Occupied', 'For Manteinance', 'Closed'),
     allowNull: false,
     defaultValue: 'Booked'
   }

@@ -1,12 +1,10 @@
 const express = require('express')
 const ReservaService = require('./../services/reservas.services')
-const { isNumber } = require('util');
 const PagosService = require("../services/pagos.services")
 const validatorHandler = require('../middleware/validator.handler')
-const { crearReservaSchema, getReservaByFecha, getReservaId } = require('../schemas/reservas.schema')
+const { getReservaByFecha, getReservaId, updateReservaSchema } = require('../schemas/reservas.schema')
 const { chequearRoles } = require('../middleware/auth.handler')
 const passport = require('passport'); 
-const { createArrayHuespedesSchema } = require('../schemas/huesped.schema')
 const router = express.Router()
 const {checkApiKey} =require('../middleware/auth.handler');
 const services = new ReservaService
@@ -64,15 +62,16 @@ async (req, res, next)=>{
     }
 });
 
-router.patch('/:id',
+
+//actualizar reserva (estado, huesped o saldo)
+router.patch('/update',
     passport.authenticate('jwt', {session: false}),
-    validatorHandler(getReservaId, 'params'),
-    validatorHandler(createArrayHuespedesSchema, 'body'),
+    chequearRoles("administrador", "recepcionista"),
+    validatorHandler(updateReservaSchema, 'body'),
     async (req, res, next) => {
         try {
-            const {id} = req.params
-            const body = req.body
-            const updateHuesped = await services.cargarHuespedes(body, id) 
+            const data = req.body
+            const updateHuesped = await services.actualizarReserva(data) 
             res.status(200).json(updateHuesped)
         } catch (error) {
             next(error)
@@ -103,7 +102,7 @@ router.post('/',
     /* validatorHandler(crearReservaSchema, 'body'), */
     async (req, res, next)=>{
         try {
-
+            
             let {toBack, infoPayment} = req.body
             console.log("toBack--->>",toBack)
             console.log("infoPayment--->>",infoPayment)
