@@ -2,7 +2,7 @@ const express = require('express')
 const ReservaService = require('./../services/reservas.services')
 const PagosService = require("../services/pagos.services")
 const validatorHandler = require('../middleware/validator.handler')
-const { getReservaByFecha, getReservaId, updateReservaSchema } = require('../schemas/reservas.schema')
+const { getReservaByFecha, getReservaId, updateReservaSchema, crearReservaRecepcionSchema } = require('../schemas/reservas.schema')
 const { chequearRoles } = require('../middleware/auth.handler')
 const passport = require('passport'); 
 const router = express.Router()
@@ -62,6 +62,21 @@ async (req, res, next)=>{
     }
 });
 
+//Crear reserva personalmente
+router.post('/recepcion',
+    passport.authenticate('jwt', {session: false}),
+    chequearRoles("administrador", "recepcionista"),
+    validatorHandler(crearReservaRecepcionSchema, 'body'),
+    async (req, res, next) => {
+        try {
+            const data = req.body
+            const reserva = await services.crearReservaRecepcion(data) 
+            res.status(200).json(reserva)
+        } catch (error) {
+            next(error)
+        }
+    }
+)
 
 //actualizar reserva (estado, huesped o saldo)
 router.patch('/update',
