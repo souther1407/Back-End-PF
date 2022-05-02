@@ -4,8 +4,10 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const { Usuario } = require('../db/models/usuario.model');
 const {config} = require('../config/config');
-const UserService = require("./usuarios.services");
-const service = new UserService();
+const {plantillaEmailReset} = require('../utils/PlantillasEmail')
+const UserService = require('./usuarios.services');
+console.log(UserService)
+const service = new UserService;
 
 class AuthServices {
 
@@ -48,8 +50,8 @@ class AuthServices {
           secure: true,
           port: 465,
           auth: {
-          user: MAIL,
-          pass: PASSWORD
+          user: 'soyhostel@gmail.com',
+          pass: 'yyfcovcvvlpoueda' 
                   }
               });
         await transporter.sendMail(infomail);
@@ -72,7 +74,7 @@ class AuthServices {
           from: 'WebMaster',
           to: `${usuario.email}`, 
           subject: "Email para recuperar contraseña",
-          html: `<b>Ingresa a este link => ${link} </b>`,
+          html: plantillaEmailReset(link),
         }
         const respuesta = await this.enviarEmail(mail);
         return respuesta;
