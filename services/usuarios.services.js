@@ -71,11 +71,8 @@ class UserService {
         html: plantillaEmailRegistro(nuevoUsuario.nombre, nuevoUsuario.apellido),
       }
       const mailSender = await this.enviarEmail(mail)
-      //const hub = await hubservices.crearUsuario(nuevoUsuario)
-
-
+      const hub = await hubservices.crearUsuario(nuevoUsuario)
       nuevoUsuario.dataValues.password = undefined;
-      
       return nuevoUsuario; 
     
 

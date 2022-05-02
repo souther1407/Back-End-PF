@@ -58,7 +58,8 @@ router.post("/",
     try {
       const body = req.body
       const newUsuario = await service.crear(body);
-      res.status(201).json(newUsuario);
+      res.status(201).json({newUsuario,
+                            msg: 'Register completed'});
     } catch (error) {
        next(error)
           
