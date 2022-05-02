@@ -20,13 +20,13 @@
  *    Usuario:
  *      type: object
  *      properties:
- *        nombre:
+ *        name:
  *          type: string
  *          description: nombre del usuario
- *        apellido:
+ *        lastname:
  *          type: string
  *          description: apellido del usuario
- *        tipoDocumento:
+ *        typeofdocument:
  *          type: string
  *          description: clase de identificador
  *        dni:
@@ -45,7 +45,7 @@
  *          type: string
  *          description: formato ISO de tipo YYYY/MM/DD
  *          format: date
- *        nacionalidad:
+ *        nationality:
  *          type: string
  *          description: nacionalidad del usuario
  *        telefono:
@@ -54,32 +54,32 @@
  *        direccion:
  *          type: string
  *          description: direccion real del usuario
- *        genero:
+ *        genre:
  *          type: string
  *          description: genero del usuario
- *        rol:
+ *        role:
  *          type: string
  *          description: rol en la api del usuario
  *      required:
  *        - dni
- *        - tipoDocumento
- *        - nombre
- *        - apellido
+ *        - typeofdocument
+ *        - name
+ *        - lastname
  *        - password
  *        - email
- *        - genero
- *        - fechaNacimiento
+ *        - genre
+ *        - birthdate
  *      example: 
  *       #
  *       #
  *        dni: "12345678"
  *        tipoDocumento: DNI
- *        nombre: "Juan"
- *        apellido: "Perez"
+ *        name: "Juan"
+ *        lastname: "Perez"
  *        email: juan@gmail.com
  *        password: "12345678"
- *        fechaNacimiento: 1991-09-19
- *        genero: "masculino"
+ *        birthdate: 1991-09-19
+ *        genre: "masculino"
  * */
 
 // GET USUARIO
