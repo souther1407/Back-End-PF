@@ -1,10 +1,13 @@
+const nodemailer = require('nodemailer');
 const boom = require('@hapi/boom');
 const bcrypt = require('bcrypt')
-
+const config = require('../config/config')
 const { sequelize } = require('../libs/sequelize')
 const { Usuario } =  require('../db/models/usuario.model')
 const HubSpotHelper = require('../utils/hubspot')
 const hubservices = new HubSpotHelper
+
+const {plantillaEmailRegistro } = require('../utils/PlantillasEmail')
 
 // const {Tipo_Documento} = require('../db/models/tipoDocumento.model')
 // const {Nacionalidades} = require('../db/models/tipoDocumento.model')
@@ -20,11 +23,28 @@ const usuarioAdmin = {
   telefono:"0000000",
   direccion:"desconocido 100",
   Nacionalidad:"LotLoriem",
-  genero:"masculino",
+  genero:"Other",
   rol:"administrador"
 }
 class UserService {
   
+  async enviarEmail(infomail) {
+    const MAIL = config.email;
+    const PASSWORD = config.emailPassword
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      secure: true,
+      port: 465,
+      auth: {
+      user: 'soyhostel@gmail.com',
+      pass: 'yyfcovcvvlpoueda' 
+              }
+          });
+    await transporter.sendMail(infomail);
+    return {message: 'se envio el correo'}        
+}
+
+
   async crear(data) {
    
       //console.log(data)
@@ -34,7 +54,7 @@ class UserService {
           apellido:data.lastname,
           rol:data.role.toLowerCase(),
           email: data.email,
-          dni: data.email,
+          dni: data.dni,
           tipoDocumento:data.typeofdocument,
           password: hash,
           nacionalidad:data.nationality,
@@ -45,7 +65,15 @@ class UserService {
       if(!nuevoUsuario){
         throw boom.badData('no se pudo crear el usuario')
       }
+      const mail = {
+        from: 'Soy Hostel',
+        to: `${nuevoUsuario.email}`, 
+        subject: "Bienvenido!",
+        html: plantillaEmailRegistro(nuevoUsuario.nombre, nuevoUsuario.apellido),
+      }
+      const mailSender = await this.enviarEmail(mail)
       const hub = await hubservices.crearUsuario(nuevoUsuario)
+
 
       nuevoUsuario.dataValues.password = undefined;
       //console.log("nuevo usuario", nuevoUsuario)
@@ -121,13 +149,13 @@ class UserService {
     const respuesta = await usuario.update({
           nombre:changes.name,
           apellido:changes.lastname,
-          rol:changes.role.toLowerCase(),
-          email,
-          dni,
+          rol:changes.role,
+          email: changes.email,
+          dni: changes.dni,
           tipoDocumento:changes.typeofdocument,
           nacionalidad:changes.nationality,
           fechaNacimiento:changes.birthdate,
-          genero:data.changes
+          genero:changes.genre
 
     });
     return {
