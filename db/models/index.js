@@ -9,7 +9,6 @@ const { HistorialOcupante, HistorialOcupanteSchema } = require('./historialOcupa
 const {Pago, PagoSchema} = require("./pago.model")
 const {Imagen,ImagenesSchema} = require("./imagen.model")
 
-
 function setupModels(sequelize) {
   Imagen.init(ImagenesSchema, Imagen.config(sequelize))
   Pago.init(PagoSchema, Pago.config(sequelize))

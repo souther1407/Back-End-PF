@@ -4,8 +4,8 @@ const PAGO_TABLE = 'pagos';
 
 const PagoSchema = {
     id: {
-       type:DataTypes.STRING,
-       primaryKey:true,
+        type:DataTypes.STRING,
+        primaryKey:true,
     },
     monto: {
         type: DataTypes.DECIMAL,

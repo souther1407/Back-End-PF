@@ -8,7 +8,7 @@ const { TipoDocumento } = require('../db/models/tipoDocumento.model');
 class huespedServices {
 
     async mostrarTodo(){
-        const huespedes = await Huesped.findAll({include: [{model: Cama}, {model: Habitacion}, {model: Habitacion}, {model: Cama}]})
+        const huespedes = await Huesped.findAll({include: [{model: Cama}, {model: Habitacion}]})
         return huespedes
     }
 
