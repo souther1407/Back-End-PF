@@ -23,7 +23,7 @@ const usuarioAdmin = {
   telefono:"0000000",
   direccion:"desconocido 100",
   Nacionalidad:"LotLoriem",
-  genero:"masculino",
+  genero:"Other",
   rol:"administrador"
 }
 class UserService {

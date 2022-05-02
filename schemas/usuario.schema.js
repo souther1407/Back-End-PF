@@ -11,7 +11,7 @@ const fechaNacimiento = Joi.date()
 const telefono= Joi.string().length(10).pattern(/^[0-9]+$/);
 const Nacionalidad = Joi.string()
 const tipoDocumento = Joi.string()
-const genero = Joi.string().valid("masculino", "femenino", "otro")
+const genero = Joi.string().valid("Male", "Female", "Other")
 const rol = Joi.string().valid("cliente", "administrador", "recepcionista")
 const direccion = Joi.string()
 

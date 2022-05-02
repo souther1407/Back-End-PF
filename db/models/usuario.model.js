@@ -51,7 +51,7 @@ const UsuarioSchema = {
   avatar: {
     type: DataTypes.STRING,
     allowNull:false,
-    defaultValue: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCzX-3KiQKCFelbSyqinJZBVDi2zS1Mefd8Q&usqp=CAU",
+    defaultValue: "https://www.pngitem.com/pimgs/m/111-1114675_user-login-person-man-enter-person-login-icon.png",
     validate: {
       isUrl: true
     }
@@ -74,7 +74,7 @@ const UsuarioSchema = {
     type: DataTypes.STRING
   },
   genero:{
-    type: DataTypes.ENUM("femenino","masculino","no-binario"),
+    type: DataTypes.ENUM("Female","Male","Other"),
     allowNull: false,
   },
   createdAt: {

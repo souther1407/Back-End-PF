@@ -33,6 +33,10 @@ const HuespedSchema = {
     type:DataTypes.DATEONLY,
     allowNull:true
   },
+  genero: {
+    type: DataTypes.ENUM('Male', 'Female', 'Other'),
+    allowNull: false
+  },
   direccion:{
     type: DataTypes.STRING,
   },
@@ -42,10 +46,6 @@ const HuespedSchema = {
     validate: {
       isEmail: true,
     }
-  },
-  genero:{
-    type: DataTypes.ENUM("femenino","masculino","no-binario"),
-    allowNull: false,
   },
   createdAt: {
     allowNull: false,
