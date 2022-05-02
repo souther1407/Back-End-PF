@@ -195,7 +195,7 @@ class ReservaService {
         })
         if (data.camas) {
             for (let i = 0; i < data.camas.length; i++) {
-                Cama.findByPk(data.camas[i])
+                await Cama.findByPk(data.camas[i])
                     .then(cama => {
                         newReserva.addCama(cama)
                     })
@@ -223,6 +223,98 @@ class ReservaService {
         return newReserva
     }
 
+    async crearReservaRecepcion(data) {
+        try {
+            const { camas,
+                habitaciones,
+                saldo,
+                ingreso,
+                egreso,
+                nombre,
+                apellido,
+                tipoDoc,
+                numDoc,
+                fechaNac,
+                nacionalidad,
+                email,
+                genero } = data
+
+            //Comprueba que los productos existen
+            if (camas) {
+                for (let i = 0; i < camas.length; i++) {
+                    const cama = await Cama.findByPk(camas[i])
+                    if (!cama) { throw boom.notFound(`no existe la cama con id ${camas[i]}`) }
+                }
+            }
+            if (habitaciones) {
+                for (let i = 0; i < habitaciones.length; i++) {
+                    const habitacion = await Habitacion.findByPk(habitaciones[i])
+                    if (!habitacion) {
+                        throw boom.notFound(`no existe la habitacion con id ${habitaciones[i]}`)
+                    }
+                }
+            }
+            if(camas.length === 0 && habitaciones.length === 0){
+                throw boom.badImplementation('no puedes crear una reserva sin producto')
+            }
+            //Comprueba si ya existe un usuario con ese dni sino se crea uno nuevo
+            const user = await Usuario.findByPk(numDoc)
+            let newUser = '';
+            if (!user) {
+                newUser = await Usuario.create({
+                    dni: numDoc,
+                    nombre: nombre,
+                    apellido: apellido,
+                    tipoDocumento: tipoDoc,
+                    nacionalidad: nacionalidad,
+                    fechaNacimiento: fechaNac,
+                    email: email,
+                    password: numDoc,
+                    genero: genero
+                })
+            }
+            //Creacion de la reserva
+            const newReserva = await ReservaCama.create({
+                fecha_ingreso: ingreso,
+                fecha_egreso: egreso,
+                saldo: saldo
+            })
+
+            if (camas) {
+                for (let i = 0; i < camas.length; i++) {
+                    await Cama.findByPk(camas[i])
+                        .then(cama => {
+                            newReserva.addCama(cama)
+                        })
+                        .catch(error => {
+                            throw boom.badData(error)
+                        })
+                }
+            }
+            if (habitaciones) {
+                for (let i = 0; i < habitaciones.length; i++) {
+                    await Habitacion.findByPk(habitaciones[i])
+                        .then(habitacion => {
+                            newReserva.addHabitacion(habitacion)
+                        })
+                        .catch(error => {
+                            throw boom.badData(error)
+                        })
+                }
+            }
+            //Asociacion usuario con reserva
+            if (!user) {
+                newReserva.setUsuario(newUser)
+            } else {
+                newReserva.setUsuario(user)
+            }
+
+            return {msg: 'La reserva fue creada con exito'}
+        } catch (error) {
+            throw boom.badData(error)
+        }
+    }
+
     async eliminarReserva(id) {
         const reserva = await ReservaCama.destroy({ where: { id } })
         if (!reserva) {
@@ -234,9 +326,9 @@ class ReservaService {
     async actualizarReserva(data) {
         const { id_reserva, id_producto, huesped, estado, saldo } = data;
         //Modificar el saldo
-        if(saldo){
+        if (saldo) {
             try {
-                if(typeof saldo !== 'number'){
+                if (typeof saldo !== 'number') {
                     throw boom.badData('el saldo debe ser un numero')
                 }
                 const reserva = await ReservaCama.findByPk(id_reserva)
@@ -244,7 +336,7 @@ class ReservaService {
                     throw boom.notFound('La reserva no existe')
                 } else {
                     await reserva.update({ saldo })
-                } 
+                }
             } catch (error) {
                 throw boom.badData(error)
             }
@@ -252,7 +344,7 @@ class ReservaService {
         //Modificar estado de reserva
         if (estado) {
             try {
-                if(!id_reserva){
+                if (!id_reserva) {
                     throw boom.badData('Sin id de reserva no se puede actualizar el estado')
                 }
                 const reserva = await ReservaCama.findByPk(id_reserva)

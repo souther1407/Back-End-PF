@@ -31,6 +31,7 @@ const createUserSchema = Joi.object({
   'cliente')
 });
 
+
 const updateUserSchema = Joi.object({
   password: password,
   nombre: nombre,
@@ -43,4 +44,4 @@ const getUserSchema = Joi.object({
   dni: dni.required(),
 });
 
-module.exports = { createUserSchema, updateUserSchema, getUserSchema }
+module.exports = { createUserSchema, updateUserSchema, getUserSchema}
