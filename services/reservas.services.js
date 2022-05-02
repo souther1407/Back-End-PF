@@ -20,7 +20,7 @@ class ReservaService {
     async mostrarReservasByFecha(ingreso, egreso) {
         const ingresoFecha = ingreso
         const egresoFecha = egreso
-        if(ingreso >= egreso) {
+        if (ingreso >= egreso) {
             throw boom.badData('la fecha de ingreso no puede ser mayor que la de egreso')
         }
         const reservas = await ReservaCama.findAll(
@@ -29,79 +29,106 @@ class ReservaService {
                     {
                         model: Usuario,
                         attributes: ['dni', "nombre", "apellido"],
-                        
                     },
                     {
                         model: Habitacion,
-                        attributes: ['id','nombre'],
-                        through: {attributes: []}
+                        attributes: ['id', 'nombre'],
+                        include: [{
+                            model: Huesped,
+                            attributes: ['dni', 'nombre', 'apellido'],
+                            // through: { attributes: ['Huesped_Habitacion']}
+                        }],
+                        through: { attributes: [] }
                     },
                     {
                         model: Cama,
-                        attributes: ['id','nombre','HabitacionId'],
-                        through: {attributes: []}
+                        attributes: ['id', 'nombre', 'HabitacionId'],
+                        include: [{
+                            model: Huesped,
+                            attributes: ['dni', 'nombre', 'apellido'],
+                            // through: { attributes: ['Huesped_Habitacion']}
+                        }],
+                        through: { attributes: [] }
 
-                    } 
+                    }
 
                 ],
                 where: {
                     [Op.or]: [
-                        {[Op.and]: [
-                            {fecha_ingreso: {
-                            [Op.gte]: ingresoFecha
-                            }},             
-                            {fecha_egreso: {
-                                [Op.lte]: egresoFecha
-                            }}
-                        ]},
-                        {[Op.and]: [
-                            {fecha_ingreso: {
-                                [Op.lte]: ingresoFecha
-                            }},
-                            {fecha_egreso: {
-                                [Op.gte]: ingresoFecha
-                            }},
-                            {fecha_egreso: {
-                                [Op.lte]: egresoFecha
-                            }}
-                        ]},
-                        {[Op.and]: [
-                            {fecha_egreso: {
-                                [Op.gte]: egresoFecha
-                                }},
-                            {fecha_ingreso: {
-                                [Op.gte]: ingresoFecha
-                            }},
-                            {fecha_ingreso: {
-                                [Op.lte]: egresoFecha
-                            }}
-                        ]},
-                        {[Op.and]: [
-                            {fecha_ingreso: {
-                                [Op.lte]: ingresoFecha
-                            }},
-                            {fecha_egreso: {
-                                [Op.gte]: egresoFecha
-                            }}
-                        ]},
-                        {fecha_ingreso: {
-                            [Op.between]: [ingresoFecha, egreso]
-                        }},
+                        {
+                            [Op.and]: [
+                                {
+                                    fecha_ingreso: {
+                                        [Op.gte]: ingresoFecha
+                                    }
+                                },
+                                {
+                                    fecha_egreso: {
+                                        [Op.lte]: egresoFecha
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            [Op.and]: [
+                                {
+                                    fecha_ingreso: {
+                                        [Op.lte]: ingresoFecha
+                                    }
+                                },
+                                {
+                                    fecha_egreso: {
+                                        [Op.gte]: ingresoFecha
+                                    }
+                                },
+                                {
+                                    fecha_egreso: {
+                                        [Op.lte]: egresoFecha
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            [Op.and]: [
+                                {
+                                    fecha_egreso: {
+                                        [Op.gte]: egresoFecha
+                                    }
+                                },
+                                {
+                                    fecha_ingreso: {
+                                        [Op.gte]: ingresoFecha
+                                    }
+                                },
+                                {
+                                    fecha_ingreso: {
+                                        [Op.lte]: egresoFecha
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            [Op.and]: [
+                                {
+                                    fecha_ingreso: {
+                                        [Op.lte]: ingresoFecha
+                                    }
+                                },
+                                {
+                                    fecha_egreso: {
+                                        [Op.gte]: egresoFecha
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            fecha_ingreso: {
+                                [Op.between]: [ingresoFecha, egreso]
+                            }
+                        },
                     ]
                 }
             })
-
-        // if (!reservas.length) {
-        //     return boom.badData('no hay reservas registradas')
-        // }
-        // const reservasFiltradas = reservas.filter(r =>
-        //     (r.fecha_ingreso >= ingresoFecha && r.fecha_ingreso <= egresoFecha)
-            // ||
-            // (
-            //     (r.fecha_ingreso < ingreso && r.fecha_egreso >= ingreso && r.fecha_egreso <= egreso)
-            //     ||
-            //     (r.fecha_egreso > egreso && r.fecha_ingreso > ingreso && r.fecha_ingreso <= egreso))
-        // )
         return reservas
     }
 
@@ -111,14 +138,27 @@ class ReservaService {
                 [{
                     attributes: ['id', 'nombre'],
                     model: Habitacion,
+                    include: [{
+                        model: Huesped,
+                        attributes: ['dni', 'nombre', 'apellido'],
+                        // through: { attributes: ['Huesped_Habitacion']}
+                    }],
                     through: { attributes: [] }
                 },
                 {
                     attributes: ["HabitacionId", 'id', 'nombre'],
                     model: Cama,
+                    include: [{
+                        model: Huesped,
+                        attributes: ['dni', 'nombre', 'apellido'],
+                        // through: { attributes: ['Huesped_Habitacion']}
+                    }],
                     through: { attributes: [] }
                 },
-                ]
+                {
+                    model: Usuario,
+                    attributes: ['dni', 'nombre', 'apellido']
+                }]
         })
         if (!reservas.length) {
             return boom.badData('no hay reservas registradas')
@@ -132,24 +172,25 @@ class ReservaService {
         const tokenInfo = token.split(' ')
         const tokendec = jwt.decode(tokenInfo[1])
         const checkUs = await Usuario.findByPk(tokendec.sub)
-        if(!checkUs){
+        if (!checkUs) {
             throw boom.badData('el usuario no existe')
         }
-        console.log("data en crear reserva",data);
+        console.log("data en crear reserva", data);
         let cama;
         let habitacion;
 
-        if(data.camas){
+        if (data.camas) {
             for (let i = 0; i < data.camas.length; i++) {
                 cama = await Cama.findByPk(data.camas[i])
-                if(!cama) { throw boom.notFound(`no existe la cama con id ${data.camas[i]}`)}
+                if (!cama) { throw boom.notFound(`no existe la cama con id ${data.camas[i]}`) }
             }
         }
-        if(data.habitaciones){
-            for (let i = 0; i < data.habitaciones.length; i++){
+        if (data.habitaciones) {
+            for (let i = 0; i < data.habitaciones.length; i++) {
                 habitacion = await Habitacion.findByPk(data.habitaciones[i])
-                if(!habitacion) { 
-                    throw boom.notFound(`no existe la habitacion con id ${data.habitaciones[i]}`)}
+                if (!habitacion) {
+                    throw boom.notFound(`no existe la habitacion con id ${data.habitaciones[i]}`)
+                }
             }
         }
         const newReserva = await ReservaCama.create({
@@ -159,31 +200,124 @@ class ReservaService {
         })
         if (data.camas) {
             for (let i = 0; i < data.camas.length; i++) {
-                Cama.findByPk(data.camas[i])
-                .then(cama => {
-                    newReserva.addCama(cama)
-                })
-                .catch(error => { 
-                    throw boom.badData(error)})
+                await Cama.findByPk(data.camas[i])
+                    .then(cama => {
+                        newReserva.addCama(cama)
+                    })
+                    .catch(error => {
+                        throw boom.badData(error)
+                    })
             }
         }
-        if(! data.habitaciones){
+        if (!data.habitaciones) {
             throw boom.badData('Estas mandando un id de una habitación compartida')
-            }else{
+        } else {
             for (let i = 0; i < data.habitaciones.length; i++) {
-                if(habitacion.dataValues.privada){
+                if (habitacion.dataValues.privada) {
                     await Habitacion.findByPk(data.habitaciones[i])
-                    .then(habitacion =>{
-                        newReserva.addHabitacion(habitacion)
-                    }).catch(error => {throw boom.badData(error)})
+                        .then(habitacion => {
+                            newReserva.addHabitacion(habitacion)
+                        }).catch(error => { throw boom.badData(error) })
                 }
             }
         }
         await Usuario.findByPk(tokendec.sub)
-        .then(user =>{
-            newReserva.setUsuario(user)
-        })
+            .then(user => {
+                newReserva.setUsuario(user)
+            })
         return newReserva
+    }
+
+    async crearReservaRecepcion(data) {
+        try {
+            const { camas,
+                habitaciones,
+                saldo,
+                ingreso,
+                egreso,
+                nombre,
+                apellido,
+                tipoDoc,
+                numDoc,
+                fechaNac,
+                nacionalidad,
+                email,
+                genero } = data
+
+            //Comprueba que los productos existen
+            if (camas) {
+                for (let i = 0; i < camas.length; i++) {
+                    const cama = await Cama.findByPk(camas[i])
+                    if (!cama) { throw boom.notFound(`no existe la cama con id ${camas[i]}`) }
+                }
+            }
+            if (habitaciones) {
+                for (let i = 0; i < habitaciones.length; i++) {
+                    const habitacion = await Habitacion.findByPk(habitaciones[i])
+                    if (!habitacion) {
+                        throw boom.notFound(`no existe la habitacion con id ${habitaciones[i]}`)
+                    }
+                }
+            }
+            if (camas.length === 0 && habitaciones.length === 0) {
+                throw boom.badImplementation('no puedes crear una reserva sin producto')
+            }
+            //Comprueba si ya existe un usuario con ese dni sino se crea uno nuevo
+            const user = await Usuario.findByPk(numDoc)
+            let newUser = '';
+            if (!user) {
+                newUser = await Usuario.create({
+                    dni: numDoc,
+                    nombre: nombre,
+                    apellido: apellido,
+                    tipoDocumento: tipoDoc,
+                    nacionalidad: nacionalidad,
+                    fechaNacimiento: fechaNac,
+                    email: email,
+                    password: numDoc,
+                    genero: genero
+                })
+            }
+            //Creacion de la reserva
+            const newReserva = await ReservaCama.create({
+                fecha_ingreso: ingreso,
+                fecha_egreso: egreso,
+                saldo: saldo
+            })
+
+            if (camas) {
+                for (let i = 0; i < camas.length; i++) {
+                    await Cama.findByPk(camas[i])
+                        .then(cama => {
+                            newReserva.addCama(cama)
+                        })
+                        .catch(error => {
+                            throw boom.badData(error)
+                        })
+                }
+            }
+            if (habitaciones) {
+                for (let i = 0; i < habitaciones.length; i++) {
+                    await Habitacion.findByPk(habitaciones[i])
+                        .then(habitacion => {
+                            newReserva.addHabitacion(habitacion)
+                        })
+                        .catch(error => {
+                            throw boom.badData(error)
+                        })
+                }
+            }
+            //Asociacion usuario con reserva
+            if (!user) {
+                newReserva.setUsuario(newUser)
+            } else {
+                newReserva.setUsuario(user)
+            }
+
+            return { msg: 'La reserva fue creada con exito' }
+        } catch (error) {
+            throw boom.badData(error)
+        }
     }
 
     async eliminarReserva(id) {
@@ -193,168 +327,164 @@ class ReservaService {
         }
         return `La reserva con ID: ${id} se ha borrado con exito`
     }
-    
-    
-    async actualizarReserva() {
 
-    }
-    
-    
-    async cargarHuespedes(data, id_reserva) {
-        const huespedes = data
-        const reserva = await ReservaCama.findOne({
-            where: {
-                id: id_reserva
-            },
-            include: [{ model: Cama }, { model: Habitacion }]
-        })
-        if (!reserva) {
-            throw boom.notFound({ msg: 'La reserva que intentas buscar no existe' })
-        }
-        //Calcular la cantidad de camas disponibles y que la cant de huespedes enviados sean correctos
-        let cantDisponible = 0;
-        if ((reserva.Habitacions.length) > 1 && reserva.Camas.length) {
-            for (let i = 0; i < reserva.Habitacions.length; i++) {
-                cantDisponible += reserva.Habitacions[i].cantCamas
-            }
-            cantDisponible += reserva.Camas.length
-        } else if ((reserva.Habitacions.length) === 1 && reserva.Camas.length) {
-            cantDisponible += reserva.Habitacions[0].cantCamas;
-            cantDisponible += reserva.Camas.length
-        } else if (reserva.Habitacions.length && !reserva.Camas.length) {
-            for (let i = 0; i < reserva.Habitacions.length; i++) {
-                cantDisponible += reserva.Habitacions[i].cantCamas;
-            }
-        } else if (!reserva.Habitacions.length && reserva.Camas.length) {
-            cantDisponible += reserva.Camas.length
-        }
-
-        if ((cantDisponible - huespedes.length) !== 0) {
-            throw boom.badData('Cantidad de huespedes no coincide con cantidad de camas disponibles')
-        }
-        if (reserva.Camas.length) {
-            for (let i = 0; i < reserva.Camas.length; i++) {
-            await Cama.findByPk(reserva.Camas[i].id)
-                    .then(async (cama) => {
-                        try {
-                            const findHuesped = await Huesped.findByPk(huespedes[i].dni)
-                            if (!findHuesped) {
-                                const huesped = await serviceHuesped.crearHuesped(huespedes.shift())
-                                console.log(huesped)
-                                cama.setHuesped(huesped)
-                            }
-                            cama.setHuesped(findHuesped)
-                        } catch (error) {
-                            console.log(error)
-                        }
-                    })
-                    .catch((error) => {
-                        console.error(error)
-                    })
+    async actualizarReserva(data) {
+        const { id_reserva, id_producto, huesped, estado, saldo } = data;
+        //Modificar el saldo
+        if (saldo) {
+            try {
+                if (typeof saldo !== 'number') {
+                    throw boom.badData('el saldo debe ser un numero')
+                }
+                const reserva = await ReservaCama.findByPk(id_reserva)
+                if (!reserva) {
+                    throw boom.notFound('La reserva no existe')
+                } else {
+                    await reserva.update({ saldo })
+                }
+            } catch (error) {
+                throw boom.badData(error)
             }
         }
-        if (reserva.Habitacions.length) {
-            for (let i = 0; i < reserva.Habitacions.length; i++) {
-                const cantHuesped = reserva.Habitacions[i].cantCamas
-                for (let j = 0; j < cantHuesped; j++) {
-                    Habitacion.findByPk(reserva.Habitacions[i].id)
-                        .then(async (habitacion) => {
-                            try {
-                                const findHuesped = await Huesped.findByPk(huespedes[j].dni)
-                                if (!findHuesped) {
-                                    const huesped = await serviceHuesped.crearHuesped(huespedes.shift())
-                                    habitacion.setHuespeds(huesped)
-                                }
-                                habitacion.setHuespeds(findHuesped)
-                            } catch (error) {
-                                console.log(error)
-                            }
-                        })
-                        .catch((error) => {
-                            console.error(error)
-                        })
+        //Modificar estado de reserva
+        if (estado) {
+            try {
+                if (!id_reserva) {
+                    throw boom.badData('Sin id de reserva no se puede actualizar el estado')
+                }
+                const reserva = await ReservaCama.findByPk(id_reserva)
+                if (!reserva) {
+                    throw boom.notFound('La reserva no existe')
+                } else {
+                    await reserva.update({ estado })
+                }
+            } catch (error) {
+                throw boom.badData(error)
+            }
+        }
+        //Cargar huesped
+        if (huesped) {
+            if (id_producto.length < 10) {
+                try {
+                    const habitacion = await Habitacion.findByPk(id_producto)
+                    const findHuesped = await Huesped.findByPk(huesped.dni)
+                    if (!habitacion) {
+                        throw boom.notFound('La habitacion no existe')
+                    }
+                    if (!findHuesped) {
+                        const huespedCreated = await Huesped.create(huesped)
+                        habitacion.addHuesped(huespedCreated)
+                    } else {
+                        habitacion.addHuesped(findHuesped)
+                    }
+                } catch (error) {
+                    throw boom.badData(error)
+                }
+            }
+            if (id_producto.length > 10) {
+                try {
+                    const cama = await Cama.findByPk(id_producto)
+                    const findHuesped = await Huesped.findByPk(huesped.dni)
+                    if (!cama) {
+                        throw boom.notFound('La habitacion no existe')
+                    }
+                    if (!findHuesped) {
+                        const huespedCreated = await Huesped.create(huesped)
+                        cama.setHuesped(huespedCreated)
+                    } else {
+                        cama.setHuesped(findHuesped)
+                    }
+                } catch (error) {
+                    throw boom.badData(error)
                 }
             }
         }
-        return { msg: 'Huespedes Cargados' }
+        return 'Reserva actualizada'
     }
-
-    // async cargarHuespedes(data, id_reserva){
-    //     const reserva = await ReservaCama.findOne({
-    //         where: {
-    //             id: id_reserva
-    //         },
-    //         include: Cama
-    //     })
-    //     for (let i = 0; i < reserva.Camas.length; i++) {
-    //         Cama.findByPk(reserva.Camas[i].id)
-    //         .then( async (cama) =>{
-    //             const findUser = await Usuario.findOne({where: { id: data[i].dni}})
-    //             if(!findUser){
-    //                 const userCreated = await Usuario.create({
-    //                     ...data,
-    //                     tipoUsuario: 'huesped'
-    //                 })
-    //                 cama.setUsuario(userCreated)
-    //             }
-    //             cama.setUsuario(findUser)
-    //         })
-    //     }
-    //     return 'Huespedes Cargados'
-    // }
 
     async mostrardisponibilidad(data) {
         try {
             const { ingreso, egreso } = data
-            const ingresoFecha= new Date(ingreso)
-            const egresoFecha= new Date(egreso)
-            if(ingresoFecha > egresoFecha) {
-                throw boom.badData('La fecha de ingreso no puede ser mayor a la fecha de egreso')}
+            const ingresoFecha = new Date(ingreso)
+            const egresoFecha = new Date(egreso)
+            if (ingresoFecha > egresoFecha) {
+                throw boom.badData('La fecha de ingreso no puede ser mayor a la fecha de egreso')
+            }
 
             const reservas = await ReservaCama.findAll({
                 where: {
                     [Op.or]: [
-                        {[Op.and]: [
-                            {fecha_ingreso: {
-                            [Op.gte]: ingresoFecha
-                            }},             
-                            {fecha_egreso: {
-                                [Op.lte]: egresoFecha
-                            }}
-                        ]},
-                        {[Op.and]: [
-                            {fecha_ingreso: {
-                                [Op.lte]: ingresoFecha
-                            }},
-                            {fecha_egreso: {
-                                [Op.gte]: ingresoFecha
-                            }},
-                            {fecha_egreso: {
-                                [Op.lte]: egresoFecha
-                            }}
-                        ]},
-                        {[Op.and]: [
-                            {fecha_egreso: {
-                                [Op.gte]: egresoFecha
-                                }},
-                            {fecha_ingreso: {
-                                [Op.gte]: ingresoFecha
-                            }},
-                            {fecha_ingreso: {
-                                [Op.lte]: egresoFecha
-                            }}
-                        ]},
-                        {[Op.and]: [
-                            {fecha_ingreso: {
-                                [Op.lte]: ingresoFecha
-                            }},
-                            {fecha_egreso: {
-                                [Op.gte]: egresoFecha
-                            }}
-                        ]},
-                        {fecha_ingreso: {
-                            [Op.between]: [ingresoFecha, egresoFecha]
-                        }},
+                        {
+                            [Op.and]: [
+                                {
+                                    fecha_ingreso: {
+                                        [Op.gte]: ingresoFecha
+                                    }
+                                },
+                                {
+                                    fecha_egreso: {
+                                        [Op.lte]: egresoFecha
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            [Op.and]: [
+                                {
+                                    fecha_ingreso: {
+                                        [Op.lte]: ingresoFecha
+                                    }
+                                },
+                                {
+                                    fecha_egreso: {
+                                        [Op.gte]: ingresoFecha
+                                    }
+                                },
+                                {
+                                    fecha_egreso: {
+                                        [Op.lte]: egresoFecha
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            [Op.and]: [
+                                {
+                                    fecha_egreso: {
+                                        [Op.gte]: egresoFecha
+                                    }
+                                },
+                                {
+                                    fecha_ingreso: {
+                                        [Op.gte]: ingresoFecha
+                                    }
+                                },
+                                {
+                                    fecha_ingreso: {
+                                        [Op.lte]: egresoFecha
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            [Op.and]: [
+                                {
+                                    fecha_ingreso: {
+                                        [Op.lte]: ingresoFecha
+                                    }
+                                },
+                                {
+                                    fecha_egreso: {
+                                        [Op.gte]: egresoFecha
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            fecha_ingreso: {
+                                [Op.between]: [ingresoFecha, egresoFecha]
+                            }
+                        },
                     ]
                 },
                 include: [
@@ -375,24 +505,24 @@ class ReservaService {
             let camasOcupadas = [];
             let disponibles = [];
 
-            reservas.map(r =>{
-                if(r.Habitacions.length) r.Habitacions.map(h =>{
+            reservas.map(r => {
+                if (r.Habitacions.length) r.Habitacions.map(h => {
                     habitacionesOcupadas.push(h.id)
                 })
                 if (r.Camas.length) r.Camas.map(c => {
                     camasOcupadas.push(c.id)
                 })
             })
-            let habitaciones = await Habitacion.findAll({where: {privada: true}, attributes: ['id', 'nombre']})
-            
+            let habitaciones = await Habitacion.findAll({ where: { privada: true }, attributes: ['id', 'nombre'] })
+
             for (let i = 0; i < habitaciones.length; i++) {
                 if (!habitacionesOcupadas.includes(habitaciones[i].id)) disponibles.push({ idHabitacion: habitaciones[i].id, nombreHabitacion: habitaciones[i].nombre })
             }
 
             let habitacionCompletamenteOupada = []
-            
+
             for (let i = 0; i < camasOcupadas.length; i++) {
-                
+
                 let camasdisponibles = []
                 const datosCama = await Cama.findByPk(camasOcupadas[i]);
                 let habitacionCama = await Habitacion.findByPk(datosCama.HabitacionId, { include: [{ model: Cama }] });
@@ -404,54 +534,54 @@ class ReservaService {
                 for (let c = 0; c < camasHabitacion.length; c++) {
                     let toggle = false
                     for (let j = 0; j < camasOcupadas.length; j++) {
-                        if(camasHabitacion[c].camaId === camasOcupadas[j]){
+                        if (camasHabitacion[c].camaId === camasOcupadas[j]) {
                             toggle = true
                         }
                     }
-                    if(!toggle){
-                        camasdisponibles.push({camaNombre: camasHabitacion[c].camaNombre, camaId: camasHabitacion[c].camaId, })
+                    if (!toggle) {
+                        camasdisponibles.push({ camaNombre: camasHabitacion[c].camaNombre, camaId: camasHabitacion[c].camaId, })
                     }
                 }
 
-                if(camasdisponibles.length !== 0){
+                if (camasdisponibles.length !== 0) {
                     let handle = false
                     for (let k = 0; k < disponibles.length; k++) {
-                        if(disponibles[k].idHabitacion === habitacionCama.id){
+                        if (disponibles[k].idHabitacion === habitacionCama.id) {
                             handle = true;
                         }
                     }
-                    if(!handle){
+                    if (!handle) {
                         disponibles.push({
-                            idHabitacion: datosCama.HabitacionId, 
-                            cantidadCamas: habitacionCama.cantCamas, 
+                            idHabitacion: datosCama.HabitacionId,
+                            cantidadCamas: habitacionCama.cantCamas,
                             camasDisponible: camasdisponibles.length,
                             camasDisponiblesIds: [...camasdisponibles]
                         })
                     }
                 }
-                if(camasdisponibles.length === 0){
+                if (camasdisponibles.length === 0) {
                     habitacionCompletamenteOupada.push(datosCama.HabitacionId)
                 }
             }
-            
-            let habitacionesCompartidas = await Habitacion.findAll({where: {privada: false}, attributes:['id','cantCamas'] ,include: [{model: Cama, attributes: ['id', 'nombre']}]})
-            
-            
+
+            let habitacionesCompartidas = await Habitacion.findAll({ where: { privada: false }, attributes: ['id', 'cantCamas'], include: [{ model: Cama, attributes: ['id', 'nombre'] }] })
+
+
             for (let i = 0; i < habitacionesCompartidas.length; i++) {
                 let incluye = false;
-                
-                if(disponibles.length === 0 && !habitacionCompletamenteOupada.includes(habitacionesCompartidas[i].id)){
+
+                if (disponibles.length === 0 && !habitacionCompletamenteOupada.includes(habitacionesCompartidas[i].id)) {
                     disponibles.push({
-                        idHabitacion: habitacionesCompartidas[i].id, 
-                        cantidadCamas: habitacionesCompartidas[i].cantCamas, 
+                        idHabitacion: habitacionesCompartidas[i].id,
+                        cantidadCamas: habitacionesCompartidas[i].cantCamas,
                         camasDisponible: habitacionesCompartidas[i].cantCamas,
-                        camasDisponiblesIds: habitacionesCompartidas[i].Camas.map(c => ({camaNombre: c.nombre, camaId: c.id, }))
+                        camasDisponiblesIds: habitacionesCompartidas[i].Camas.map(c => ({ camaNombre: c.nombre, camaId: c.id, }))
                     })
                 }
-                console.log('habitacion completamente ocupada',habitacionCompletamenteOupada)
+                console.log('habitacion completamente ocupada', habitacionCompletamenteOupada)
                 for (let j = 0; j < disponibles.length; j++) {
-                    
-                    if(disponibles[j].idHabitacion === habitacionesCompartidas[i].id || habitacionCompletamenteOupada.includes(habitacionesCompartidas[i].id)) { 
+
+                    if (disponibles[j].idHabitacion === habitacionesCompartidas[i].id || habitacionCompletamenteOupada.includes(habitacionesCompartidas[i].id)) {
                         incluye = true
                         continue;
                     } else if (j === disponibles.length - 1 && incluye === false) {
@@ -474,23 +604,23 @@ class ReservaService {
             return error;
         }
     }
-// creando un pull 
-    async mostrardisponibilidadById(data){
-        
-            const { id } = data
-            console.log(id)
-            const reservas = await ReservaCama.findByPk(id, {
-                include: [
+    // creando un pull 
+    async mostrardisponibilidadById(data) {
 
-                    { model: Cama, attributes: ['id', 'nombre'], through: { attributes: [] } },
-                    { model: Habitacion, attributes: ['id', 'nombre', 'cantCamas'], through: { attributes: [] } }
-                ]
-            })
-            if(!reservas){
-                throw boom.notFound('no existen reservas')
-            }
-            return reservas
-}
+        const { id } = data
+        console.log(id)
+        const reservas = await ReservaCama.findByPk(id, {
+            include: [
+
+                { model: Cama, attributes: ['id', 'nombre'], through: { attributes: [] } },
+                { model: Habitacion, attributes: ['id', 'nombre', 'cantCamas'], through: { attributes: [] } }
+            ]
+        })
+        if (!reservas) {
+            throw boom.notFound('no existen reservas')
+        }
+        return reservas
+    }
 
 
 }

@@ -9,13 +9,14 @@ class HubSpotHelper {
  async crearUsuario (data) {
   const nuevoContacto = await hubspotClient.crm.contacts.basicApi.create({
     properties: {
-      firstname: data.nombre,
-      lastname: data.apellido,
-      email: data.email,
+      //ID: data.dni,
+      firstname: data.nombre.toLowerCase(),
+      lastname: data.apellido.toLowerCase() ,
+      email: data.email.toLowerCase() ,
   }, 
   })
   if(!nuevoContacto){
-    throw boom.badData('no se creo en el CRm')
+    throw boom.badData(error.message)
   }
   return 'se creo en el CRM'
 }
