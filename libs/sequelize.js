@@ -95,7 +95,7 @@ Pago.hasOne(Reserva)
 Reserva.belongsTo(Pago,{onDelete: "cascade" })
 
 //a
-sequelize.sync({ force: false })
+sequelize.sync({ alter:true })
   .then(() => {
     console.log(`base de datos creada/actualizada `);
     
