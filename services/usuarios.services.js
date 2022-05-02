@@ -52,7 +52,7 @@ class UserService {
       const nuevoUsuario = await Usuario.create({
           nombre: data.name,
           apellido:data.lastname,
-          rol:data.role.toLowerCase(),
+          rol:data.role,
           email: data.email,
           dni: data.dni,
           tipoDocumento:data.typeofdocument,
