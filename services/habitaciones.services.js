@@ -129,7 +129,7 @@ class habitacionesService {
     }
     return habitacion;
   }
-
+ //toqueteado por eric, cambiado precioHabiacion por precio
   // eslint-disable-next-line class-methods-use-this
   async actualizar(id, cambios) {
     const {
