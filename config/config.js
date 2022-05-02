@@ -20,6 +20,7 @@ googleClient: process.env.GOOGLE_CLIENTE_ID,
 googlePassword: process.env.GOOGLE_CLIENT_SECRET,
 stripeSecret: process.env.API_KEY_STRIPE_SECRET,
 dbUrl: process.env.DATABASE_URL,
+hubspot: process.env.APIKEY_HUBSPOT,
 
 }
 
