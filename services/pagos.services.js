@@ -1,7 +1,7 @@
 const boom = require('@hapi/boom');
 const { Pago } = require('../db/models/pago.model');
 const { ReservaCama } = require('../db/models/reservaCama.model');
-const { Usuario } = require('../db/models/usuario.model')
+const { Usuario } = require('../db/models/usuario.model');
 
 const Stripe = require('stripe')
 const { config } = require('../config/config');

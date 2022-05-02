@@ -29,6 +29,10 @@ const CamaSchema = {
     defaultValue: 'libre',
   },
 }
+// id reserva
+// id cama
+// id habitacion o cama
+// estado
 
 class Cama extends Model {
   static associate() {

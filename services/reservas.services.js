@@ -12,6 +12,7 @@ const { Op } = require('sequelize');
 
 //servicios
 const huespedServices = require('./huesped.sevices');
+const { Pago } = require('../db/models/pago.model');
 
 const serviceHuesped = new huespedServices
 
@@ -128,14 +129,14 @@ class ReservaService {
         }
     }
 
-    async crearReserva(data, token) {
+    async crearReserva(data, token, pagoId) {
         const tokenInfo = token.split(' ')
         const tokendec = jwt.decode(tokenInfo[1])
         const checkUs = await Usuario.findByPk(tokendec.sub)
+        
         if(!checkUs){
             throw boom.badData('el usuario no existe')
         }
-        console.log("data en crear reserva",data);
         let cama;
         let habitacion;
 
@@ -159,7 +160,7 @@ class ReservaService {
         })
         if (data.camas) {
             for (let i = 0; i < data.camas.length; i++) {
-                Cama.findByPk(data.camas[i])
+                await Cama.findByPk(data.camas[i])
                 .then(cama => {
                     newReserva.addCama(cama)
                 })
@@ -179,10 +180,18 @@ class ReservaService {
                 }
             }
         }
+        let pago = await Pago.findByPk(pagoId)
+        if(!pago){
+            throw boom.notFound('Pago no encontrado')
+        }
+        await newReserva.addPago(pago)
+
         await Usuario.findByPk(tokendec.sub)
         .then(user =>{
             newReserva.setUsuario(user)
         })
+        .catch(error => {throw boom.badData(error)})
+
         return newReserva
     }
 
