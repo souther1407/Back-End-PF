@@ -47,7 +47,6 @@ class UserService {
 
   async crear(data) {
    
-      //console.log(data)
       const hash = await bcrypt.hash(data.password, 12)
       const nuevoUsuario = await Usuario.create({
           nombre: data.name,
@@ -61,7 +60,7 @@ class UserService {
           fechaNacimiento:data.birthdate,
           genero:data.genre
       }); 
-      //console.log('el que se crea------>',nuevoUsuario)
+      
       if(!nuevoUsuario){
         throw boom.badData('no se pudo crear el usuario')
       }
@@ -72,11 +71,11 @@ class UserService {
         html: plantillaEmailRegistro(nuevoUsuario.nombre, nuevoUsuario.apellido),
       }
       const mailSender = await this.enviarEmail(mail)
-      const hub = await hubservices.crearUsuario(nuevoUsuario)
+      //const hub = await hubservices.crearUsuario(nuevoUsuario)
 
 
       nuevoUsuario.dataValues.password = undefined;
-      //console.log("nuevo usuario", nuevoUsuario)
+      
       return nuevoUsuario; 
     
 
