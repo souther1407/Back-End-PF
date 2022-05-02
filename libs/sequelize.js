@@ -94,8 +94,8 @@ Imagen.belongsTo(Habitacion)
 Pago.hasOne(Reserva)
 Reserva.belongsTo(Pago,{onDelete: "cascade" })
 
-
-sequelize.sync({ force: true })
+//a
+sequelize.sync({ force: false })
   .then(() => {
     console.log(`base de datos creada/actualizada `);
     
