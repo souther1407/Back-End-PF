@@ -20,14 +20,6 @@ class camasServices {
         return newCama
     }
 
-    async mostrarByHabitacion(id){
-        const camas = await Cama.findAll({where: { HabitacionId : id}})
-        if(!camas){
-            throw boom.notFound(`no existen camas en la habitacion ${id}`)
-        }
-        return camas
-    }
-
     async traeruna(id){
         const cama = await Cama.findByPk(id)
         if (!cama){
@@ -61,7 +53,7 @@ class camasServices {
     }
 
     async actualizar(id, cambios){
-        const { precio, estado } = cambios;
+        const { precio, estado, nombre } = cambios;
         const checkCama = Cama.findByPk(id);
         if (!checkCama) {
         throw boom.notFound('no existe la cama que intenta actualizar')
@@ -69,7 +61,8 @@ class camasServices {
         const camaUpdate = Cama.update(
             {
             precio,
-            estado
+            estado,
+            nombre
         },
             { where: {id : id}}
         )

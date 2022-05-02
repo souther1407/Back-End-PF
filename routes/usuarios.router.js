@@ -11,8 +11,8 @@ const service = new UserService
 
 router.get('/',
 checkApiKey,
-passport.authenticate('jwt', {session: false}),
-chequearRoles("administrador", "recepcionisa"),
+// passport.authenticate('jwt', {session: false}),
+// chequearRoles("administrador", "recepcionisa"),
 async (req, res, next) => {
   try {
     const users = await service.mostrarTodo();
@@ -50,36 +50,18 @@ router.get("/existGoogleUser/:googleId",async (req, res) => {
 
 })
 
-
-
 // crear usuario
-//TODO: modificada ruta por Eric, nombres de atributos del body incompatibles con el front
 router.post("/",
   checkApiKey,
-  /* validatorHandler(createUserSchema, 'body'),  */
-  async (req, res) => {
+  validatorHandler(createUserSchema, 'body'), 
+  async (req, res, next) => {
     try {
-      const {name, lastname, role,email,dni, typeofdocument,password,nationality,birthdate, genre} = req.body
-
-      const body = {
-        nombre:name,
-        apellido:lastname,
-        rol:role.toLowerCase(),
-        email,
-        dni,
-        tipoDocumento:typeofdocument,
-        password,
-        nacionalidad:nationality,
-        fechaNacimiento:birthdate,
-        genero:genre
-      };
-
-      console.log("el body", body)
+      const body = req.body
       const newUsuario = await service.crear(body);
       res.status(201).json(newUsuario);
     } catch (error) {
-  /*     return boom.badData() */
-          res.json(error)
+       next(error)
+          
       };
     }
 );
@@ -89,20 +71,13 @@ router.patch('/:dni',
   checkApiKey,
   passport.authenticate('jwt', {session: false}),
   chequearRoles("administrador", "recepcionista", "cliente"),
-  /* validatorHandler(getUserSchema, 'params'),
-  validatorHandler(updateUserSchema, 'body'), */
+  validatorHandler(getUserSchema, 'params'),
+  validatorHandler(updateUserSchema, 'body'),
   async (req, res, next) => {
     try {
       const { dni } = req.params;
-      /* const body = req.body; */
+      const body = req.body; 
       const {name,lastname,email,birthdate} = req.body
-      const body = {
-        nombre:name,
-        apellido:lastname,
-        email,
-        fechaNacimiento:birthdate
-      }
-
       const usuario = await service.actualizar(dni, body);
       usuario.respuesta.password = undefined
       res.json(usuario);
