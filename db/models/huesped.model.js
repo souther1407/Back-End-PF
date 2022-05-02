@@ -23,7 +23,7 @@ const HuespedSchema = {
     type: DataTypes.INTEGER
   },
   genero: {
-    type: DataTypes.ENUM('masculino', 'femenino', 'otro'),
+    type: DataTypes.ENUM('male', 'female', 'other'),
     allowNull: false
   },
   email: {
