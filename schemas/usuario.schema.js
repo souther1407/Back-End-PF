@@ -14,7 +14,7 @@ const genero = Joi.string().valid("Male", "Female", "Other")
 const rol = Joi.string().valid("cliente", "administrador", "recepcionista")
 const direccion = Joi.string()
 const avatar = Joi.string()
-const googleId = Joi.number().integer()
+const googleId = Joi.string()
 
 const createUserSchema = Joi.object({
   dni: dni.required(),
