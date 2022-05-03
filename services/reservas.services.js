@@ -177,7 +177,7 @@ class ReservaService {
         const tokendeca = jwt.decode(tokenInfo[1])
         const tokendec = parseInt(tokendeca.sub)
         console.log('soy el tokendec--------->', tokendec)
-        const checkUs = await Usuario.findByPk(tokendec.sub)
+        const checkUs = await Usuario.findByPk(tokendec)
         if (!checkUs) {
             throw boom.badData('el usuario no existe')
         }
@@ -203,7 +203,7 @@ class ReservaService {
             fecha_ingreso: data.fecha_ingreso,
             fecha_egreso: data.fecha_egreso,
             saldo: data.saldo,
-            UsuarioDni: tokendec.sub
+            UsuarioDni: tokendec
         })
         if (data.camas) {
             for (let i = 0; i < data.camas.length; i++) {
@@ -234,11 +234,11 @@ class ReservaService {
         }
         await newReserva.addPago(pago)
 
-        await Usuario.findByPk(tokendec.sub)
+        await Usuario.findByPk(tokendec)
             .then( user => {
                 newReserva.setUsuario(user)
             })
-            const usamail = await Usuario.findByPk(tokendec.sub)
+            const usamail = await Usuario.findByPk(tokendec)
             const mail = {
                 from: 'WebMaster',
                 to: `${usamail.email}`, 
