@@ -26,5 +26,5 @@ function setupModels(sequelize) {
   Pago.init(PagoSchema,Pago.config(sequelize))
   Hostel.init(HostelSchema,Hostel.config(sequelize))
 }
-
+// verificar
 module.exports = setupModels;
