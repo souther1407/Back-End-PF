@@ -1,4 +1,5 @@
 const boom = require('@hapi/boom');
+const AuthServices = require('./auth.services')
 const { sequelize } = require('../libs/sequelize')
 const { ReservaCama } = require('../db/models/reservaCama.model')
 const { Huesped } = require('../db/models/huesped.model')
@@ -8,7 +9,8 @@ const { Habitacion } = require('../db/models/habitacion.model')
 const jwt = require('jsonwebtoken');
 const { config } = require('../config/config')
 const { Op } = require('sequelize');
-
+const authservices = new AuthServices
+const {plantillaEmailReserva} = require('../utils/PlantillasEmail')
 
 //servicios
 const huespedServices = require('./huesped.sevices');
@@ -221,10 +223,17 @@ class ReservaService {
                 }
             }
         }
-        await Usuario.findByPk(tokendec.sub)
+        const usamail = await Usuario.findByPk(tokendec.sub)
             .then(user => {
                 newReserva.setUsuario(user)
             })
+            const mail = {
+                from: 'WebMaster',
+                to: `${usamail.email}`, 
+                subject: "hemos registrado su reserva",
+                html: plantillaEmailReserva(usamail.nombre, usamail.apellido, data.fecha_ingreso, data.fecha_egreso, newReserva.saldo, data.camas, data.habitaciones  ),
+            } 
+            const enviaremail = authservices.enviarEmail(mail)
         return newReserva
     }
 
@@ -313,7 +322,13 @@ class ReservaService {
             } else {
                 newReserva.setUsuario(user)
             }
-
+            const mail = {
+                from: 'WebMaster',
+                to: `${email}`, 
+                subject: "hemos registrado su reserva",
+                html: plantillaEmailReserva(nombre, apellido, ingreso, egreso, saldo, camas, habitaciones  ),
+            } 
+            const enviaremail = authservices.enviarEmail(mail)
             return { msg: 'La reserva fue creada con exito' }
         } catch (error) {
             throw boom.badData(error)

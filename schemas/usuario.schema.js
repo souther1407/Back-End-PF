@@ -13,6 +13,8 @@ const tipoDocumento = Joi.string()
 const genero = Joi.string().valid("Male", "Female", "Other")
 const rol = Joi.string().valid("cliente", "administrador", "recepcionista")
 const direccion = Joi.string()
+const avatar = Joi.string()
+const googleId = Joi.string()
 
 const createUserSchema = Joi.object({
   dni: dni.required(),
@@ -24,6 +26,8 @@ const createUserSchema = Joi.object({
   nationality: Nacionalidad.required(),
   telefono,
   direccion,
+  avatar,
+  googleId,
   typeofdocument: tipoDocumento.required(),
   genre: genero.required(),
   role: rol.valid('administrador', 'recepcionista',
@@ -40,6 +44,8 @@ const updateUserSchema = Joi.object({
   birthdate: fechaNacimiento,
   nationality: Nacionalidad,
   telefono,
+  avatar,
+  googleId,
   direccion,
   typeofdocument: tipoDocumento,
   genre: genero,
