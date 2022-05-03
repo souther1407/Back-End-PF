@@ -232,7 +232,7 @@ class ReservaService {
         if(!pago){
             throw boom.notFound('Pago no encontrado')
         }
-        await newReserva.addPago(pago)
+        await newReserva.setPago(pago)
 
         await Usuario.findByPk(tokendec)
             .then( user => {
