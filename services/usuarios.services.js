@@ -131,7 +131,8 @@ class UserService {
           tipoDocumento:changes.typeofdocument,
           nacionalidad:changes.nationality,
           fechaNacimiento:changes.birthdate,
-          genero:changes.genre
+          genero:changes.genre,
+          tokenRecuperacion: changes.tokenRecuperacion
 
     });
     return {
