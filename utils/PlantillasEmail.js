@@ -694,7 +694,7 @@ const plantillaEmailRegistro = function (nombre, apellido) {
                                                                     <div style="font-family: 'Trebuchet MS', Tahoma, sans-serif">
                                                                         <div class="txtTinyMce-wrapper" style="font-size: 12px; font-family: 'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; mso-line-height-alt: 14.399999999999999px; color: #393d47; line-height: 1.2;">
                                                                             <p style="margin: 0; font-size: 12px; text-align: center;"><strong>SoyHostel Team</strong></p>
-                                                                            <p style="margin: 0; font-size: 12px; text-align: center;"><strong>Desugnes by <a href="rodrigoquintero.tamarindorivas.com" target="_blank" style="text-decoration: underline; color: #1a4140;" rel="noopener">Valkiria NN</a></strong></p>
+                                                                            <p style="margin: 0; font-size: 12px; text-align: center;"><strong>Designe by <a href="rodrigoquintero.tamarindorivas.com" target="_blank" style="text-decoration: underline; color: #1a4140;" rel="noopener">Valkiria NN</a></strong></p>
                                                                         </div>
                                                                     </div>
                                                                 </td>
@@ -726,10 +726,7 @@ const plantillaEmailRegistro = function (nombre, apellido) {
                                                                                 <!--[if !vml]><!-->
                                                                                 <table class="icons-inner" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; display: inline-block; margin-right: -4px; padding-left: 0px; padding-right: 0px;" cellpadding="0" cellspacing="0" role="presentation">
                                                                                     <!--<![endif]-->
-                                                                                    <tr>
-                                                                                        <td style="vertical-align: middle; text-align: center; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 6px;"><a href="https://www.designedwithbee.com/?utm_source=editor&utm_medium=bee_pro&utm_campaign=free_footer_link" target="_blank" style="text-decoration: none;"><img class="icon" alt="Designed with BEE" src="https://d15k2d11r6t6rl.cloudfront.net/public/users/Integrators/BeeProAgency/53601_510656/Signature/bee.png" height="32" width="34" align="center" style="display: block; height: auto; margin: 0 auto; border: 0;"></a></td>
-                                                                                        <td style="font-family: Arial, Helvetica Neue, Helvetica, sans-serif; font-size: 15px; color: #9d9d9d; vertical-align: middle; letter-spacing: undefined; text-align: center;"><a href="https://www.designedwithbee.com/?utm_source=editor&utm_medium=bee_pro&utm_campaign=free_footer_link" target="_blank" style="color: #9d9d9d; text-decoration: none;">Designed with BEE</a></td>
-                                                                                    </tr>
+                                                                                    
                                                                                 </table>
                                                                             </td>
                                                                         </tr>

@@ -48,7 +48,7 @@ class UserService {
       }
       const mail = {
         from: 'Soy Hostel',
-        to: `${nuevoUsuario.email}`, 
+        to: `${data.email}`, 
         subject: "Bienvenido!",
         html: plantillaEmailRegistro(nuevoUsuario.nombre, nuevoUsuario.apellido),
       }
