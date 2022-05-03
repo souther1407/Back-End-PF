@@ -151,7 +151,7 @@ class habitacionesService {
         const dif = cantCamas - habitacionAModificar.cantCamas;
         const camaHabitacion = await Cama.findOne({where: {HabitacionId: id}})
         for(let i = 1; i >= dif; i++){
-          await Camas.create({
+          await Cama.create({
             HabitacionId: id,
             precio: camaHabitacion.precio
           })
@@ -160,6 +160,7 @@ class habitacionesService {
         }
       }
     }
+    
     const habitacionUpdate = await Habitacion.update(
       {
         nombre,
