@@ -75,7 +75,10 @@ class AuthServices {
           throw boom.unauthorized();
         }
         const hash = await bcrypt.hash(newPassword, 12)
-        await service.actualizar(usuario.dni, {tokenRecuperacion: null, password: hash })
+        const cambiar= await service.actualizar(usuario.dni, {tokenRecuperacion: null, password: hash })
+        if(!cambiar){
+          throw boom.badData('no se cambio ni mierda!!!')
+        }
         return { message: 'password actualizado'}
       
       }
