@@ -9,7 +9,7 @@ const { ReservaCama } = require('../db/models/reservaCama.model');
 class habitacionesService {
   async crear(data) {
     if (data.privada === true) {
-      if(!data.precioHabitacion) return boom.badData('no se puede crear una habitacion privada sin precio');
+      if(!data.precioHabitacion) throw boom.badData('no se puede crear una habitacion privada sin precio');
         const habitacion = await Habitacion.create({
           nombre: data.nombre,
           comodidades: data.comodidades,
@@ -40,7 +40,7 @@ class habitacionesService {
         }
         return habitacion
     } else {
-      if(!data.preciosCamas) return boom.badData('no se puede crear una habitacion compartida sin precios de camas');
+      if(!data.preciosCamas) throw boom.badData('no se puede crear una habitacion compartida sin precios de camas');
         let precioHabitacion = 0;
         if(data.preciosCamas.length > 1 && data.preciosCamas.length !== data.cantCamas ){
           throw boom.badData('falta precio de una cama')
@@ -147,6 +147,9 @@ class habitacionesService {
     const habitacionAModificar = await Habitacion.findByPk(id);
     if(!habitacionAModificar.privada){
       // verificar como hacer para eliminar camas dee una habitacion compartida en base a las reseervas que tiene
+      if(habitacionAModificar.cantCamas > cantCamas){
+        throw boom.badData('No se pueden Eliminar camas, debe verificar previamente las reservas')
+      }
       if(habitacionAModificar.cantCamas < cantCamas) {
         const dif = cantCamas - habitacionAModificar.cantCamas;
         const camaHabitacion = await Cama.findOne({where: {HabitacionId: id}})
@@ -155,12 +158,10 @@ class habitacionesService {
             HabitacionId: id,
             precio: camaHabitacion.precio
           })
-        }if(habitacionAModificar.cantCamas > cantCamas){
-          return boom.badData ('No se pueden Eliminar camas, debe verificar previamente las reservas')
         }
       }
     }
-    
+
     const habitacionUpdate = await Habitacion.update(
       {
         nombre,
