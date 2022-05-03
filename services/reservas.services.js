@@ -225,9 +225,6 @@ class ReservaService {
                 }
             }
         }
-<<<<<<< HEAD
-        const usamail = await Usuario.findByPk(tokendec.sub)
-=======
         let pago = await Pago.findByPk(pagoId)
         if(!pago){
             throw boom.notFound('Pago no encontrado')
@@ -235,7 +232,6 @@ class ReservaService {
         await newReserva.addPago(pago)
 
         await Usuario.findByPk(tokendec.sub)
->>>>>>> 563c144d8ac174b677b032beb98ac114ac3f340e
             .then(user => {
                 newReserva.setUsuario(user)
             })
@@ -250,7 +246,7 @@ class ReservaService {
     }
 
     async crearReservaRecepcion(data) {
-        try {
+      
             const { camas,
                 habitaciones,
                 saldo,
@@ -342,9 +338,7 @@ class ReservaService {
             } 
             const enviaremail = enviarEmail(mail)
             return { msg: 'La reserva fue creada con exito' }
-        } catch (error) {
-            throw boom.badData(error)
-        }
+       
     }
 
     async eliminarReserva(id) {
