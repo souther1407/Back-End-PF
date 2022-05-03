@@ -8,11 +8,8 @@ const {TipoDocumento,tipoDocumentoSchema} = require("./tipoDocumento.model");
 const { HistorialOcupante, HistorialOcupanteSchema } = require('./historialOcupante.model');
 const {Pago, PagoSchema} = require("./pago.model")
 const {Imagen,ImagenesSchema} = require("./imagen.model")
-<<<<<<< HEAD
 const {HostelSchema, Hostel } = require('./hostel.model');
-=======
 const {Contacto,ContactoSchema} = require("./contacto.model")
->>>>>>> production
 
 function setupModels(sequelize) {
   Imagen.init(ImagenesSchema, Imagen.config(sequelize))
@@ -31,4 +28,3 @@ function setupModels(sequelize) {
 }
 
 module.exports = setupModels;
-
