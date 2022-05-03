@@ -7,7 +7,6 @@ const service = new pagoService()
 
 router.post('/checkout',checkApiKey,passport.authenticate('jwt', {session: false}), async (req, res) => {
     try {
-
         const {cart} = req.body
         console.log(req.body)
         const payment = await service.crearPago(cart)

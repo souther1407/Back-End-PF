@@ -8,7 +8,7 @@ const PASSWORD = encodeURIComponent(config.dbPassword);
 
 const options = {
   dialect: `postgres`,
-  logging: config.isProd ? false: true,
+  logging: config.isProd ? false: false,
 }
 if (config.isProd) {
   options.dialectOptions = {

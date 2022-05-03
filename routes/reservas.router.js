@@ -123,8 +123,8 @@ router.post('/',
             console.log("infoPayment--->>",infoPayment)
             const token = req.headers['authorization'];
             infoPayment.amount = toBack.saldo
-            const newReserva = await services.crearReserva(toBack, token)
             const newPago = await servicesPago.guardarPago(infoPayment)
+            const newReserva = await services.crearReserva(toBack, token, infoPayment.id)
             newReserva.setPago(newPago);
             res.status(201).json(newReserva)
         } catch(error) {

@@ -14,6 +14,7 @@ const {plantillaEmailReserva} = require('../utils/PlantillasEmail')
 
 //servicios
 const huespedServices = require('./huesped.sevices');
+const { Pago } = require('../db/models/pago.model');
 
 const serviceHuesped = new huespedServices
 
@@ -170,14 +171,14 @@ class ReservaService {
         }
     }
 
-    async crearReserva(data, token) {
+    async crearReserva(data, token, pagoId) {
         const tokenInfo = token.split(' ')
         const tokendec = jwt.decode(tokenInfo[1])
         const checkUs = await Usuario.findByPk(tokendec.sub)
         if (!checkUs) {
             throw boom.badData('el usuario no existe')
         }
-        console.log("data en crear reserva", data);
+        
         let cama;
         let habitacion;
 
@@ -223,7 +224,17 @@ class ReservaService {
                 }
             }
         }
+<<<<<<< HEAD
         const usamail = await Usuario.findByPk(tokendec.sub)
+=======
+        let pago = await Pago.findByPk(pagoId)
+        if(!pago){
+            throw boom.notFound('Pago no encontrado')
+        }
+        await newReserva.addPago(pago)
+
+        await Usuario.findByPk(tokendec.sub)
+>>>>>>> 563c144d8ac174b677b032beb98ac114ac3f340e
             .then(user => {
                 newReserva.setUsuario(user)
             })
@@ -619,24 +630,23 @@ class ReservaService {
             return error;
         }
     }
-    // creando un pull 
-    async mostrardisponibilidadById(data) {
 
-        const { id } = data
-        console.log(id)
-        const reservas = await ReservaCama.findByPk(id, {
-            include: [
+    async mostrardisponibilidadById(data){
+        
+            const { id } = data
+            console.log(id)
+            const reservas = await ReservaCama.findByPk(id, {
+                include: [
 
-                { model: Cama, attributes: ['id', 'nombre'], through: { attributes: [] } },
-                { model: Habitacion, attributes: ['id', 'nombre', 'cantCamas'], through: { attributes: [] } }
-            ]
-        })
-        if (!reservas) {
-            throw boom.notFound('no existen reservas')
-        }
-        return reservas
+                    { model: Cama, attributes: ['id', 'nombre'], through: { attributes: [] } },
+                    { model: Habitacion, attributes: ['id', 'nombre', 'cantCamas'], through: { attributes: [] } }
+                ]
+            })
+            if(!reservas){
+                throw boom.notFound('no existen reservas')
+            }
+            return reservas
     }
-
 
 }
 
