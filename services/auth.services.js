@@ -78,7 +78,7 @@ class AuthServices {
         await service.actualizar(usuario.dni, {tokenRecuperacion: null, password: hash })
         return { message: 'password actualizado'}
       
-      }}
+      }
 
       async refreshToken (data) {
         const refreshToken = data.headers.refresh
