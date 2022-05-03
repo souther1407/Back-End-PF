@@ -132,7 +132,8 @@ class UserService {
           nacionalidad:changes.nationality,
           fechaNacimiento:changes.birthdate,
           genero:changes.genre,
-          tokenRecuperacion: changes.tokenRecuperacion
+          tokenRecuperacion: changes.tokenRecuperacion,
+          password: changes.password
 
     });
     return {
