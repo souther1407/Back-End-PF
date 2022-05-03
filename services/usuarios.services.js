@@ -28,7 +28,10 @@ const usuarioAdmin = {
 class UserService {
   
    async crear(data) {
-   
+      const check = await Usuario.findByPk(data.dni)
+      if(check){
+        throw boom.badData({msg:'el usuario ya existe'})
+      }
       const hash = await bcrypt.hash(data.password, 12)
       const nuevoUsuario = await Usuario.create({
           nombre: data.name,

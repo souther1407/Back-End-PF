@@ -7,7 +7,7 @@ function logErrors (err, req, res, next) {
 
 function errorHandler (err, req, res, next) {
   if(err){
-    res.status(500).json({
+    res.status(409).json({
       message: err.message,
       stack: err.stack
     })

@@ -143,7 +143,23 @@ class habitacionesService {
         descripcion,
         imagenes,
     } = cambios;
-    console.log("cambios -- >",cambios)
+    console.log("cambios -- >",cambios);
+    const habitacionAModificar = await Habitacion.findByPk(id);
+    if(!habitacionAModificar.privada){
+      // verificar como hacer para eliminar camas dee una habitacion compartida en base a las reseervas que tiene
+      if(habitacionAModificar.cantCamas < cantCamas) {
+        const dif = cantCamas - habitacionAModificar.cantCamas;
+        const camaHabitacion = await Cama.findOne({where: {HabitacionId: id}})
+        for(let i = 1; i >= dif; i++){
+          await Camas.create({
+            HabitacionId: id,
+            precio: camaHabitacion.precio
+          })
+        }if(habitacionAModificar.cantCamas > cantCamas){
+          return boom.badData ('No se pueden Eliminar camas, debe verificar previamente las reservas')
+        }
+      }
+    }
     const habitacionUpdate = await Habitacion.update(
       {
         nombre,
