@@ -174,7 +174,7 @@ class ReservaService {
 
     async crearReserva(data, token, pagoId) {
         const tokenInfo = token.split(' ')
-        const tokendeca = jwt.decode(tokenInfo[1])
+        const tokendeca = jwt.decode(tokenInfo[0])
         const tokendec = parseInt(tokendeca)
         const checkUs = await Usuario.findByPk(tokendec.sub)
         if (!checkUs) {
