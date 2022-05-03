@@ -268,9 +268,9 @@ const plantillaEmailReset = function (link) {
     </body>
     
     </html>`
-  }
-  
-  const plantillaEmailRegistro = function (nombre, apellido) {
+}
+
+const plantillaEmailRegistro = function (nombre, apellido) {
     return `<!DOCTYPE html>
     <html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
     
@@ -752,9 +752,201 @@ const plantillaEmailReset = function (link) {
     </body>
     
     </html>`
-  }
-  
- 
-  module.exports = {plantillaEmailReset, plantillaEmailRegistro };
-  
-  
+}
+
+const plantillaEmailReserva = function (nombre, apellido, ingreso, egreso, saldo, camas, habitaciones ) {
+    return `<!DOCTYPE html>
+    <html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="es-ES">
+    
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--[if mso]><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch><o:AllowPNG/></o:OfficeDocumentSettings></xml><![endif]-->
+        <!--[if !mso]><!-->
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Bitter" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Droid+Serif" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+        <!--<![endif]-->
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+    
+            body {
+                margin: 0;
+                padding: 0;
+            }
+    
+            a[x-apple-data-detectors] {
+                color: inherit !important;
+                text-decoration: inherit !important;
+            }
+    
+            #MessageViewBody a {
+                color: inherit;
+                text-decoration: none;
+            }
+    
+            p {
+                line-height: inherit
+            }
+    
+            @media (max-width:520px) {
+                .icons-inner {
+                    text-align: center;
+                }
+    
+                .icons-inner td {
+                    margin: 0 auto;
+                }
+    
+                .row-content {
+                    width: 100% !important;
+                }
+    
+                .column .border {
+                    display: none;
+                }
+    
+                table {
+                    table-layout: fixed !important;
+                }
+    
+                .stack .column {
+                    width: 100%;
+                    display: block;
+                }
+            }
+        </style>
+    </head>
+    
+    <body style="background-color: #e9e9e9; margin: 0; padding: 0; -webkit-text-size-adjust: none; text-size-adjust: none;">
+        <table class="nl-container" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #e9e9e9;">
+            <tbody>
+                <tr>
+                    <td>
+                        <table class="row row-1" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-image: url('https://d15k2d11r6t6rl.cloudfront.net/public/users/Integrators/BeeProAgency/796840_780645/editor_images/754632.jpg'); background-repeat: no-repeat; background-size: auto;">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; background-size: auto; width: 500px;" width="500">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 5px; padding-bottom: 5px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                                        <table class="image_block" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                            <tr>
+                                                                <td style="width:100%;padding-right:0px;padding-left:0px;">
+                                                                    <div align="center" style="line-height:10px"><a href="www.soyhostel.com" target="_blank" style="outline:none" tabindex="-1"><img src="https://d15k2d11r6t6rl.cloudfront.net/public/users/Integrators/BeeProAgency/796840_780645/editor_images/henryLogo.svg" style="display: block; height: auto; border: 0; width: 125px; max-width: 100%;" width="125"></a></div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        <table class="heading_block" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                            <tr>
+                                                                <td style="text-align:center;width:100%;">
+                                                                    <h1 style="margin: 0; color: #393d47; direction: ltr; font-family: Georgia, Times, 'Times New Roman', serif; font-size: 26px; font-weight: 700; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0;"><span class="tinyMce-placeholder">Hemos recibido su reserva</span></h1>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        <table class="paragraph_block" width="100%" border="0" cellpadding="35" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                            <tr>
+                                                                <td>
+                                                                    <div style="color:#393d47;direction:ltr;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:13px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:left;">
+                                                                        <p style="margin: 0;">Recibimos correctamente los datos de tu reserva, al llegar la hostel puedes presentar este mail como comprobante de la misma, no hace falta que la imprimas, puedes mostrarsela al recepcionista en tu telefono, tableta o dispositivo movil que prefieras.-&nbsp;</p>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        <table class="list_block" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                            <tr>
+                                                                <td>
+                                                                    <ul style="margin: 0; padding: 0; margin-left: 20px; color: #000000; direction: ltr; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; font-size: 13px; font-weight: 400; letter-spacing: 0px; line-height: 120%; text-align: left;">
+                                                                        <li style="margin-bottom: 0px;">Numero de Reserva: <strong>{IdReserva}</strong></li>
+                                                                        <li style="margin-bottom: 0px;">Titular de la Reserva: <strong>${nombre} ${apellido}</strong></li>
+                                                                        <li style="margin-bottom: 0px;">Cantidad de camas reservadas: <strong>${camas}</strong></li>
+                                                                        <li style="margin-bottom: 0px;">Cantidad de Habitaciones Reservadas: <strong>${habitaciones}</strong></li>
+                                                                        <li style="margin-bottom: 0px;">Importe abonado: <strong>${saldo}</strong></li>
+                                                                        <li style="margin-bottom: 0px;">Check In: <strong>${ingreso}</strong></li>
+                                                                        <li>Checkout:<strong>${egreso}</strong></li>
+                                                                    </ul>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        <table class="paragraph_block" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                            <tr>
+                                                                <td style="padding-bottom:10px;padding-left:10px;padding-right:10px;padding-top:70px;">
+                                                                    <div style="color:#000000;direction:ltr;font-family:Arial, Helvetica Neue, Helvetica, sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;line-height:150%;text-align:left;">
+                                                                        <p style="margin: 0; margin-bottom: 3px;">recuerda que el horario de check in es a partir de las 15:00 y el check out debe efectuarse antes de la hora 11:00.</p>
+                                                                        <p style="margin: 0; margin-bottom: 3px;">Durante toda la estadia cuentas con seguro medico y cobertura de primeros auxilios dentro del Hostel, la cual puedes soliciar sin cargo al:</p>
+                                                                        <p style="margin: 0; margin-bottom: 3px;">0800-111-aycholita!&nbsp;</p>
+                                                                        <p style="margin: 0; margin-bottom: 3px;">como tambien soliciarselo a cualquier colaborador del Hostel.-</p>
+                                                                        <p style="margin: 0;">Una buena experiencia en tu estadia es nuestro principal objetivo, no dudes en hacernos saber cualquier sugerencia o consulta que tengas, estamos para ayudarte!</p>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        <table class="social_block" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                            <tr>
+                                                                <td style="text-align:center;padding-top:10px;padding-right:10px;padding-bottom:70px;padding-left:10px;">
+                                                                    <table class="social-table" width="108px" border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                                        <tr>
+                                                                            <td style="padding:0 2px 0 2px;"><a href="https://www.facebook.com/SoyHostel-112398641450674/" target="_blank"><img src="https://app-rsrc.getbee.io/public/resources/social-networks-icon-sets/circle-color/facebook@2x.png" width="32" height="32" alt="Facebook" title="facebook" style="display: block; height: auto; border: 0;"></a></td>
+                                                                            <td style="padding:0 2px 0 2px;"><a href="https://twitter.com/Soyhostel/" target="_blank"><img src="https://app-rsrc.getbee.io/public/resources/social-networks-icon-sets/circle-color/twitter@2x.png" width="32" height="32" alt="Twitter" title="twitter" style="display: block; height: auto; border: 0;"></a></td>
+                                                                            <td style="padding:0 2px 0 2px;"><a href="https://www.instagram.com/soyhostel/" target="_blank"><img src="https://app-rsrc.getbee.io/public/resources/social-networks-icon-sets/circle-color/instagram@2x.png" width="32" height="32" alt="Instagram" title="Instagram" style="display: block; height: auto; border: 0;"></a></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="row row-2" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; width: 500px;" width="500">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 5px; padding-bottom: 5px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                                        <table class="icons_block" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                            <tr>
+                                                                <td style="vertical-align: middle; color: #9d9d9d; font-family: inherit; font-size: 15px; padding-bottom: 5px; padding-top: 5px; text-align: center;">
+                                                                    <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                                        <tr>
+                                                                            <td style="vertical-align: middle; text-align: center;">
+                                                                                <!--[if vml]><table align="left" cellpadding="0" cellspacing="0" role="presentation" style="display:inline-block;padding-left:0px;padding-right:0px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"><![endif]-->
+                                                                                <!--[if !vml]><!-->
+                                                                                <table class="icons-inner" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; display: inline-block; margin-right: -4px; padding-left: 0px; padding-right: 0px;" cellpadding="0" cellspacing="0" role="presentation">
+                                                                                    <!--<![endif]-->
+                                                                                    
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table><!-- End -->
+    </body>
+    
+    </html>`
+}
+
+module.exports = {plantillaEmailReset, plantillaEmailRegistro, plantillaEmailReserva };
