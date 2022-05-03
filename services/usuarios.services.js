@@ -133,7 +133,7 @@ class UserService {
           fechaNacimiento:changes.birthdate,
           genero:changes.genre,
           tokenRecuperacion: changes.tokenRecuperacion,
-          password: changes.password
+          password: changes.hash
 
     });
     return {
