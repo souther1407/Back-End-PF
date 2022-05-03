@@ -8,9 +8,11 @@ const {TipoDocumento,tipoDocumentoSchema} = require("./tipoDocumento.model");
 const { HistorialOcupante, HistorialOcupanteSchema } = require('./historialOcupante.model');
 const {Pago, PagoSchema} = require("./pago.model")
 const {Imagen,ImagenesSchema} = require("./imagen.model")
+const {Contacto,ContactoSchema} = require("./contacto.model")
 
 function setupModels(sequelize) {
   Imagen.init(ImagenesSchema, Imagen.config(sequelize))
+  Contacto.init(ContactoSchema, Contacto.config(sequelize))
   Pago.init(PagoSchema, Pago.config(sequelize))
   HistorialOcupante.init(HistorialOcupanteSchema, HistorialOcupante.config(sequelize))
   Huesped.init(HuespedSchema, Huesped.config(sequelize))
