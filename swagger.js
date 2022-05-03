@@ -781,3 +781,140 @@
  *        nacionalidad: Argenitina
  * */
 
+// SCHEMA DE Info Hostel
+/**
+ *  @swagger
+ * components:
+ *  schemas:
+ *    InfoHostel:
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: integer
+ *          description: Id indeentificatorio del objeto 
+ *        title:
+ *          type: string
+ *          description: Titulo de la imagen
+ *        description:
+ *          type: string
+ *          description: Description de la imagen
+ *        url:
+ *          type: string
+ *          description: Url de la imagen
+ *      required:
+ *        - title
+ *        - url
+ *        - description
+ *      example: 
+ *       #
+ *       #
+ *        title: "Soy Hostel"
+ *        url: "https://media-cdn.tripadvisor.com/media/photo-s/16/af/28/82/dormitorio-de-12-camas.jpg"
+ *        description: "Ejemplo de las habitaciones compartidas"
+ * */
+
+// GET INFO
+/**
+ * @swagger
+ * path:
+ * /hostel:
+ *  get:
+ *    summary: Retorna toda la info guardada del hostel
+ *    tags: [InfoHostel]
+ *    responses:
+ *      200:
+ *         description: Retorna una array con las imagens y su respectiva información posee el Hostel
+ *         content: 
+ *            application/json:
+ *              schema:
+ *                type: array
+ *                items:
+ *                  $ref: '#/components/schemas/InfoHostel'
+ *      401:
+ *        description: El usuario no tiene los permisos necesarios
+ */
+
+// GET INFO POR ID
+/**
+ * @swagger
+ * path:
+ * /hostel/{id}:
+ *  get:
+ *    summary: Retorna una Cama
+ *    tags: [InfoHostel]
+ *    parameters:
+ *      - in: path
+ *        name: id   
+ *        required: true
+ *        schema:
+ *          type: string
+ *        description: Recibe el id de la info a buscar
+ *    security:
+ *      - ApiKeySecurity: []
+ *    responses:
+ *       200:
+ *         description: Devuelve la info pedida
+ *         content: 
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                $ref: '#/components/schemas/InfoHostel'
+ *       404:
+ *         description: IInfo no encontrada
+ */
+
+// POST INFO
+/**
+ * @swagger
+ * /hostel:
+ *  post:
+ *    summary: Agrega nueva informacion sobre el hostel
+ *    tags: [InfoHostel]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            $ref: '#/components/schemas/InfoHostel'
+ *    security:
+ *      - ApiKeySecurity: []
+ *        Token: []
+ *    responses:
+ *      201:
+ *        description: Retorna la Info agregada, en un Json
+ *      401:
+ *        description: El usuario no tiene los permisos necesarios
+ */
+
+// DELETE CAMA POR ID
+/**
+ * @swagger
+ * path:
+ * /hostel/{id}:
+ *  delete:
+ *    summary: Elimina info del hostel
+ *    tags: [InfoHostel]
+ *    parameters:
+ *      - in: path
+ *        name: id   
+ *        required: true
+ *        schema:
+ *          type: string
+ *        description: Se pasa el id de la info a eliminar
+ *    security:
+ *      - ApiKeySecurity: []
+ *        Token: []
+ *    responses:
+ *      201:
+ *         description: devuelve la confirmación de la eliminación
+ *         content: 
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                $ref: '#/components/schemas/InfoHostel'
+ *      401:
+ *        description: El usuario no tiene los permisos necesarios
+ *      404:
+ *         description: Informacion no encontrada
+ */

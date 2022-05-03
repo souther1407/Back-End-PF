@@ -21,8 +21,8 @@ class huespedServices {
             const createdHuesped = await Huesped.create(data)
             const tipoDocu = await TipoDocumento.create({nombre: data.tipoDocumento})
             const nacionalidad = await Nacionalidades.create({nombre: data.nacionalidad})
-            createdHuesped.setTipoDocumento(tipoDocu)
-            createdHuesped.setNacionalidade(nacionalidad)
+            await createdHuesped.setTipoDocumento(tipoDocu)
+            await createdHuesped.setNacionalidade(nacionalidad)
             return createdHuesped
         }
     }

@@ -1,12 +1,11 @@
 const boom = require('@hapi/boom');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
+const {enviarEmail} = require('../utils/mailer')
 const { Usuario } = require('../db/models/usuario.model');
 const {config} = require('../config/config');
 const {plantillaEmailReset} = require('../utils/PlantillasEmail')
 const UserService = require('./usuarios.services');
-console.log(UserService)
 const service = new UserService;
 
 class AuthServices {
@@ -42,21 +41,7 @@ class AuthServices {
     }
 
   
-    async enviarEmail(infomail) {
-        const MAIL = config.email;
-        const PASSWORD = config.emailPassword
-        const transporter = nodemailer.createTransport({
-          host: "smtp.gmail.com",
-          secure: true,
-          port: 465,
-          auth: {
-          user: 'soyhostel@gmail.com',
-          pass: 'yyfcovcvvlpoueda' 
-                  }
-              });
-        await transporter.sendMail(infomail);
-        return {message: 'se envio el correo'}        
-    }
+    
 
 
     async enviarRecuperacion(email){
@@ -76,14 +61,13 @@ class AuthServices {
           subject: "Email para recuperar contraseña",
           html: plantillaEmailReset(link),
         }
-        const respuesta = await this.enviarEmail(mail);
+        const respuesta = await enviarEmail(mail);
         return respuesta;
       }
 
     async cambiarPaswword(token, newPassword){
 
-      try {
-        const payload = jwt.verify(token, config.jwtSecret);
+      const payload = jwt.verify(token, config.jwtSecret);
 
         const usuario = await service.mostrarByDni(payload.sub);
         console.log('soy el token---->',usuario._previousDataValues.tokenRecuperacion)
@@ -91,11 +75,13 @@ class AuthServices {
           throw boom.unauthorized();
         }
         const hash = await bcrypt.hash(newPassword, 12)
-        await service.actualizar(usuario.dni, {tokenRecuperacion: null, password: hash })
+        const cambiar= await service.actualizar(usuario.dni, {tokenRecuperacion: null, password: hash })
+        if(!cambiar){
+          throw boom.badData('no se cambio ni mierda!!!')
+        }
         return { message: 'password actualizado'}
-      } catch(error) {
-        throw boom.unauthorized()
-      }}
+      
+      }
 
       async refreshToken (data) {
         const refreshToken = data.headers.refresh

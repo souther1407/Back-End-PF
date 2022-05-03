@@ -1,5 +1,5 @@
 const boom = require('@hapi/boom');
-const AuthServices = require('./auth.services')
+
 const { sequelize } = require('../libs/sequelize')
 const { ReservaCama } = require('../db/models/reservaCama.model')
 const { Huesped } = require('../db/models/huesped.model')
@@ -9,11 +9,13 @@ const { Habitacion } = require('../db/models/habitacion.model')
 const jwt = require('jsonwebtoken');
 const { config } = require('../config/config')
 const { Op } = require('sequelize');
-const authservices = new AuthServices
+
 const {plantillaEmailReserva} = require('../utils/PlantillasEmail')
+const {enviarEmail} = require('../utils/mailer')
 
 //servicios
 const huespedServices = require('./huesped.sevices');
+const { Pago } = require('../db/models/pago.model');
 
 const serviceHuesped = new huespedServices
 
@@ -170,14 +172,16 @@ class ReservaService {
         }
     }
 
-    async crearReserva(data, token) {
+    async crearReserva(data, token, pagoId) {
         const tokenInfo = token.split(' ')
-        const tokendec = jwt.decode(tokenInfo[1])
-        const checkUs = await Usuario.findByPk(tokendec.sub)
+        const tokendeca = jwt.decode(tokenInfo[1])
+        const tokendec = tokendeca.sub
+        console.log('soy el tokendec--------->', tokendec)
+        const checkUs = await Usuario.findByPk(tokendec)
         if (!checkUs) {
             throw boom.badData('el usuario no existe')
         }
-        console.log("data en crear reserva", data);
+        
         let cama;
         let habitacion;
 
@@ -198,7 +202,8 @@ class ReservaService {
         const newReserva = await ReservaCama.create({
             fecha_ingreso: data.fecha_ingreso,
             fecha_egreso: data.fecha_egreso,
-            saldo: data.saldo
+            saldo: data.saldo,
+            UsuarioDni: tokendec
         })
         if (data.camas) {
             for (let i = 0; i < data.camas.length; i++) {
@@ -223,22 +228,35 @@ class ReservaService {
                 }
             }
         }
-        const usamail = await Usuario.findByPk(tokendec.sub)
-            .then(user => {
+        let pago = await Pago.findByPk(pagoId)
+        if(!pago){
+            throw boom.notFound('Pago no encontrado')
+        }
+        await newReserva.setPago(pago)
+
+        await Usuario.findByPk(tokendec)
+            .then( user => {
                 newReserva.setUsuario(user)
             })
+            const usamail = await Usuario.findByPk(tokendec)
             const mail = {
                 from: 'WebMaster',
                 to: `${usamail.email}`, 
                 subject: "hemos registrado su reserva",
-                html: plantillaEmailReserva(usamail.nombre, usamail.apellido, data.fecha_ingreso, data.fecha_egreso, newReserva.saldo, data.camas, data.habitaciones  ),
+                html: plantillaEmailReserva(usamail.nombre, 
+                                            usamail.apellido, 
+                                            data.fecha_ingreso, 
+                                            data.fecha_egreso,
+                                            newReserva.saldo, 
+                                            data.camas, 
+                                            data.habitaciones),
             } 
-            const enviaremail = authservices.enviarEmail(mail)
+            const enviaremail = enviarEmail(mail)
         return newReserva
     }
 
     async crearReservaRecepcion(data) {
-        try {
+      
             const { camas,
                 habitaciones,
                 saldo,
@@ -328,11 +346,9 @@ class ReservaService {
                 subject: "hemos registrado su reserva",
                 html: plantillaEmailReserva(nombre, apellido, ingreso, egreso, saldo, camas, habitaciones  ),
             } 
-            const enviaremail = authservices.enviarEmail(mail)
+            const enviaremail = enviarEmail(mail)
             return { msg: 'La reserva fue creada con exito' }
-        } catch (error) {
-            throw boom.badData(error)
-        }
+       
     }
 
     async eliminarReserva(id) {
@@ -619,24 +635,23 @@ class ReservaService {
             return error;
         }
     }
-    // creando un pull 
-    async mostrardisponibilidadById(data) {
 
-        const { id } = data
-        console.log(id)
-        const reservas = await ReservaCama.findByPk(id, {
-            include: [
+    async mostrardisponibilidadById(data){
+        
+            const { id } = data
+            console.log(id)
+            const reservas = await ReservaCama.findByPk(id, {
+                include: [
 
-                { model: Cama, attributes: ['id', 'nombre'], through: { attributes: [] } },
-                { model: Habitacion, attributes: ['id', 'nombre', 'cantCamas'], through: { attributes: [] } }
-            ]
-        })
-        if (!reservas) {
-            throw boom.notFound('no existen reservas')
-        }
-        return reservas
+                    { model: Cama, attributes: ['id', 'nombre'], through: { attributes: [] } },
+                    { model: Habitacion, attributes: ['id', 'nombre', 'cantCamas'], through: { attributes: [] } }
+                ]
+            })
+            if(!reservas){
+                throw boom.notFound('no existen reservas')
+            }
+            return reservas
     }
-
 
 }
 
