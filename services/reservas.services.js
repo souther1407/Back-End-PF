@@ -174,7 +174,8 @@ class ReservaService {
 
     async crearReserva(data, token, pagoId) {
         const tokenInfo = token.split(' ')
-        const tokendec = jwt.decode(tokenInfo[1])
+        const tokendeca = jwt.decode(tokenInfo[1])
+        const tokendec = parseInt(tokendeca)
         const checkUs = await Usuario.findByPk(tokendec.sub)
         if (!checkUs) {
             throw boom.badData('el usuario no existe')
@@ -200,7 +201,8 @@ class ReservaService {
         const newReserva = await ReservaCama.create({
             fecha_ingreso: data.fecha_ingreso,
             fecha_egreso: data.fecha_egreso,
-            saldo: data.saldo
+            saldo: data.saldo,
+            UsuarioDni: tokendec.sub
         })
         if (data.camas) {
             for (let i = 0; i < data.camas.length; i++) {
@@ -232,14 +234,21 @@ class ReservaService {
         await newReserva.addPago(pago)
 
         await Usuario.findByPk(tokendec.sub)
-            .then(user => {
+            .then( user => {
                 newReserva.setUsuario(user)
             })
+            const usamail = await Usuario.findByPk(tokendec.sub)
             const mail = {
                 from: 'WebMaster',
                 to: `${usamail.email}`, 
                 subject: "hemos registrado su reserva",
-                html: plantillaEmailReserva(usamail.nombre, usamail.apellido, data.fecha_ingreso, data.fecha_egreso, newReserva.saldo, data.camas, data.habitaciones  ),
+                html: plantillaEmailReserva(usamail.nombre, 
+                                            usamail.apellido, 
+                                            data.fecha_ingreso, 
+                                            data.fecha_egreso,
+                                            newReserva.saldo, 
+                                            data.camas, 
+                                            data.habitaciones),
             } 
             const enviaremail = enviarEmail(mail)
         return newReserva
