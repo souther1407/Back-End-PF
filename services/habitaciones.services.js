@@ -111,7 +111,6 @@ class habitacionesService {
       return habitacion;
   }}
 
-  
   // eslint-disable-next-line class-methods-use-this
   async buscaruno(id) {
     
@@ -125,11 +124,11 @@ class habitacionesService {
       });
     }
     if (!habitacion) {
-      throw boom.notFound('no se encontro la habitacion');
+      throw boom.notFound('no se encontro la habitación');
     }
     return habitacion;
   }
- //toqueteado por eric, cambiado precioHabiacion por precio
+  //toqueteado por eric, cambiado precioHabiacion por precio
   // eslint-disable-next-line class-methods-use-this
   async actualizar(id, cambios) {
     const {
@@ -152,8 +151,10 @@ class habitacionesService {
       }
       if(habitacionAModificar.cantCamas < cantCamas) {
         const dif = cantCamas - habitacionAModificar.cantCamas;
+        console.log(dif)
         const camaHabitacion = await Cama.findOne({where: {HabitacionId: id}})
-        for(let i = 1; i >= dif; i++){
+        console.log("cambiosssssssssssssssssssssss -- >");
+        for(let i = 1; i <= dif; i++){
           await Cama.create({
             HabitacionId: id,
             precio: camaHabitacion.precio
