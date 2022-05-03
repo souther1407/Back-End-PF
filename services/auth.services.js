@@ -67,8 +67,7 @@ class AuthServices {
 
     async cambiarPaswword(token, newPassword){
 
-      try {
-        const payload = jwt.verify(token, config.jwtSecret);
+      const payload = jwt.verify(token, config.jwtSecret);
 
         const usuario = await service.mostrarByDni(payload.sub);
         console.log('soy el token---->',usuario._previousDataValues.tokenRecuperacion)
@@ -78,8 +77,7 @@ class AuthServices {
         const hash = await bcrypt.hash(newPassword, 12)
         await service.actualizar(usuario.dni, {tokenRecuperacion: null, password: hash })
         return { message: 'password actualizado'}
-      } catch(error) {
-        throw boom.unauthorized()
+      
       }}
 
       async refreshToken (data) {
