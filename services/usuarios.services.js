@@ -30,7 +30,7 @@ class UserService {
    async crear(data) {
       const check = await Usuario.findByPk(data.dni)
       console.log(check)
-      if(check.dataValues){
+      if(check){
         throw new Error('el usuario ya existe')
       }
       const hash = await bcrypt.hash(data.password, 12)
