@@ -751,7 +751,7 @@ const plantillaEmailRegistro = function (nombre, apellido) {
     </html>`
 }
 
-const plantillaEmailReserva = function (nombre, apellido, ingreso, egreso, saldo, camas, habitaciones ) {
+const plantillaEmailReserva = function (id,nombre, apellido, ingreso, egreso, saldo, camas, habitaciones ) {
     return `<!DOCTYPE html>
     <html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="es-ES">
     
@@ -859,7 +859,7 @@ const plantillaEmailReserva = function (nombre, apellido, ingreso, egreso, saldo
                                                             <tr>
                                                                 <td>
                                                                     <ul style="margin: 0; padding: 0; margin-left: 20px; color: #000000; direction: ltr; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; font-size: 13px; font-weight: 400; letter-spacing: 0px; line-height: 120%; text-align: left;">
-                                                                        <li style="margin-bottom: 0px;">Numero de Reserva: <strong>{IdReserva}</strong></li>
+                                                                        <li style="margin-bottom: 0px;">Numero de Reserva: <strong>${id}</strong></li>
                                                                         <li style="margin-bottom: 0px;">Titular de la Reserva: <strong>${nombre} ${apellido}</strong></li>
                                                                         <li style="margin-bottom: 0px;">Cantidad de camas reservadas: <strong>${camas}</strong></li>
                                                                         <li style="margin-bottom: 0px;">Cantidad de Habitaciones Reservadas: <strong>${habitaciones}</strong></li>
