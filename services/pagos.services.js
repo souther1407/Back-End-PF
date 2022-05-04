@@ -1,7 +1,5 @@
 const boom = require('@hapi/boom');
 const { Pago } = require('../db/models/pago.model');
-const { ReservaCama } = require('../db/models/reservaCama.model');
-const { Usuario } = require('../db/models/usuario.model');
 
 const Stripe = require('stripe')
 const { config } = require('../config/config');
@@ -41,16 +39,14 @@ class PagosService {
             throw boom.badData({ msg: error })
         }
     }
-    //a
+
    
     async calcularAmountItems (habitaciones, camas){
         let amount = 0;
         try {
             if(habitaciones.length !== 0){
                 for (let i = 0; i < habitaciones.length; i++) {
-                    console.log("entrando a habitacion findByPk")
                     const habitacion = await Habitacion.findByPk(habitaciones[i])
-                    console.log(habitacion)
                     amount += habitacion.precio;
                 }
             }
@@ -66,17 +62,9 @@ class PagosService {
             throw boom.conflict(error)
         }
     }
-    /*
-        {
-            id,
-            status,
-            receipt_email,
-            currency,
-            payment_method_types
-        } 
-     */
+    
     async guardarPago(infoPago){
-        //TODO: guardar en la tabla pago la info del pago,
+        
         const newPago = await Pago.create({
             id:infoPago.id,
             moneda:infoPago.currency,
