@@ -1,4 +1,3 @@
-const nodemailer = require('nodemailer');
 const boom = require('@hapi/boom');
 const bcrypt = require('bcrypt')
 const config = require('../config/config')
@@ -6,7 +5,7 @@ const { sequelize } = require('../libs/sequelize')
 const { Usuario } =  require('../db/models/usuario.model')
 const HubSpotHelper = require('../utils/hubspot')
 const hubservices = new HubSpotHelper
-
+const {enviarEmail} = require('../utils/mailer')
 const {plantillaEmailRegistro } = require('../utils/PlantillasEmail')
 
 // const {Tipo_Documento} = require('../db/models/tipoDocumento.model')
@@ -28,25 +27,12 @@ const usuarioAdmin = {
 }
 class UserService {
   
-  async enviarEmail(infomail) {
-    const MAIL = config.email;
-    const PASSWORD = config.emailPassword
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      secure: true,
-      port: 465,
-      auth: {
-      user: 'soyhostel@gmail.com',
-      pass: 'yyfcovcvvlpoueda' 
-              }
-          });
-    await transporter.sendMail(infomail);
-    return {message: 'se envio el correo'}        
-}
-
-
-  async crear(data) {
-   
+   async crear(data) {
+      const check = await Usuario.findByPk(data.dni)
+      console.log(check)
+      if(check){
+        throw new Error('el usuario ya existe')
+      }
       const hash = await bcrypt.hash(data.password, 12)
       const nuevoUsuario = await Usuario.create({
           nombre: data.name,
@@ -66,11 +52,11 @@ class UserService {
       }
       const mail = {
         from: 'Soy Hostel',
-        to: `${nuevoUsuario.email}`, 
+        to: `${data.email}`, 
         subject: "Bienvenido!",
         html: plantillaEmailRegistro(nuevoUsuario.nombre, nuevoUsuario.apellido),
       }
-      const mailSender = await this.enviarEmail(mail)
+      const mailSender = await enviarEmail(mail)
       const hub = await hubservices.crearUsuario(nuevoUsuario)
       nuevoUsuario.dataValues.password = undefined;
       return nuevoUsuario; 
@@ -106,9 +92,7 @@ class UserService {
     }else{
     const usuario = await Usuario.findAll()
     return usuario
-      
-
-
+    
     }
     
   }
@@ -151,7 +135,9 @@ class UserService {
           tipoDocumento:changes.typeofdocument,
           nacionalidad:changes.nationality,
           fechaNacimiento:changes.birthdate,
-          genero:changes.genre
+          genero:changes.genre,
+          tokenRecuperacion: changes.tokenRecuperacion,
+          password: changes.password
 
     });
     return {
