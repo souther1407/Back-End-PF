@@ -114,7 +114,8 @@ class habitacionesService {
   // eslint-disable-next-line class-methods-use-this
   async buscaruno(id) {
     
-    let habitacion = await Habitacion.findByPk(id);
+    let habitacion = await Habitacion.findByPk(id,{
+      include: [Imagen, ReservaCama]});
     
     if (habitacion === null) {
       throw boom.notFound('no exite la habitacion')}
