@@ -9,6 +9,7 @@ const { Habitacion } = require('../db/models/habitacion.model')
 const jwt = require('jsonwebtoken');
 const { config } = require('../config/config')
 const { Op } = require('sequelize');
+const bcrypt = require('bcrypt')
 
 const {plantillaEmailReserva} = require('../utils/PlantillasEmail')
 const {enviarEmail} = require('../utils/mailer')
@@ -243,7 +244,8 @@ class ReservaService {
                 from: 'WebMaster',
                 to: `${usamail.email}`, 
                 subject: "hemos registrado su reserva",
-                html: plantillaEmailReserva(usamail.nombre, 
+                html: plantillaEmailReserva(newReserva.id,
+                                            usamail.nombre, 
                                             usamail.apellido, 
                                             data.fecha_ingreso, 
                                             data.fecha_egreso,
@@ -292,6 +294,7 @@ class ReservaService {
             //Comprueba si ya existe un usuario con ese dni sino se crea uno nuevo
             const user = await Usuario.findByPk(numDoc)
             let newUser = '';
+            const hash = await bcrypt.hash(numDoc, 12)
             if (!user) {
                 newUser = await Usuario.create({
                     dni: numDoc,
@@ -301,7 +304,7 @@ class ReservaService {
                     nacionalidad: nacionalidad,
                     fechaNacimiento: fechaNac,
                     email: email,
-                    password: numDoc,
+                    password: hash,
                     genero: genero
                 })
             }
